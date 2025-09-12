@@ -1,9 +1,11 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodmeon server.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +16,10 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "express-fileupload": "^1.5.2",
     "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.5"
   }
 }
