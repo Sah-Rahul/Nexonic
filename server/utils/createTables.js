@@ -18,7 +18,5 @@ export const createAllTables = async () => {
     console.log("✅ All tables created successfully!");
   } catch (error) {
     console.error("❌ Error creating tables:", error);
-  } finally {
-    process.exit();
   }
 };
