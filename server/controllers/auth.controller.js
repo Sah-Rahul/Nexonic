@@ -7,6 +7,7 @@ import { sendToken } from "../utils/sendToken.js";
 import { generateResetPasswordToken } from "../utils/generateResetPasswordToken.js";
 import { generateEmailTemplate } from "../utils/generateForgotPasswordEmail.js";
 import { sendEmail } from "../utils/sendEmail.js";
+import cloudinary from "../config/cloudinary.config.js";
 
 export const register = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -273,5 +274,71 @@ export const updatePassword = catchAsyncError(async (req, res, next) => {
     success: true,
     message: "Password updated successfully.",
     user: updatedUser,
+  });
+});
+
+export const updateProfile = catchAsyncError(async (req, res, next) => {
+  const { name, email } = req.body;
+  const userId = req.user.id;
+
+  //  Validate name/email
+  if (!name?.trim() || !email?.trim()) {
+    return next(new ErrorHandler("Name and email cannot be empty.", 400));
+  }
+
+  //  Initialize avatarData object
+  let avatarData = {};
+
+  //  Handle avatar update
+  if (req.files && req.files.avatar) {
+    const { avatar } = req.files;
+
+    // Delete old image from Cloudinary if exists
+    if (req.user?.avatar?.public_id) {
+      await cloudinary.uploader.destroy(req.user.avatar.public_id);
+    }
+
+    // Upload new image
+    const newProfileImage = await cloudinary.uploader.upload(
+      avatar.tempFilePath,
+      {
+        folder: "Ecommerce_Avatars",
+        width: 150,
+        crop: "scale",
+      }
+    );
+
+    // Set new avatar data
+    // avatarData = {
+    //   public_id: newProfileImage.public_id,
+    //   url: newProfileImage.secure_url,
+    // };
+
+    avatarData = JSON.stringify({
+      public_id: newProfileImage.public_id,
+      url: newProfileImage.secure_url,
+    });
+  }
+
+  //  Update profile (name, email, avatar)
+  let userResult;
+
+  if (Object.keys(avatarData).length === 0) {
+    userResult = await db.query(
+      "UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *",
+      [name, email, userId]
+    );
+  } else {
+    userResult = await db.query(
+      "UPDATE users SET name = $1, email = $2, avatar = $3 WHERE id = $4 RETURNING *",
+      [name, email, avatarData, userId]
+    );
+  }
+
+  // 6. Send response
+  res.status(200).json({
+    success: true,
+    message: "Profile updated successfully.",
+    user: userResult.rows[0],
   });
 });

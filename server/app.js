@@ -9,8 +9,8 @@ import { createAllTables } from "./utils/createTables.js";
 import userAuth from "./routes/userAuth.routes.js";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 
-dotenv.config();
-config({ path: "./config/config.env" });
+// dotenv.config();
+dotenv.config({ path: "./config/config.env" });
 
 const app = express();
 
