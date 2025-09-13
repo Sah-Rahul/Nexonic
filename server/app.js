@@ -8,6 +8,7 @@ import { createAllTables } from "./utils/createTables.js";
 // Import Routes
 import userAuth from "./routes/userAuth.routes.js";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
+import productRouter from "./routes/product.routes.js";
 
 // dotenv.config();
 dotenv.config({ path: "./config/config.env" });
@@ -36,6 +37,7 @@ createAllTables();
 
 // Routes
 app.use('/api/v1/auth', userAuth);  
+app.use('/api/v1/product', productRouter);  
 
 
 app.use(errorMiddleware);
