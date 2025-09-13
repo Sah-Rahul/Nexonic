@@ -277,3 +277,130 @@ export const getSingleProduct = catchAsyncError(async (req, res, next) => {
     product: result.rows[0],
   });
 });
+
+export const postProductReview = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+  const { rating, comment } = req.body;
+
+  if (!rating || !comment) {
+    return next(new ErrorHandler("Please provide rating and comment.", 400));
+  }
+
+  //  Verify if the user has purchased this product
+  const purchaseCheckQuery = `
+    SELECT oi.product_id
+    FROM order_items oi
+    JOIN orders o ON o.id = oi.order_id
+    JOIN payments p ON p.order_id = o.id
+    WHERE o.buyer_id = $1
+    AND oi.product_id = $2
+    AND p.payment_status = 'Paid'
+    LIMIT 1
+  `;
+
+  const { rows: purchaseRows } = await db.query(purchaseCheckQuery, [
+    req.user.id,
+    id,
+  ]);
+
+  if (purchaseRows.length === 0) {
+    return res.status(403).json({
+      success: false,
+      message: "You can only review a product you've purchased.",
+    });
+  }
+
+  //  Check if the product exists
+  const product = await db.query("SELECT * FROM products WHERE id = $1", [id]);
+
+  if (product.rows.length === 0) {
+    return next(new ErrorHandler("Product not found.", 404));
+  }
+
+  //  Check if the user already reviewed this product
+  const existingReview = await db.query(
+    `SELECT * FROM reviews WHERE product_id = $1 AND user_id = $2`,
+    [id, req.user.id]
+  );
+
+  let review;
+  if (existingReview.rows.length > 0) {
+    //  Update existing review
+    review = await db.query(
+      `UPDATE reviews 
+       SET rating = $1, comment = $2, updated_at = NOW()
+       WHERE product_id = $3 AND user_id = $4
+       RETURNING *`,
+      [rating, comment, id, req.user.id]
+    );
+  } else {
+    //  Insert new review
+    review = await db.query(
+      `INSERT INTO reviews (product_id, user_id, rating, comment, created_at)
+       VALUES ($1, $2, $3, $4, NOW())
+       RETURNING *`,
+      [id, req.user.id, rating, comment]
+    );
+  }
+
+  //  Recalculate and update average rating for the product
+  const allReviews = await db.query(
+    `SELECT AVG(rating) AS avg_rating FROM reviews WHERE product_id = $1`,
+    [id]
+  );
+
+  const newAvgRating = parseFloat(allReviews.rows[0].avg_rating).toFixed(2);
+
+  await db.query(`UPDATE products SET ratings = $1 WHERE id = $2 RETURNING *`, [
+    newAvgRating,
+    id,
+  ]);
+
+  //  Send response
+  res.status(200).json({
+    success: true,
+    message: "Review submitted successfully.",
+    review: review.rows[0],
+  });
+});
+
+export const deleteReview = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+
+  //  Check if review exists
+  const reviewQuery = await db.query(`SELECT * FROM reviews WHERE id = $1`, [
+    id,
+  ]);
+
+  if (reviewQuery.rows.length === 0) {
+    return next(new ErrorHandler("Review not found.", 404));
+  }
+
+  const review = reviewQuery.rows[0];
+  const productId = review.product_id;
+
+  //  Delete the review
+  await db.query(`DELETE FROM reviews WHERE id = $1`, [id]);
+
+  //  Recalculate average rating for the product
+  const allReviews = await db.query(
+    `SELECT AVG(rating) AS avg_rating FROM reviews WHERE product_id = $1`,
+    [productId]
+  );
+
+  const newAvgRating = allReviews.rows[0].avg_rating
+    ? parseFloat(allReviews.rows[0].avg_rating).toFixed(2)
+    : 0.0;
+
+  //  Update the product with new rating
+  await db.query(`UPDATE products SET ratings = $1 WHERE id = $2`, [
+    newAvgRating,
+    productId,
+  ]);
+
+  // 5. Send response
+  res.status(200).json({
+    success: true,
+    message: "Review deleted successfully.",
+  });
+});

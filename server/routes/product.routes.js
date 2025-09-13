@@ -8,6 +8,7 @@ import {
   deleteProduct,
   fetchAllProducts,
   getSingleProduct,
+  postProductReview,
   updateProduct,
 } from "../controllers/product.controller.js";
 
@@ -40,7 +41,16 @@ productRouter.delete(
 productRouter.get(
   "/get-single-product/:id",
   isAuthenticated,
-  authorizedRoles("Admin"),
   getSingleProduct
+);
+productRouter.put(
+  "/post-new/review/:id",
+  isAuthenticated,
+  postProductReview
+);
+productRouter.delete(
+  "/delete/review/:id",
+  isAuthenticated,
+  postProductReview
 );
 export default productRouter;
