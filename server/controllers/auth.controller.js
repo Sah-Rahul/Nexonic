@@ -335,10 +335,135 @@ export const updateProfile = catchAsyncError(async (req, res, next) => {
     );
   }
 
-  // 6. Send response
+  //  Send response
   res.status(200).json({
     success: true,
     message: "Profile updated successfully.",
     user: userResult.rows[0],
   });
 });
+
+export const fetchAIFilteredProducts = catchAsyncError(
+  
+  async (req, res, next) => {
+    const { userPrompt } = req.body;
+
+    if (!userPrompt) {
+      return next(new ErrorHandler("Provide a valid prompt.", 400));
+    }
+
+    // Function to clean and extract keywords
+    const filterKeywords = (query) => {
+      const stopwords = new Set([
+        "the",
+        "they",
+        "them",
+        "then",
+        "i",
+        "we",
+        "you",
+        "a",
+        "an",
+        "and",
+        "or",
+        "but",
+        "if",
+        "is",
+        "are",
+        "was",
+        "were",
+        "of",
+        "in",
+        "on",
+        "at",
+        "to",
+        "for",
+        "with",
+        "from",
+        "by",
+        "about",
+        "as",
+        "into",
+        "all",
+        "like",
+        "through",
+        "after",
+        "over",
+        "between",
+        "out",
+        "so",
+        "no",
+        "not",
+        "too",
+        "very",
+        "can",
+        "will",
+        "just",
+        "be",
+        "been",
+        "being",
+        "do",
+        "does",
+        "did",
+        "done",
+        "this",
+        "that",
+        "these",
+        "those",
+        "he",
+        "she",
+        "it",
+        "his",
+        "her",
+        "its",
+        "their",
+        "ours",
+        "mine",
+        "yours",
+      ]);
+
+      return query
+        .toLowerCase()
+        .replace(/[^\w\s]/g, "")
+        .split(/\s+/)
+        .filter((word) => !stopwords.has(word) && isNaN(word))
+        .map((word) => `%${word}%`);
+    };
+
+    // Extracted keywords from user prompt
+    const keywords = filterKeywords(userPrompt);
+
+    // Query database using filtered keywords
+    const result = await database.query(
+      `
+        SELECT * FROM products
+        WHERE name ILIKE ANY($1)
+        OR description ILIKE ANY($1)
+        OR category ILIKE ANY($1)
+        LIMIT 200;
+      `,
+      [keywords]
+    );
+
+    const filteredProducts = result.rows;
+
+    if (filteredProducts.length === 0) {
+      return res.status(404).json({ message: "No products found." });
+    }
+
+    // Get AI-based recommendation from filtered products
+    const { products } = await getAIRecommendation(
+      req,
+      res,
+      userPrompt,
+      filteredProducts
+    );
+
+    // Final response
+    return res.status(200).json({
+      success: true,
+      message: "AI filtered products.",
+      products,
+    });
+  }
+);

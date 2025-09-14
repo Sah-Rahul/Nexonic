@@ -1,7 +1,7 @@
 import cloudinary from "../config/cloudinary.config.js";
-import db from "../config/db.js";
 import { catchAsyncError } from "../middlewares/catchAsyncError.js";
 import { ErrorHandler } from "../middlewares/errorMiddleware.js";
+import db from "../config/db.js";
 
 export const createProduct = catchAsyncError(async (req, res, next) => {
   const { name, description, price, category, stock } = req.body;
@@ -398,7 +398,7 @@ export const deleteReview = catchAsyncError(async (req, res, next) => {
     productId,
   ]);
 
-  // 5. Send response
+  //  Send response
   res.status(200).json({
     success: true,
     message: "Review deleted successfully.",
