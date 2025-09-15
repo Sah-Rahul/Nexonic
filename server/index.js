@@ -3,7 +3,7 @@ import app from './app.js'
 const port = process.env.PORT || 4000;
 
 app.get("/", (req, res) => {
-  res.send("server is running ✅ ...");
+  res.send("server is running ✅");
 });
 
 
