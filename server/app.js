@@ -24,6 +24,8 @@ dotenv.config({ path: "./config/config.env" });
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+console.log(stripe)
+
 // Stripe Webhook Route  
 app.post(
   "/api/v1/payment/webhook",
