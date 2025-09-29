@@ -16,7 +16,7 @@ import adminRouter from "./routes/admin.routes.js";
 import orderRouter from "./routes/order.routes.js";
 
 // DB
-import database from "./config/db.js";  
+import database from "./config/db.js";
 
 // Config
 dotenv.config({ path: "./config/config.env" });
@@ -24,9 +24,7 @@ dotenv.config({ path: "./config/config.env" });
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-console.log(stripe)
-
-// Stripe Webhook Route  
+// Stripe Webhook Route
 app.post(
   "/api/v1/payment/webhook",
   express.raw({ type: "application/json" }),
@@ -101,7 +99,7 @@ app.post(
 );
 
 // Middlewares
-app.use(express.json());  
+app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 

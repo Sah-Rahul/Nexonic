@@ -1,8 +1,10 @@
 import { Client } from "pg";
 import dotenv from "dotenv";
 
-// Load env variables here, BEFORE accessing process.env
-dotenv.config({ path: "./config/config.env" }); // Adjust relative path if needed
+// dotenv.config({ path: "./config/config.env" });
+dotenv.config();
+
+console.log(process.env.DB_PASSWORD);
 
 const database = new Client({
   user: process.env.DB_USER,
