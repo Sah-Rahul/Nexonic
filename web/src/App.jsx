@@ -2,8 +2,8 @@ import AppRoutes from "./Routes/AppRoutes";
 
 const App = () => {
   return (
-    <div className="min-h-screen text-red-800">
-      <AppRoutes /> 
+    <div className="min-h-screen ">
+      <AppRoutes />
     </div>
   );
 };
