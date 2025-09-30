@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "img": "/Kitchen/kitchen1.jpg",
+        "name": "0.9 Cubic Feet Capacity 900 Watts Kitchen Essentials for the Countertop Stainless Steel",
+        "price": 629.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "2 years warranty"
+        ]
+      },
+    {
+        "id": 2,
+        "img": "/Kitchen/kitchen2.jpg",
+        "name": "Microwave Oven with Smart Sensor Easy Clean Interior ECO Mode 1.2 Cu Ft Stainless Steel",
+        "price": 749.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "1 years warranty"
+        ]
+      },
+    {
+        "id": 3,
+        "img": "/Kitchen/kitchen3.jpg",
+        "name": "Double Door Mini Fridge with Freezer for Office or Dorm with Adjustable Remove Glass Shelves",
+        "price": 1249.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "2 years warranty"
+        ]
+      },
+    {
+        "id": 4,
+        "img": "/Kitchen/kitchen4.jpg",
+        "name": "36″ Side-by-Side Refrigerator and Freezer with 25 Cubic Ft. Total Capacity, Black",
+        "price": 1329.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "1 years warranty"
+        ]
+      }
+]

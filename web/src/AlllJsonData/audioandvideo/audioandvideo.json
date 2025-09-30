@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "img": "/AudioAndVideo/MaxSRHome.jpg",
+        "name": "Max SR Home Theater Surround Sound Bar HDMI, Optical Cables, Wireless Subwoofer & Two Speakers",
+        "price": 9999.00,
+        "discount": 15,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "2 years warranty"
+        ]
+      },
+    {
+        "id": 2,
+        "img": "/AudioAndVideo/V-Series.jpg",
+        "name": "V-Series 5.1 Home Theater Sound Bar with Dolby Audio, Bluetooth, Wireless Subwoofer, Voice Assistant Compatible",
+        "price": 749.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "2 years warranty"
+        ]
+      },
+    {
+        "id": 3,
+        "img": "/AudioAndVideo/OLEDC1Series.jpg",
+        "name": "OLED C1 Series 55” 4k Smart TV (3840 x 2160), 120Hz Refresh Rate, AI-Powered 4K, Dolby Cinema, WiSA Ready, Gaming Mode",
+        "price": 1249.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "2 years warranty"
+        ]
+      },
+    {
+        "id": 4,
+        "img": "/AudioAndVideo/X80J55InchTV.jpg",
+        "name": "X80J 55 Inch TV: 4K Ultra HD LED Smart Google TV with Dolby Vision HDR",
+        "price": 1329.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "2 years warranty"
+        ]
+      }
+]

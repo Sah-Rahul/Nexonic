@@ -1,13 +1,38 @@
-import Layout from "../components/Layout";
-import Apple from "../pages/Apple";
+import Layout from "./Layout";
 import Home from "../pages/Home";
-import Rahul from "../pages/Rahul";
-
+import Category from "./Category";
+import BestDeal from "./bestDeal";
+import Video from "./Video";
+import HomeAppliances from "./HomeAppliances​";
+import ShowCase from "./ShowCase";
+import KitchenAppliances from "./KitchenAppliances​";
+import Refrigerator from "./Refrigerator";
+import PCLaptop from "./PCLaptop";
+import Gadget from "./Gadget​";
+import TopBrands from "./TopBrands";
+import Testimonial from "./Testimonial";
+import Contact from "./Contact";
+import AirConditioner from "./AirConditioner";
+import BannerOne from "./BannerOne";
+ 
 const Hero = () => {
   return (
     <Layout>
       <Home />
-      <Apple />
+      <Category />
+      <BestDeal />
+      <Video />
+      <HomeAppliances />
+      <AirConditioner />
+      <ShowCase />
+      <KitchenAppliances />
+      <Refrigerator />
+      <BannerOne />
+      <PCLaptop />
+      <Gadget />
+      <TopBrands />
+      <Testimonial />
+      <Contact />
     </Layout>
   );
 };

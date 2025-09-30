@@ -1,0 +1,70 @@
+[
+  {
+    "id": 1,
+    "img": "/HomeAppliances/HomeAppliances1.jpg",
+    "name": "Multigroomer All-in-One Trimmer Series 5000, 23 Piece Mens Grooming Kit",
+    "price": 629.00,
+    "discount": 5,
+    "discountedPrice": 597.55,
+    "rating": "★★★★",
+    "qty":0,
+    "keyFeatures": [
+      "Newest technology",
+      "Best in class components",
+      "Dimensions - 69.5 x 75.0 x 169.0",
+      "Maintenance free",
+      "1 years warranty"
+    ]
+  },
+  {
+    "id": 2,
+    "img": "/HomeAppliances/HomeAppliances2.jpg",
+    "name": "Compact Pulsator Washer for Clothes, .9 Cubic ft. Tub, White, BPAB10WH",
+    "price": 749.00,
+    "discount": 10,
+    "discountedPrice": 674.10,
+    "rating": "★★★★",
+    "qty":0,
+    "keyFeatures": [
+      "Newest technology",
+      "Best in class components",
+      "Dimensions - 69.5 x 75.0 x 169.0",
+      "Maintenance free",
+      "2 years warranty"
+    ]
+  },
+  {
+    "id": 3,
+    "img": "/HomeAppliances/HomeAppliances3.jpg",
+    "name": "Full-Automatic Compact Washer with Wheels, 1.6 cu. ft, 11 lbs capacity with 6 Wash Programs Washer",
+    "price": 1249.00,
+    "discount": 15,
+    "discountedPrice": 1061.65,
+    "rating": "★★★★",
+    "qty":0,
+    "keyFeatures": [
+      "Newest technology",
+      "Best in class components",
+      "Dimensions - 69.5 x 75.0 x 169.0",
+      "Maintenance free",
+      "3 years warranty"
+    ]
+  },
+  {
+    "id": 4,
+    "img": "/HomeAppliances/HomeAppliances4.jpg",
+    "name": "Small Space Heat Pump Dryer with Sensor Dry, 12 Preset Machine Cycles, 40 Minute Express Drying",
+    "price": 1329.00,
+    "discount": 10,
+    "discountedPrice": 1196.10,
+    "rating": "★★★★",
+    "qty":0,
+    "keyFeatures": [
+      "Newest technology",
+      "Best in class components",
+      "Dimensions - 69.5 x 75.0 x 169.0",
+      "Maintenance free",
+      "2 years warranty"
+    ]
+  }
+]

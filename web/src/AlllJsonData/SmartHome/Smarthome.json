@@ -1,0 +1,67 @@
+[
+    {
+      "id": 1,
+      "img": "/RelatedProducts/RelatedProducts1.jpg",
+      "name": "Smartwatch with Bright Touchscreen Display, Up to 6 Days of Battery Life, Orchid Purple",
+      "price": 299.00,
+      "discount": 10,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "1 years warranty"
+      ]
+    },
+    {
+      "id": 2,
+      "img": "/RelatedProducts/RelatedProducts2.jpg",
+      "name": "Home Speaker 500: Smart Bluetooth Speaker with Alexa Voice Control Built-In, White",
+      "price": 209.00,
+      "discount": 10,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "3 years warranty"
+      ]
+    },
+    {
+      "id": 3,
+      "img": "/RelatedProducts/RelatedProducts3.jpg",
+      "name": "Smart Wifi Alexa Control, 6L Top Fill Cool Mist for Baby and Plants, Ultrasonic, Essential Oil Diffuser",
+      "price": 199.00,
+      "discount": 10,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "1 years warranty"
+      ]
+    },
+    {
+      "id": 4,
+      "img": "/RelatedProducts/RelatedProducts4.jpg",
+      "name": "Health and Fitness Smartwatch with Heart Rate, Music, Alexa Built-In, Sleep and Swim Tracking",
+      "price": 129.00,
+      "discount": 10,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "2 years warranty"
+      ]
+    }
+  ]
+  

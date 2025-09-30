@@ -1,0 +1,77 @@
+
+[
+    {
+      "id": 1,
+      "img": "/TodayDeals/soon1.jpg",
+      "name": "RK ROYAL KLUDGE RK61 Wired 60% Mechanical Gaming Keyboard Programmable QMK/VIA RGB Backlit 61 Keys Ultra-Compact Hot Swappable Red Switch White",
+      "price": 500,
+      "discount": 50,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "2 years warranty"
+      ],
+      "images": [
+        {
+          "title":"Rahul",
+          "img": "/images/Laptop.jpg"
+        },
+        {
+          "img": "/images/amazon2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "img": "/TodayDeals/soon2.jpg",
+      "name": "Gaming Mouse with 4DPI (800 1600 2400 3200) Programmable Buttons Ergonomic USB Computer Mice Computer Mouse Gaming",
+      "price": 249.0,
+      "discount": 50,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "2 years warranty"
+      ]
+    },
+    {
+      "id": 3,
+      "img": "/TodayDeals/soon3.jpg",
+      "name": "HyperX Cloud Alpha – Gaming Headset with in-line Volume Control",
+      "price": 2349.0,
+      "discount": 50,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "2 years warranty"
+      ]
+    },
+    {
+      "id": 4,
+      "img": "/TodayDeals/soon4.jpg",
+      "name": "Intel® Core™ i9-14900KF New Gaming Desktop Processor 24 cores (8 P-cores + 16 E-cores) - Unlocked",
+      "price": 2449.0,
+      "discount": 50,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "2 years warranty"
+      ]
+    }
+  ]
+  

@@ -1,0 +1,77 @@
+
+[
+    {
+      "id": 1,
+      "img": "/TodayDeals/deal1.webp",
+      "name": "Noise Icon 2 1.8'' Display with Bluetooth Calling, Women's Edition, AI Voice Assistant Smartwatch  (Pink Strap, Regular)",
+      "price": 1550,
+      "discount": 30,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "2 years warranty"
+      ],
+      "images": [
+        {
+          "title":"Rahu",
+          "img": "/images/Laptop.jpg"
+        },
+        {
+          "img": "/images/amazon2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "img": "/TodayDeals/deal2.webp",
+      "name": "Fastrack Optimus 2 Pro,36.3mm AMOLED Display,AOD,Metal Case,Working Crown,BT Calling,SOS Smartwatch  (Grey Strap, Free Size)",
+      "price": 249.0,
+      "discount": 30,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "2 years warranty"
+      ]
+    },
+    {
+      "id": 3,
+      "img": "/TodayDeals/deal3.webp",
+      "name": "Brolan Blue Wireless Ear Buds witth multiple features Bluetooth  (Blue, True Wireless)",
+      "price": 249.0,
+      "discount": 30,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "2 years warranty"
+      ]
+    },
+    {
+      "id": 4,
+      "img": "/TodayDeals/deal4.webp",
+      "name": "NNoise Buds VS102 Elite with 50Hr Playtime, ENC, Quad Mic, Chrome finish Flybird Design Bluetooth  (Soft Purple, True Wireless)",
+      "price": 249.0,
+      "discount": 30,
+      "rating": "★★★★",
+      "qty":0,
+      "keyFeatures": [
+        "Newest technology",
+        "Best in class components",
+        "Dimensions - 69.5 x 75.0 x 169.0",
+        "Maintenance free",
+        "2 years warranty"
+      ]
+    }
+  ]
+  
