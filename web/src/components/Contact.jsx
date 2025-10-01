@@ -1,7 +1,9 @@
 import React from "react";
 import { LuMailOpen } from "react-icons/lu";
+import { useTheme } from "../context/ThemeContext";
 
 const Contact = () => {
+  const { themeColor } = useTheme();
   return (
     <>
       <div className="h-96 bg-red-500 flex flex-col">
@@ -10,21 +12,36 @@ const Contact = () => {
           <div className="text-left mb-6 md:mb-0">
             <p className="text-sm text-gray-600">Expert advice</p>
             <p className="h-[1px] bg-black"></p>
-            <h2 className="text-2xl font-bold text-gray-600">123-456-7890</h2>
+            <h2
+              style={{ color: themeColor }}
+              className="text-2xl font-bold text-gray-600"
+            >
+              123-456-7890
+            </h2>
           </div>
 
           {/* Customer Service Section */}
           <div className="text-left mb-6 md:mb-0">
             <p className="text-sm text-gray-600">Customer service</p>
             <p className="h-[1px] bg-black"></p>
-            <h2 className="text-2xl font-bold text-gray-600">1-222-345-6789</h2>
+            <h2
+              style={{ color: themeColor }}
+              className="text-2xl font-bold text-gray-600"
+            >
+              1-222-345-6789
+            </h2>
           </div>
 
           {/* Contact Us Section */}
           <div className="text-left mb-6 md:mb-0">
             <p className="text-sm text-gray-600">Have any questions?</p>
             <p className="h-[1px] bg-black"></p>
-            <h2 className="text-2xl font-bold text-gray-600">Contact us</h2>
+            <h2
+              style={{ color: themeColor }}
+              className="text-2xl font-bold text-gray-600"
+            >
+              Contact us
+            </h2>
           </div>
 
           {/* Image Section */}

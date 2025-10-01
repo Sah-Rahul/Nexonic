@@ -15,6 +15,8 @@ const Customize = ({ isOpen, onClose }) => {
     "#EE4D49",
     "#000000",
     "#0ba0db",
+    "#1B9D84",
+    "#344F1F",
   ];
 
   return (
@@ -46,12 +48,12 @@ const Customize = ({ isOpen, onClose }) => {
         {/* Theme Colors */}
         <div className="p-5">
           <p className="font-bold mb-3">Select Theme Color</p>
-          <div className="flex flex-col gap-4">
+          <div className="flex  flex-wrap items-center justify-center gap-5">
             {colors.map((color) => (
               <div
                 key={color}
                 onClick={() => changeThemeColor(color)}
-                className="h-12 w-full cursor-pointer rounded-md"
+                className="h-12 w-16 cursor-pointer rounded-md"
                 style={{
                   backgroundColor: color,
                   border: color === themeColor ? "3px solid black" : "none",

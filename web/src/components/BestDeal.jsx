@@ -100,10 +100,16 @@ const BestDeal = () => {
 
               {hoveredItemId === item.id && (
                 <div className="flex items-center absolute top-26 right-[45px]">
-                  <span className="text-xs px-2 py-1 bg-blue-500 text-white shadow-md">
+                  <span
+                    style={{ backgroundColor: themeColor }}
+                    className="text-xs px-2 py-1   text-white shadow-md"
+                  >
                     Add to Cart
                   </span>
-                  <MdPlayArrow className="text-xl text-blue-500" />
+                  <MdPlayArrow
+                    style={{ color: themeColor }}
+                    className="text-xl  "
+                  />
                 </div>
               )}
 

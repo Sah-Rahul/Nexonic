@@ -5,7 +5,7 @@ import NavBar from "./Navbar";
 import { Palette } from "lucide-react";
 import Customize from "./Customize";
 import { useTheme } from "../context/ThemeContext";
- 
+
 const Layout = ({ children }) => {
   const [showCustomize, setShowCustomize] = useState(false);
   const { themeColor } = useTheme();
@@ -26,15 +26,19 @@ const Layout = ({ children }) => {
 
       {/* CUSTOMIZE BUTTON */}
       <div
+        style={{ color: themeColor }}
         onClick={() => setShowCustomize(true)}
-        className="flex text-black shadow-2xl cursor-pointer hover:text-white transition-all items-center justify-center gap-4 h-14 w-32 fixed top-[50%] right-0 bg-white"
+        className="flex   shadow-2xl cursor-pointer hover:text-white transition-all items-center justify-center gap-4 h-14 w-32 fixed top-[50%] right-0 bg-white"
       >
         <Palette />
         <h2 className="font-semibold">Customize</h2>
       </div>
 
       {/* CUSTOMIZE SIDEBAR */}
-      <Customize isOpen={showCustomize} onClose={() => setShowCustomize(false)} />
+      <Customize
+        isOpen={showCustomize}
+        onClose={() => setShowCustomize(false)}
+      />
 
       <Footer />
     </div>

@@ -1,18 +1,15 @@
 import { ShoppingBasket, Search, ChevronUp, ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CartModal from "./CartModal";
-import SearchOverlay from "./SearchOverlay";
 import { useTheme } from "../context/ThemeContext";
 
 const NavBar = () => {
-  const dropdownRef = useRef(null);
-  const searchRef = useRef(null);
   const [showAllProducts, setShowAllProducts] = useState(false);
   const [showCart, setShowCart] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { themeColor } = useTheme();
+  const navigate = useNavigate();
 
   const menu = [
     { label: "Home Appliances", link: "/appliancess_home" },
@@ -31,30 +28,15 @@ const NavBar = () => {
     { label: "Smart home", link: "/home_smart" },
   ];
 
-  //  Close overlays when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowAllProducts(false);
-      }
-
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setShowSearch(false);
-      }
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchQuery.trim() !== "") {
+      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
     }
+  };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  //   Handle search submit on Enter
-  const handleSearchKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      console.log("Searching for:", searchQuery);
-      setShowSearch(false);
+  const handleSearchClick = () => {
+    if (searchQuery.trim() !== "") {
+      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -62,8 +44,9 @@ const NavBar = () => {
     <>
       <div className="w-full">
         {/* First navbar */}
+
         <div
-          className="h-8 px-16 flex items-center justify-between text-white "
+          className="h-8 border-b-[1px] border-gray-600 px-16 flex items-center justify-between text-white "
           style={{ backgroundColor: themeColor }}
         >
           <span>
@@ -79,30 +62,28 @@ const NavBar = () => {
         <CartModal isOpen={showCart} onClose={() => setShowCart(false)} />
 
         {/* SEARCHOVERLAY MODAL */}
-        {showSearch && <SearchOverlay onClose={() => setShowSearch(false)} />}
+        {/* {showSearch && <SearchOverlay onClose={() => setShowSearch(false)} />} */}
 
         {/* Second navbar */}
         <div className="h-28 px-16 flex items-center justify-between  ">
           <Link to={"/"}>
             <span className="text-3xl font-bold text-white">Nexonic</span>
           </Link>
-          <div
-            ref={searchRef}
-            className="relative flex items-center gap-4 font-semibold"
-          >
+
+          <div className="relative flex items-center gap-4 font-semibold">
             <input
               type="text"
               placeholder="Search product..."
               className="bg-white w-72 h-12 px-4 pr-10 text-black placeholder-gray-500 outline-none"
-              onClick={() => setShowSearch(true)}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleSearchKeyDown}
+              onKeyDown={handleKeyDown}
             />
+
             <Search
               className="text-blue-600 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
               size={24}
-              onClick={() => console.log("Searching for:", searchQuery)}
+              onClick={handleSearchClick}
             />
           </div>
         </div>
@@ -110,7 +91,7 @@ const NavBar = () => {
         {/* Third navbar */}
         <div className="h-14 border-t border-gray-500 px-16 flex items-center justify-between text-white   relative">
           {/* Allproducts dropdown */}
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative">
             <button
               onClick={() => setShowAllProducts(!showAllProducts)}
               className="cursor-pointer flex items-center gap-1 font-semibold"
