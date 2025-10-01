@@ -1,7 +1,9 @@
+import React from "react";
+
 const ShowCase = () => {
   return (
     <>
-      <div className="h-[250px] flex gap-5 px-11 mb-16 bg-[#e8eef3] w-full">
+      <div className="h-[250px] flex gap-5 px-11   bg-[#e8eef3] w-full">
         {/* First Box */}
         <div className="h-full w-1/2 flex items-center justify-center   relative">
           <img

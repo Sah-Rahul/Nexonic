@@ -1,3 +1,4 @@
+import React from "react"
 import { Link } from "react-router-dom";
 import airconditioner from "../AlllJsonData/AirConditioner/AirConditioner.json";
 import audiodata from "../AlllJsonData/audioandvideo/audioandvideo.json";
@@ -7,8 +8,11 @@ import kitchendata from "../AlllJsonData/kitchen/kitchen.json";
 import pcandlaptopdata from "../AlllJsonData/PcAndLaptop/PcAndLaptop.json";
 import refrigeratordata from "../AlllJsonData/Refrigerator/Refrigerator.json";
 import smarthomedata from "../AlllJsonData/SmartHome/Smarthome.json";
+import { useTheme } from "../context/ThemeContext";
 
 const Category = () => {
+  const { themeColor } = useTheme();
+
   const categories = [
     {
       id: 1,
@@ -73,7 +77,9 @@ const Category = () => {
       <div className="md:p-10 relative p-5 bg-[#e8eef3] min-h-screen">
         <div>
           <div className="absolute top-20 left-25">
-            <h2 className="font-bold text-gray-600 text-2xl">Shop by Category</h2>
+            <h2 style={{ color: themeColor }} className="font-bold  text-2xl">
+              Shop by Category
+            </h2>
           </div>
           <div className="h-full border-gray-200 border flex items-center flex-wrap justify-between mt-5 bg-white">
             {categories.map((item, index) => (

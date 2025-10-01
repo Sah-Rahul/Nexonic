@@ -14,7 +14,7 @@ import Testimonial from "./Testimonial";
 import Contact from "./Contact";
 import AirConditioner from "./AirConditioner";
 import BannerOne from "./BannerOne";
- 
+
 const Hero = () => {
   return (
     <Layout>

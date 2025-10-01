@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
 const Footer = () => {
+  const { themeColor } = useTheme()
   return (
     <>
       <footer className="w-full ">
-        <div className="bg-[#102c41] text-white px-16 flex items-center justify-between h-72">
+        <div style={{ backgroundColor: themeColor }}className="  text-white px-16 flex items-center justify-between h-72">
           <div className="mb-4 md:mt-0 mt-5 md:mb-0">
             <h2 className="font-bold text-3xl">Nexonic</h2>
             {/* <img className="bg-gray-500 h-24" src="/images/logo7.png" alt="Logo" /> */}

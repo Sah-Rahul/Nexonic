@@ -1,6 +1,8 @@
 import React from 'react'
+import { useTheme } from '../context/ThemeContext';
 
 const TopBrands = () => {
+    const { themeColor } = useTheme()
     const logo = [
         {
             img: '/images/logo1.jpg'
@@ -25,7 +27,7 @@ const TopBrands = () => {
                     {/* Left Content */}
                     <div className="flex flex-col justify-center items-start px-10 md:h-full h-[60vw] md:w-1/2 bg-white">
                         <p className="text-sm text-gray-500 font-medium mb-2">Brand’s deal</p>
-                        <h1 className="md:text-3xl font-bold text-gray-800 leading-snug mb-4">
+                        <h1 style={{ color: themeColor }}  className="md:text-3xl font-bold   leading-snug mb-4">
                             Save up to $200 on select Samsung washing machine
                         </h1>
                         <p className="text-gray-600 mb-6">
@@ -42,7 +44,7 @@ const TopBrands = () => {
                 {/* Top Brands */}
                 <div className="md:mt-10 mt-[89vw] mb-10 w-full">
                     {/* Section Title */}
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Top brands</h2>
+                    <h2 style={{ color: themeColor }}  className="text-2xl font-bold text-gray-800 mb-4">Top brands</h2>
 
                     {/* Brand Logos Container */}
                     <div className="h-[11vw] overflow-hidden   flex items-center justify-start gap-6 bg-white shadow-sm">

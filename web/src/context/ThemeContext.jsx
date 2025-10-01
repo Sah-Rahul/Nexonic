@@ -1,38 +1,25 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from "react";
 
-const ThemeContext = createContext();
+export const ThemeContext = createContext();
 
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
-};
-
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') || 'dark';
-    }
-    return 'dark';
-  });
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
+export function ThemeContextProvider({ children }) {
+  const [themeColor, setThemeColor] = useState("#0472F0");
 
   useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(theme);
-  }, [theme]);
+    const savedColor = localStorage.getItem("themeColor");
+    if (savedColor) setThemeColor(savedColor);
+  }, []);
+
+  const changeThemeColor = (color) => {
+    setThemeColor(color);
+    localStorage.setItem("themeColor", color);
+  };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ themeColor, changeThemeColor }}>
       {children}
     </ThemeContext.Provider>
   );
-};
+}
+
+export const useTheme = () => useContext(ThemeContext);
