@@ -3,6 +3,8 @@ import { RxCross2 } from "react-icons/rx";
 import { useTheme } from "../context/ThemeContext";
 
 const Customize = ({ isOpen, onClose }) => {
+     
+  
   const { themeColor, changeThemeColor } = useTheme();
 
   const colors = [
@@ -31,7 +33,7 @@ const Customize = ({ isOpen, onClose }) => {
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="h-14 bg-gray-200 flex items-center justify-between px-5">
+        <div style={{ backgroundColor: themeColor }} className="h-14  text-white flex items-center justify-between px-5">
           <h2 className="text-2xl font-semibold">Customize</h2>
           <button
             onClick={onClose}

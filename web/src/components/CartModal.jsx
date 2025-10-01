@@ -1,8 +1,10 @@
 import React from "react";
 import { RxCross2 } from "react-icons/rx";
 import { Trash2 } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 
 const CartModal = ({ isOpen, onClose }) => {
+  const { themeColor } = useTheme()
   return (
     <>
       {/* Overlay */}
@@ -19,7 +21,7 @@ const CartModal = ({ isOpen, onClose }) => {
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Header */}
-        <div className="h-16 flex items-center justify-between px-6 bg-blue-600 text-white">
+        <div   style={{ backgroundColor: themeColor }} className="h-16 flex items-center justify-between px-6   text-white">
           <h2 className="font-semibold text-2xl">Cart</h2>
           <button
             onClick={onClose}
