@@ -5,6 +5,8 @@ import NavBar from "./Navbar";
 import { Palette } from "lucide-react";
 import Customize from "./Customize";
 import { useTheme } from "../context/ThemeContext";
+import { useDispatch } from "react-redux";
+import { getMe } from "../store/slices/authSlice";
 
 const Layout = ({ children }) => {
   const [showCustomize, setShowCustomize] = useState(false);
@@ -12,6 +14,12 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getMe());  
   }, []);
 
   return (

@@ -1,16 +1,20 @@
 import { ShoppingBasket, Search, ChevronUp, ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CartModal from "./CartModal";
 import { useTheme } from "../context/ThemeContext";
+import { useSelector } from "react-redux";
 
 const NavBar = () => {
+  // const { authUser } = useSelector((state) => state.auth);
+  const authUser = useSelector((state) => state.auth.authUser);
   const [showAllProducts, setShowAllProducts] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { themeColor } = useTheme();
   const navigate = useNavigate();
 
+  console.log(authUser);
   const menu = [
     { label: "Home Appliances", link: "/appliancess_home" },
     { label: "Audio & video", link: "/video_and_audio" },
@@ -150,9 +154,29 @@ const NavBar = () => {
               </div>
             </div>
 
-            <Link to={"/login"} className="text-white font-medium text-[18px]">
-              Log In
-            </Link>
+            {authUser ? (
+              <div className="flex items-center gap-2 cursor-pointer">
+                {authUser.avatar ? (
+                  <img
+                    src={authUser.avatar}
+                    alt={authUser.name}
+                    className="h-10 w-10 rounded-full"
+                  />
+                ) : (
+                  <Link to={'/profile'}>
+                    <img
+                      className="h-10 w-10 rounded-full"
+                      src="https://avatar.iran.liara.run/public/boy"
+                      alt="authUser.name"
+                    />
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <Link to="/login" className="text-white font-medium text-[18px]">
+                Log In
+              </Link>
+            )}
           </div>
         </div>
       </div>

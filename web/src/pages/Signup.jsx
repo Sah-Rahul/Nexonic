@@ -8,10 +8,17 @@ import {
   ShoppingBag,
   Sparkles,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signupSchema } from "../validation/signupSchema";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../store/slices/authSlice";
 
-export const Signup = () => {
+const Signup = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isSigningUp } = useSelector((state) => state.auth);
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -20,7 +27,7 @@ export const Signup = () => {
   });
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const result = signupSchema.safeParse(formData);
@@ -35,15 +42,19 @@ export const Signup = () => {
     }
 
     setErrors({});
-    console.log("✅ Signup Data:", formData);
-    alert("Signup Successful!");
+
+    try {
+      await dispatch(register(formData)).unwrap();
+      navigate("/login"); // ✅ Redirect to login only if signup succeeds
+    } catch (error) {
+      // error already handled by toast in slice
+      console.error("Signup failed:", error);
+    }
   };
 
-  // Handle input change and clear specific field error
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
-    
-    // Clear error for this specific field when user types
+
     if (errors[field]) {
       setErrors({ ...errors, [field]: "" });
     }
@@ -95,7 +106,9 @@ export const Signup = () => {
             className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 transform hover:scale-105 transition-transform duration-300"
           >
             <div className="mb-8">
-              <h2 className="text-3xl font-bold text-orange-600 mb-2">Sign Up</h2>
+              <h2 className="text-3xl font-bold text-orange-600 mb-2">
+                Sign Up
+              </h2>
               <p className="text-gray-500">
                 Create your account to get started
               </p>
@@ -107,18 +120,26 @@ export const Signup = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Full Name
                 </label>
-                <div className="relative group">
-                  <User className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${errors.name ? 'text-red-500' : 'text-gray-400'} transition-colors`} />
+                <div className="relative">
+                  <User
+                    className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+                      errors.name ? "text-red-500" : "text-gray-400"
+                    }`}
+                  />
                   <input
                     type="text"
                     placeholder="Enter your name"
                     value={formData.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
-                    className={`w-full pl-11 pr-4 py-3 border-2 ${errors.name ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:border-orange-500 focus:outline-none transition-all duration-300`}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    className={`w-full pl-11 pr-4 py-3 border-2 ${
+                      errors.name ? "border-red-500" : "border-gray-200"
+                    } rounded-xl focus:border-orange-500 focus:outline-none transition-all duration-300`}
                   />
                 </div>
                 {errors.name && (
-                  <p className="text-red-500 text-sm mt-1 animate-pulse">{errors.name}</p>
+                  <p className="text-red-500 text-sm mt-1 animate-pulse">
+                    {errors.name}
+                  </p>
                 )}
               </div>
 
@@ -127,18 +148,26 @@ export const Signup = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Email Address
                 </label>
-                <div className="relative group">
-                  <Mail className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${errors.email ? 'text-red-500' : 'text-gray-400'} transition-colors`} />
+                <div className="relative">
+                  <Mail
+                    className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+                      errors.email ? "text-red-500" : "text-gray-400"
+                    }`}
+                  />
                   <input
                     type="email"
                     placeholder="Enter your email"
                     value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    className={`w-full pl-11 pr-4 py-3 border-2 ${errors.email ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:border-orange-500 focus:outline-none transition-all duration-300`}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    className={`w-full pl-11 pr-4 py-3 border-2 ${
+                      errors.email ? "border-red-500" : "border-gray-200"
+                    } rounded-xl focus:border-orange-500 focus:outline-none transition-all duration-300`}
                   />
                 </div>
                 {errors.email && (
-                  <p className="text-red-500 text-sm mt-1 animate-pulse">{errors.email}</p>
+                  <p className="text-red-500 text-sm mt-1 animate-pulse">
+                    {errors.email}
+                  </p>
                 )}
               </div>
 
@@ -147,19 +176,27 @@ export const Signup = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Password
                 </label>
-                <div className="relative group">
-                  <Lock className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${errors.password ? 'text-red-500' : 'text-gray-400'} transition-colors`} />
+                <div className="relative">
+                  <Lock
+                    className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+                      errors.password ? "text-red-500" : "text-gray-400"
+                    }`}
+                  />
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a password"
                     value={formData.password}
-                    onChange={(e) => handleInputChange('password', e.target.value)}
-                    className={`w-full pl-11 pr-12 py-3 border-2 ${errors.password ? 'border-red-500' : 'border-gray-200'} rounded-xl focus:border-orange-500 focus:outline-none transition-all duration-300`}
+                    onChange={(e) =>
+                      handleInputChange("password", e.target.value)
+                    }
+                    className={`w-full pl-11 pr-12 py-3 border-2 ${
+                      errors.password ? "border-red-500" : "border-gray-200"
+                    } rounded-xl focus:border-orange-500 focus:outline-none transition-all duration-300`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -169,31 +206,24 @@ export const Signup = () => {
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-red-500 text-sm mt-1 animate-pulse">{errors.password}</p>
+                  <p className="text-red-500 text-sm mt-1 animate-pulse">
+                    {errors.password}
+                  </p>
                 )}
               </div>
-
-              <button
-                type="submit"
-                className="w-full cursor-pointer bg-orange-500 text-white py-3 rounded-xl font-semibold hover:bg-orange-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Create Account
-              </button>
             </div>
 
-            {/* Divider */}
-            <div className="flex items-center my-6">
-              <div className="flex-1 border-t border-gray-200"></div>
-              <span className="px-4 text-sm text-gray-500">OR</span>
-              <div className="flex-1 border-t border-gray-200"></div>
-            </div>
+            <button
+              type="submit"
+              className="w-full cursor-pointer bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl mt-8 transition duration-300"
+              disabled={isSigningUp}
+            >
+              {isSigningUp ? "Signing up..." : "Sign Up"}
+            </button>
 
-            <p className="text-center text-gray-600">
+            <p className="text-sm text-center text-gray-600 mt-6">
               Already have an account?{" "}
-              <Link
-                to="/login"
-                className="text-orange-600 hover:text-orange-700 font-semibold"
-              >
+              <Link to="/login" className="text-orange-500 hover:underline">
                 Login
               </Link>
             </p>
