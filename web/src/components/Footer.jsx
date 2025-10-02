@@ -77,9 +77,13 @@ const Footer = () => {
               </div>
 
               <div className="flex items-center gap-4">
+                <FaWhatsapp className="text-2xl" /> WhatsApp: 9800002222
+              </div>
+
+              <div className="flex items-center gap-4">
                 <MdSupportAgent className="text-2xl" /> Support: 9800001111
               </div>
-              {/* <div className="flex items-center gap-4"><FaWhatsapp className="text-2xl"/> WhatsApp: 9800002222</div> */}
+              
             </div>
           </div>
         </div>
@@ -87,7 +91,10 @@ const Footer = () => {
         <div className="bg-[#1B3C53] h-24 flex items-center">
           <div className="w-full px-16 flex items-center justify-between text-white">
             <span>
-              © {new Date().getFullYear()} Electronic Store. Powered by ❤ <span style={{color: themeColor}}><b>Rahul Sah</b></span>
+              © {new Date().getFullYear()} Electronic Store. Powered by ❤{" "}
+              <span style={{ color: themeColor }}>
+                <b>Rahul Sah</b>
+              </span>
             </span>
 
             <div className="flex items-center gap-5">

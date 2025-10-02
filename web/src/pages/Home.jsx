@@ -2,6 +2,7 @@ import { useTheme } from "../context/ThemeContext";
 
 const Home = () => {
   const { themeColor } = useTheme();
+
   return (
     <div className=" h-screen relative bg-[url(/images/hero-image.jpg)] bg-center md:bg-cover">
       <div className="p-5 flex flex-col items-start pt-16 space-y-5 absolute top-[50%] md:top-14 right-3 bg-white md:h-[400px] md:w-[380px] w-[340px]">

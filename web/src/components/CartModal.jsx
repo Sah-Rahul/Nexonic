@@ -2,9 +2,23 @@ import React from "react";
 import { RxCross2 } from "react-icons/rx";
 import { Trash2 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromCart } from "../store/slices/cartSlice";
+import EmptyCart from "./EmptyCart";
 
 const CartModal = ({ isOpen, onClose }) => {
-  const { themeColor } = useTheme()
+  const { themeColor } = useTheme();
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  const updateQuantity = (id, quantity) => {
+    if (quantity <= 0) {
+      dispatch(removeFromCart({ id }));
+    } else {
+      dispatch(updateCartQuantity({ id, quantity }));
+    }
+  };
+
   return (
     <>
       {/* Overlay */}
@@ -21,7 +35,10 @@ const CartModal = ({ isOpen, onClose }) => {
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Header */}
-        <div   style={{ backgroundColor: themeColor }} className="h-16 flex items-center justify-between px-6   text-white">
+        <div
+          style={{ color: themeColor }}
+          className="h-16 border-b-1 flex items-center justify-between px-6"
+        >
           <h2 className="font-semibold text-2xl">Cart</h2>
           <button
             onClick={onClose}
@@ -32,53 +49,74 @@ const CartModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Scrollable Content */}
-        <div className="h-[calc(100%-4rem)]  overflow-y-auto">
-          {Array(50)
-            .fill(null)
-            .map((_, index) => (
+        <div className="h-[calc(100%-8rem)]     p-4">
+          {cart.length === 0 ? (
+            <div className="text-center py-12">
+              <EmptyCart />
+            </div>
+          ) : (
+            cart.map((item, index) => (
               <div
-                key={index}
-                className={`flex items-center justify-between pt-2 pb-2 px-2 h-24 mt-5 ${
-                  index % 2 === 0 ? "bg-blue-500/45" : "bg-gray-500/50"
-                }`}
+                key={item.product.id}
+                className="flex items-center justify-between p-2 h-24 mb-3 border rounded-lg"
               >
-                <div className="h-full w-28 flex items-center justify-center bg-orange-500">
+                <div className="h-full w-20 flex items-center justify-center bg-gray-200">
                   <img
-                    src="https://plus.unsplash.com/premium_photo-1673439304183-8840bd0dc1bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGl6emF8ZW58MHx8MHx8fDA%3D"
-                    alt="Product"
+                    src={item.product.image}
+                    alt={item.product.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <button className="w-8 h-8 cursor-pointer bg-white rounded-full flex items-center justify-center font-bold text-pink-500 hover:bg-gray-100">
+                  <button
+                    onClick={() =>
+                      updateQuantity(item.product.id, item.quantity - 1)
+                    }
+                    className="w-8 h-8 bg-white rounded-full flex items-center justify-center font-bold text-pink-500 hover:bg-gray-100"
+                  >
                     -
                   </button>
-                  <span className="text-white font-semibold text-lg">1</span>
-                  <button className="w-8 h-8 cursor-pointer bg-white rounded-full flex items-center justify-center font-bold text-pink-500 hover:bg-gray-100">
+                  <span className="font-semibold text-lg">{item.quantity}</span>
+                  <button
+                    onClick={() =>
+                      updateQuantity(item.product.id, item.quantity + 1)
+                    }
+                    className="w-8 h-8 bg-white rounded-full flex items-center justify-center font-bold text-pink-500 hover:bg-gray-100"
+                  >
                     +
                   </button>
                 </div>
 
                 <div className="flex items-center gap-4">
+                  <span className="font-semibold">
+                    ${item.product.price * item.quantity}
+                  </span>
                   <button
-                    onClick={() => alert(index)}
-                    className="cursor-pointer text-white hover:text-red-200 transition-colors"
+                    onClick={() =>
+                      dispatch(removeFromCart({ id: item.product.id }))
+                    }
+                    className="text-red-500 hover:text-red-700 transition-colors"
                   >
                     <Trash2 className="w-6 h-6" />
                   </button>
                 </div>
               </div>
-            ))}
+            ))
+          )}
         </div>
-        <div className="h-[80px] space-y-2  w-full bg-white   fixed bottom-0">
-          <button className="cursor-pointer h-[40px] bg-pink-500 w-full">
-            View in Cart
-          </button>
-          <button className="cursor-pointer h-[40px] bg-orange-500 w-full">
-            Checkout
-          </button>
-        </div>
+
+        {/* Footer */}
+        {cart.length > 0 && (
+          <div className="h-[80px] space-y-2 w-full bg-white fixed bottom-0 p-2">
+            <button className="cursor-pointer h-[40px] bg-pink-500 w-full text-white rounded">
+              View in Cart
+            </button>
+            <button className="cursor-pointer h-[40px] bg-orange-500 w-full text-white rounded">
+              Checkout
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

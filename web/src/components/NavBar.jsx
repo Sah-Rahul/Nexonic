@@ -81,7 +81,8 @@ const NavBar = () => {
             />
 
             <Search
-              className="text-blue-600 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+              style={{ color: themeColor }}
+              className="  absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
               size={24}
               onClick={handleSearchClick}
             />
@@ -105,12 +106,15 @@ const NavBar = () => {
             </button>
 
             {showAllProducts && (
-              <div className="absolute top-full left-0 w-56 bg-[#0472F0] shadow-lg   z-50 mt-2">
+              <div
+                style={{ background: themeColor }}
+                className="absolute top-full left-0 w-56 bg-[#0472F0] shadow-lg   z-50 mt-2"
+              >
                 {hoverlink.map((item, index) => (
                   <Link
                     key={index}
                     to={item.link}
-                    className="block px-4 py-3 hover:bg-blue-600 text-white font-medium rounded-md"
+                    className="block px-4 py-3 hover:text-gray-400  text-white font-medium rounded-md"
                   >
                     {item.label}
                   </Link>
@@ -140,7 +144,9 @@ const NavBar = () => {
                 <ShoppingBasket className="text-white" size={30} />
               </button>
               <div className="h-6 w-6 rounded-full flex items-center justify-center bg-white absolute -top-4 right-0">
-                <span className="text-blue-500 font-semibold">0</span>
+                <span style={{ color: themeColor }} className="  font-semibold">
+                  0
+                </span>
               </div>
             </div>
 

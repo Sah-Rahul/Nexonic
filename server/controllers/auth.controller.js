@@ -56,7 +56,7 @@ export const login = catchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler("Email and password are required.", 400));
   }
 
-  if (password.trim().length < 6) {
+  if (password.trim().length < 8) {
     return next(
       new ErrorHandler("Password must be at least 6 characters.", 400)
     );
@@ -344,7 +344,6 @@ export const updateProfile = catchAsyncError(async (req, res, next) => {
 });
 
 export const fetchAIFilteredProducts = catchAsyncError(
-  
   async (req, res, next) => {
     const { userPrompt } = req.body;
 
