@@ -3,22 +3,35 @@ import { Link } from "react-router-dom";
 import { BsCart4 } from "react-icons/bs";
 import { MdPlayArrow } from "react-icons/md";
 import { Heart } from "lucide-react";
+import { Badge } from "antd";
+import { toast } from "react-hot-toast";
+import { useTheme } from "../context/ThemeContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../store/slices/cartSlice";
+import { addToWishlist } from "../store/slices/wishlist";
 import todayData from "../AlllJsonData/Todaybest/Todaybest.json";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Badge } from "antd";
-import { useTheme } from "../context/ThemeContext";
 
 const BestDeal = () => {
   const { themeColor } = useTheme();
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart.cart);
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
+
   const [hoveredItemId, setHoveredItemId] = useState(null);
 
-  const handleMouseEnter = (id) => {
-    setHoveredItemId(id);
+  const handleMouseEnter = (id) => setHoveredItemId(id);
+  const handleMouseLeave = () => setHoveredItemId(null);
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({ product, quantity: 1 }));
+    toast.success("Item added to cart!");
   };
 
-  const handleMouseLeave = () => {
-    setHoveredItemId(null);
+  const handleAddToWishlist = (product) => {
+    dispatch(addToWishlist(product));
+    toast.success("Item added to wishlist!");
   };
 
   useEffect(() => {
@@ -27,167 +40,96 @@ const BestDeal = () => {
   }, []);
 
   return (
-    <>
-      <div className="p-10 bg-[#e8eef3]   min-h-screen">
-        <h1 style={{ color: themeColor }} className="text-2xl font-bold">
-          Today’s best deal
-        </h1>
+    <div className="p-10 bg-[#e8eef3] min-h-screen">
+      <h1 style={{ color: themeColor }} className="text-2xl font-bold">
+        Today’s Best Deal
+      </h1>
 
-        <div className="relative p-5 bg-[#fff] flex gap-[8px] flex-wrap justify-between mt-5">
-          {todayData.map((item) => (
-            <div
-              key={item.id}
-              data-aos="fade-up"
-              className="relative md:w-[22vw] group mb-6"
-            >
-              {/* Ribbon */}
-              <Badge.Ribbon
-                text="Sale"
-                color={themeColor}
-                style={{
-                  fontWeight: "bold",
-                  padding: "0 10px",
-                  boxShadow: "0 0 2px rgba(0,0,0,0.2)",
-                }}
-                className="absolute top-0 right-5"
-              />
+       
 
-              <div className="flex flex-col items-center">
-                <Link to={`/productsdetails/${item.id}`}>
-                  <img
-                    src={item.img}
-                    alt={item.name}
-                    className="transition-all duration-300 ease-in-out"
-                  />
-                </Link>
+      <div className="relative p-5 bg-[#fff] flex flex-wrap justify-between mt-5">
+        {todayData.map((item) => (
+          <div
+            key={item.id}
+            data-aos="fade-up"
+            className="relative md:w-[22vw] group mb-6"
+          >
+            {/* Ribbon */}
+            <Badge.Ribbon
+              text="Sale"
+              color={themeColor}
+              style={{
+                fontWeight: "bold",
+                padding: "0 10px",
+                boxShadow: "0 0 2px rgba(0,0,0,0.2)",
+              }}
+              className="absolute top-0 right-5"
+            />
 
-                <Link to={`/productsdetails/${item.id}`}>
-                  <div className="px-6 flex flex-col">
-                    <span className="pt-2 text-x" style={{ color: themeColor }}>
-                      {item.rating}
-                    </span>
-                    <span className="pt-2 md:text-xl text-sm font-bold">
-                      {item.name.slice(0, 70)}...
-                    </span>
-                    <div className="pt-5 flex gap-3">
-                      <label className="font-semibold">
-                        Rs
-                        {(
-                          item.price -
-                          (item.price * item.discount) / 100
-                        ).toFixed()}
-                      </label>
-                      <del className="text-gray-600">Rs{item.price}</del>
-                      <label className="text-red-600">
-                        ({item.discount}% OFF)
-                      </label>
-                    </div>
-                  </div>
-                </Link>
-              </div>
+            <div className="flex flex-col items-center">
+              <Link to={`/productsdetails/${item.id}`}>
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="transition-all duration-300 ease-in-out"
+                />
+              </Link>
 
-              {/* Cart Icon */}
-              <div
-                style={{ backgroundColor: themeColor }}
-                onMouseEnter={() => handleMouseEnter(item.id)}
-                onMouseLeave={handleMouseLeave}
-                className="h-8 w-8 mt-22  flex items-center justify-center font-bold rounded-full   text-white text-xs absolute top-3 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
-              >
-                <button onClick={() => alert()}>
-                  <BsCart4 className="text-xl cursor-pointer" />
-                </button>
-              </div>
-
-              {hoveredItemId === item.id && (
-                <div className="flex items-center absolute top-26 right-[45px]">
-                  <span
-                    style={{ backgroundColor: themeColor }}
-                    className="text-xs px-2 py-1   text-white shadow-md"
-                  >
-                    Add to Cart
+              <Link to={`/productsdetails/${item.id}`}>
+                <div className="px-6 flex flex-col">
+                  <span className="pt-2 text-x" style={{ color: themeColor }}>
+                    {item.rating}
                   </span>
-                  <MdPlayArrow
-                    style={{ color: themeColor }}
-                    className="text-xl  "
-                  />
+                  <span className="pt-2 md:text-xl text-sm font-bold">
+                    {item.name.slice(0, 70)}...
+                  </span>
+                  <div className="pt-5 flex gap-3">
+                    <label className="font-semibold">
+                      Rs{(item.price - (item.price * item.discount) / 100).toFixed()}
+                    </label>
+                    <del className="text-gray-600">Rs{item.price}</del>
+                    <label className="text-red-600">({item.discount}% OFF)</label>
+                  </div>
                 </div>
-              )}
+              </Link>
+            </div>
 
-              {/* Wishlist Icon */}
-              <div
-                style={{ backgroundColor: themeColor }}
-                className="h-8 w-8 flex items-center justify-center font-bold rounded-full   text-white text-xs absolute top-14 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
-              >
-                <Heart className="w-4 h-4 cursor-pointer" />
+            {/* Cart Icon */}
+            <div
+              style={{ backgroundColor: themeColor }}
+              onMouseEnter={() => handleMouseEnter(item.id)}
+              onMouseLeave={handleMouseLeave}
+              className="h-8 w-8 mt-22 flex items-center justify-center font-bold rounded-full text-white text-xs absolute top-3 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
+            >
+              <button onClick={() => handleAddToCart(item)}>
+                <BsCart4 className="text-xl cursor-pointer" />
+              </button>
+            </div>
+
+            {hoveredItemId === item.id && (
+              <div className="flex items-center absolute top-26 right-[45px]">
+                <span
+                  style={{ backgroundColor: themeColor }}
+                  className="text-xs px-2 py-1 text-white shadow-md"
+                >
+                  Add to Cart
+                </span>
+                <MdPlayArrow style={{ color: themeColor }} className="text-xl" />
               </div>
-            </div>
-          ))}
-        </div>
+            )}
 
-        {/* Bottom 3 Promo Cards */}
-        <div
-          data-aos="fade-up"
-          className="hidden md:flex flex-wrap mt-10 gap-8 items-center justify-between"
-        >
-          {/* Card 1 */}
-          <div className="w-full md:w-[400px] flex justify-between items-center bg-[#F1F3F7] p-6 rounded-lg shadow-lg">
-            <div>
-              <h1 style={{ color: themeColor }} className="text-3xl font-bold">
-                Wireless Headphones
-              </h1>
-              <p className="mt-2 text-gray-500 text-lg">Starting at $49</p>
-              <button className="py-2 text-blue-500 font-semibold">
-                Shop Now
-              </button>
+            {/* Wishlist Icon */}
+            <div
+              style={{ backgroundColor: themeColor }}
+              onClick={() => handleAddToWishlist(item)}
+              className="h-8 w-8 flex items-center justify-center font-bold rounded-full text-white text-xs absolute top-14 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out cursor-pointer"
+            >
+              <Heart className="w-4 h-4" />
             </div>
-            <img
-              src="/BestDeal/banner1.png"
-              alt="banner"
-              className="mt-10 md:w-[100px] w-[25vw] h-auto object-cover rounded-lg"
-            />
           </div>
-
-          {/* Card 2 */}
-          <div className="w-full md:w-[400px] flex justify-between items-center bg-[#E9EAED] p-6 rounded-lg shadow-lg">
-            <div>
-              <h1
-                style={{ color: themeColor }}
-                className="text-3xl   font-bold"
-              >
-                Grooming
-              </h1>
-              <p className="mt-2 text-gray-500 text-lg">Starting at $49</p>
-              <button className="mt-4 text-blue-500 font-semibold">
-                Shop Now
-              </button>
-            </div>
-            <img
-              src="/BestDeal/trimer.png"
-              alt="banner"
-              className="mt-10 hidden md:block w-[200px] h-auto object-cover rounded-lg"
-            />
-          </div>
-
-          {/* Card 3 */}
-          <div className="w-full md:w-[400px] flex justify-between items-center bg-[#F8EDD1] p-6 rounded-lg shadow-lg">
-            <div>
-              <h1 style={{ color: themeColor }} className="text-3xl  font-bold">
-                Video Games
-              </h1>
-              <p className="mt-2 text-gray-500 text-lg">Starting at $49</p>
-              <button className="mt-4 text-blue-500 font-semibold">
-                Shop Now
-              </button>
-            </div>
-            <img
-              src="/BestDeal/game.png"
-              alt="banner"
-              className="mt-16 hidden md:block w-[100px] h-auto object-cover rounded-lg"
-            />
-          </div>
-        </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 

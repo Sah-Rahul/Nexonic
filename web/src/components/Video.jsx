@@ -3,15 +3,23 @@ import { Link } from "react-router-dom";
 import { BsCart4 } from "react-icons/bs";
 import { MdPlayArrow } from "react-icons/md";
 import { Heart } from "lucide-react";
+import { addToCart } from "../store/slices/cartSlice";
+import { addToWishlist } from "../store/slices/wishlist";
 import audiodata from "../AlllJsonData/audioandvideo/audioandvideo.json";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Badge } from "antd";
 import { useTheme } from "../context/ThemeContext";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const Video = () => {
   const { themeColor } = useTheme();
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart.cart);
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
+
   const [hoveredItemId, setHoveredItemId] = useState(null);
 
   const handleMouseEnter = (id) => {
@@ -21,6 +29,16 @@ const Video = () => {
   const handleMouseLeave = () => {
     setHoveredItemId(null);
   };
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({ product, quantity: 1 }));
+    toast.success("Item added to cart!");
+  };
+
+   const handleAddToWishlist = (product) => {
+      dispatch(addToWishlist(product));
+      toast.success("Item added to wishlist!");
+    };
 
   useEffect(() => {
     AOS.init({ duration: 1000, easing: "ease-in-out", once: true });
@@ -34,7 +52,7 @@ const Video = () => {
           Audio & Video​
         </h1>
 
-        <div className="relative p-5 bg-[#fff] flex gap-[8px] flex-wrap justify-between mt-5">
+        <div className="relative p-5 bg-[#fff] flex   flex-wrap justify-between mt-5">
           {audiodata.map((item, index) => (
             <div
               key={item.id}
@@ -102,7 +120,7 @@ const Video = () => {
                 onMouseLeave={handleMouseLeave}
                 className="h-8 w-8 mt-22  flex items-center justify-center font-bold rounded-full   text-white text-xs absolute top-3 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
               >
-                <button onClick={() => alert()}>
+                <button onClick={() => handleAddToCart(item)}>
                   <BsCart4 className="text-xl cursor-pointer" />
                 </button>
               </div>
@@ -125,6 +143,7 @@ const Video = () => {
               {/* Wishlist Icon */}
               <div
                 style={{ backgroundColor: themeColor }}
+                onClick={() => handleAddToWishlist(item)}
                 className="h-8 w-8 flex items-center justify-center font-bold rounded-full   text-white text-xs absolute top-14 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
               >
                 <Heart className="w-4 h-4 cursor-pointer" />

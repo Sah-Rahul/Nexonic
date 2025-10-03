@@ -7,11 +7,18 @@ import homedata from "../AlllJsonData/HomeAppliances/HomeAppliances.json";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Badge } from "antd";
+import { addToCart } from "../store/slices/cartSlice";
+import { addToWishlist } from "../store/slices/wishlist";
 import { useTheme } from "../context/ThemeContext";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const HomeAppliances = () => {
   const { themeColor } = useTheme();
   const [hoveredItemId, setHoveredItemId] = useState(null);
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart.cart);
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
 
   const handleMouseEnter = (id) => {
     setHoveredItemId(id);
@@ -19,6 +26,16 @@ const HomeAppliances = () => {
 
   const handleMouseLeave = () => {
     setHoveredItemId(null);
+  };
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({ product, quantity: 1 }));
+    toast.success("Item added to cart!");
+  };
+
+  const handleAddToWishlist = (product) => {
+    dispatch(addToWishlist(product));
+    toast.success("Item added to wishlist!");
   };
 
   useEffect(() => {
@@ -29,9 +46,11 @@ const HomeAppliances = () => {
   return (
     <>
       <div className="p-10 bg-[#e8eef3]   min-h-screen">
-        <h1 style={{ color: themeColor }} className="text-2xl font-bold">Home appliances​</h1>
+        <h1 style={{ color: themeColor }} className="text-2xl font-bold">
+          Home appliances​
+        </h1>
 
-        <div className="relative p-5 bg-[#fff] flex gap-[8px] flex-wrap justify-between mt-5">
+        <div className="relative p-5 bg-[#fff] flex   flex-wrap justify-between mt-5">
           {homedata.map((item, index) => (
             <div
               key={item.id}
@@ -98,7 +117,7 @@ const HomeAppliances = () => {
                 onMouseLeave={handleMouseLeave}
                 className="h-8 w-8 mt-22  flex items-center justify-center font-bold rounded-full   text-white text-xs absolute top-3 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
               >
-                <button onClick={() => alert()}>
+                <button onClick={() => handleAddToCart(item)}>
                   <BsCart4 className="text-xl cursor-pointer" />
                 </button>
               </div>
@@ -120,6 +139,7 @@ const HomeAppliances = () => {
 
               {/* Wishlist Icon */}
               <div
+              onClick={() => handleAddToWishlist(item)}
                 style={{ backgroundColor: themeColor }}
                 className="h-8 w-8 flex items-center justify-center font-bold rounded-full   text-white text-xs absolute top-14 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
               >

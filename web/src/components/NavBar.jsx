@@ -14,7 +14,8 @@ const NavBar = () => {
   const { themeColor } = useTheme();
   const navigate = useNavigate();
 
-  console.log(authUser);
+  const cartItems = useSelector((state) => state.cart.cart);
+
   const menu = [
     { label: "Home Appliances", link: "/appliancess_home" },
     { label: "Audio & video", link: "/video_and_audio" },
@@ -63,7 +64,11 @@ const NavBar = () => {
         </div>
 
         {/* CART MODAL */}
-        <CartModal isOpen={showCart} onClose={() => setShowCart(false)} />
+        <CartModal
+          data={cartItems}
+          isOpen={showCart}
+          onClose={() => setShowCart(false)}
+        />
 
         {/* SEARCHOVERLAY MODAL */}
         {/* {showSearch && <SearchOverlay onClose={() => setShowSearch(false)} />} */}
@@ -149,7 +154,7 @@ const NavBar = () => {
               </button>
               <div className="h-6 w-6 rounded-full flex items-center justify-center bg-white absolute -top-4 right-0">
                 <span style={{ color: themeColor }} className="  font-semibold">
-                  0
+                  {cartItems.length}
                 </span>
               </div>
             </div>
@@ -163,7 +168,7 @@ const NavBar = () => {
                     className="h-10 w-10 rounded-full"
                   />
                 ) : (
-                  <Link to={'/profile'}>
+                  <Link to={"/profile"}>
                     <img
                       className="h-10 w-10 rounded-full"
                       src="https://avatar.iran.liara.run/public/boy"

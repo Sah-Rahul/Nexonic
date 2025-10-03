@@ -14,6 +14,7 @@ import Testimonial from "./Testimonial";
 import Contact from "./Contact";
 import AirConditioner from "./AirConditioner";
 import BannerOne from "./BannerOne";
+import PromotionsCard from "./PromotionsCard";
 
 const Hero = () => {
   return (
@@ -21,6 +22,7 @@ const Hero = () => {
       <Home />
       <Category />
       <BestDeal />
+      <PromotionsCard />
       <Video />
       <HomeAppliances />
       <AirConditioner />

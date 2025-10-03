@@ -8,10 +8,17 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Badge } from "antd";
 import { useTheme } from "../context/ThemeContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../store/slices/cartSlice";
+import { addToWishlist } from "../store/slices/wishlist";
+import toast from "react-hot-toast";
 
 const BestDeal = () => {
   const { themeColor } = useTheme();
   const [hoveredItemId, setHoveredItemId] = useState(null);
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart.cart);
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
 
   const handleMouseEnter = (id) => {
     setHoveredItemId(id);
@@ -19,6 +26,16 @@ const BestDeal = () => {
 
   const handleMouseLeave = () => {
     setHoveredItemId(null);
+  };
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({ product, quantity: 1 }));
+    toast.success("Item added to cart!");
+  };
+
+  const handleAddToWishlist = (product) => {
+    dispatch(addToWishlist(product));
+    toast.success("Item added to wishlist!");
   };
 
   useEffect(() => {
@@ -33,7 +50,7 @@ const BestDeal = () => {
           Refrigerator
         </h1>
 
-        <div className="relative p-5 bg-[#fff] flex gap-[8px] flex-wrap justify-between mt-5">
+        <div className="relative p-5 bg-[#fff] flex  flex-wrap justify-between mt-5">
           {refrigeratordata.map((item, index) => (
             <div
               key={item.id}
@@ -100,7 +117,7 @@ const BestDeal = () => {
                 onMouseLeave={handleMouseLeave}
                 className="h-8 w-8 mt-22  flex items-center justify-center font-bold rounded-full   text-white text-xs absolute top-3 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
               >
-                <button onClick={() => alert()}>
+                <button onClick={() => handleAddToCart(item)}>
                   <BsCart4 className="text-xl cursor-pointer" />
                 </button>
               </div>
@@ -122,6 +139,7 @@ const BestDeal = () => {
 
               {/* Wishlist Icon */}
               <div
+                onClick={() => handleAddToWishlist(item)}
                 style={{ backgroundColor: themeColor }}
                 className="h-8 w-8 flex items-center justify-center font-bold rounded-full   text-white text-xs absolute top-14 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
               >

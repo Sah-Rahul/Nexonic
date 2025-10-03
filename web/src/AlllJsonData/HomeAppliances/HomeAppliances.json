@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": 13,
     "img": "/HomeAppliances/HomeAppliances1.jpg",
     "name": "Multigroomer All-in-One Trimmer Series 5000, 23 Piece Mens Grooming Kit",
     "price": 629.00,
@@ -17,7 +17,7 @@
     ]
   },
   {
-    "id": 2,
+    "id": 14,
     "img": "/HomeAppliances/HomeAppliances2.jpg",
     "name": "Compact Pulsator Washer for Clothes, .9 Cubic ft. Tub, White, BPAB10WH",
     "price": 749.00,
@@ -34,7 +34,7 @@
     ]
   },
   {
-    "id": 3,
+    "id": 15,
     "img": "/HomeAppliances/HomeAppliances3.jpg",
     "name": "Full-Automatic Compact Washer with Wheels, 1.6 cu. ft, 11 lbs capacity with 6 Wash Programs Washer",
     "price": 1249.00,
@@ -51,7 +51,7 @@
     ]
   },
   {
-    "id": 4,
+    "id": 16,
     "img": "/HomeAppliances/HomeAppliances4.jpg",
     "name": "Small Space Heat Pump Dryer with Sensor Dry, 12 Preset Machine Cycles, 40 Minute Express Drying",
     "price": 1329.00,

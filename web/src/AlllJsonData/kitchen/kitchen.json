@@ -1,6 +1,6 @@
 [
     {
-        "id": 1,
+        "id": 17,
         "img": "/Kitchen/kitchen1.jpg",
         "name": "0.9 Cubic Feet Capacity 900 Watts Kitchen Essentials for the Countertop Stainless Steel",
         "price": 629.00,
@@ -16,7 +16,7 @@
         ]
       },
     {
-        "id": 2,
+        "id": 18,
         "img": "/Kitchen/kitchen2.jpg",
         "name": "Microwave Oven with Smart Sensor Easy Clean Interior ECO Mode 1.2 Cu Ft Stainless Steel",
         "price": 749.00,
@@ -32,7 +32,7 @@
         ]
       },
     {
-        "id": 3,
+        "id": 19,
         "img": "/Kitchen/kitchen3.jpg",
         "name": "Double Door Mini Fridge with Freezer for Office or Dorm with Adjustable Remove Glass Shelves",
         "price": 1249.00,
@@ -48,7 +48,7 @@
         ]
       },
     {
-        "id": 4,
+        "id": 20,
         "img": "/Kitchen/kitchen4.jpg",
         "name": "36″ Side-by-Side Refrigerator and Freezer with 25 Cubic Ft. Total Capacity, Black",
         "price": 1329.00,

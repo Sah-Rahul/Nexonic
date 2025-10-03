@@ -171,6 +171,7 @@ export const fetchAllProducts = catchAsyncError(async (req, res, next) => {
     products: result.rows,
     totalProducts,
     topRatedProducts: topRatedResult.rows,
+    newProducts: result.rows.slice(0, 3),
   });
 });
 
@@ -275,6 +276,7 @@ export const getSingleProduct = catchAsyncError(async (req, res, next) => {
   res.status(200).json({
     success: true,
     product: result.rows[0],
+    message: "getSingle Product successfully.",
   });
 });
 

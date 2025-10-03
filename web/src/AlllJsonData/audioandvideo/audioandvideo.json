@@ -1,6 +1,6 @@
 [
     {
-        "id": 1,
+        "id": 5,
         "img": "/AudioAndVideo/MaxSRHome.jpg",
         "name": "Max SR Home Theater Surround Sound Bar HDMI, Optical Cables, Wireless Subwoofer & Two Speakers",
         "price": 9999.00,
@@ -16,7 +16,7 @@
         ]
       },
     {
-        "id": 2,
+        "id": 6,
         "img": "/AudioAndVideo/V-Series.jpg",
         "name": "V-Series 5.1 Home Theater Sound Bar with Dolby Audio, Bluetooth, Wireless Subwoofer, Voice Assistant Compatible",
         "price": 749.00,
@@ -32,7 +32,7 @@
         ]
       },
     {
-        "id": 3,
+        "id": 7,
         "img": "/AudioAndVideo/OLEDC1Series.jpg",
         "name": "OLED C1 Series 55” 4k Smart TV (3840 x 2160), 120Hz Refresh Rate, AI-Powered 4K, Dolby Cinema, WiSA Ready, Gaming Mode",
         "price": 1249.00,
@@ -48,7 +48,7 @@
         ]
       },
     {
-        "id": 4,
+        "id": 8,
         "img": "/AudioAndVideo/X80J55InchTV.jpg",
         "name": "X80J 55 Inch TV: 4K Ultra HD LED Smart Google TV with Dolby Vision HDR",
         "price": 1329.00,
