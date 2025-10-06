@@ -18,7 +18,7 @@ const cartSlice = createSlice({
       state.cart = state.cart.filter(
         (item) => item.product.id !== action.payload.id
       );
-      toast.success('item removed from cart ')
+      toast.success("item removed from cart ");
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
     clearCart(state) {

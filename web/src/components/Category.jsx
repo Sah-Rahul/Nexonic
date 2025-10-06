@@ -74,7 +74,7 @@ const Category = () => {
 
   return (
     <>
-      <div className="md:p-10 relative p-5 bg-[#e8eef3] min-h-screen">
+      <div  className="md:p-10 relative p-5 bg-[#e8eef3] min-h-screen">
         <div>
           <div className="absolute top-20 left-25">
             <h2 style={{ color: themeColor }} className="font-bold  text-2xl">

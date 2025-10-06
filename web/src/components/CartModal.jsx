@@ -6,17 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart, updateCartQuantity } from "../store/slices/cartSlice";
 import EmptyCart from "./EmptyCart";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
-const CartModal = ({ isOpen, onClose ,data}) => {
+const CartModal = ({ isOpen, onClose, data }) => {
   const { themeColor } = useTheme();
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-  console.log(data)
+  // console.log(data);
 
   const updateQuantity = (id, quantity) => {
     if (quantity <= 0) {
-      toast.error('minium one item is required ')
+      toast.error("minium one item is required ");
     } else {
       dispatch(updateCartQuantity({ id, quantity }));
     }
@@ -111,10 +112,15 @@ const CartModal = ({ isOpen, onClose ,data}) => {
 
         {/* Footer */}
         {cart.length > 0 && (
-          <div  style={{background: themeColor }} className="h-[62px] space-y-2 w-full bg-white fixed bottom-0 p-2">
-            <button className="cursor-pointer h-[62px]   w-full font-semibold text-white rounded">
-              View in Cart
-            </button>
+          <div
+            style={{ background: themeColor }}
+            className="h-[62px]  space-y-2 w-full bg-white fixed bottom-0 p-2"
+          >
+            <Link to={"/cart"}>
+              <button className="cursor-pointer h-[62px]   w-full font-semibold text-white rounded">
+                View in Cart
+              </button>
+            </Link>
           </div>
         )}
       </div>

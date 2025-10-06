@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import Signup from "../pages/Signup";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
+import Cart from "../pages/Cart";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />

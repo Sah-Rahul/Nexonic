@@ -18,3 +18,10 @@
   cursor: pointer;
   background-color: #1145ca8c;
 }
+
+h1::selection,
+h2::selection,
+span::selection,
+p::selection {
+  color: red;
+}
