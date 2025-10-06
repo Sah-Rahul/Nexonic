@@ -8,10 +8,11 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Links, useNavigate } from "react-router-dom";
 import { loginSchema } from "../validation/loginSchema";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../store/slices/authSlice"; 
+import { login } from "../store/slices/authSlice";
+import ForgotPassword from "./ForgotPassword";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -28,7 +29,6 @@ const Login = () => {
 
   useEffect(() => {
     if (authUser) {
-      console.log("🔐 Logged in user:", authUser);
       navigate("/");
     }
   }, [authUser, navigate]);
@@ -48,7 +48,7 @@ const Login = () => {
     }
 
     setErrors({});
-    dispatch(login(formData)); // 🔥 Dispatch login API call
+    dispatch(login(formData));
   };
 
   const handleInputChange = (field, value) => {
@@ -173,9 +173,9 @@ const Login = () => {
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     {showPassword ? (
-                      <EyeOff className="w-5 h-5" />
+                      <EyeOff className="w-5 cursor-pointer h-5" />
                     ) : (
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-5 cursor-pointer h-5" />
                     )}
                   </button>
                 </div>
@@ -185,11 +185,14 @@ const Login = () => {
                   </p>
                 )}
               </div>
+              <div className="flex  text-teal-700 items-center justify-end">
+                <Link to={"/forgot/password"}>forgot Password</Link>
+              </div>
 
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full cursor-pointer bg-teal-500 text-white py-3 rounded-xl font-semibold hover:bg-teal-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="w-full cursor-pointer bg-teal-500 text-white py-3 rounded-xl font-semibold   hover:bg-teal-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 {isLoggingIn ? "Logging In..." : "Login Now"}
               </button>

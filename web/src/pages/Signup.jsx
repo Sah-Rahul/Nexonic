@@ -45,9 +45,8 @@ const Signup = () => {
 
     try {
       await dispatch(register(formData)).unwrap();
-      navigate("/login"); // ✅ Redirect to login only if signup succeeds
+      navigate("/login");
     } catch (error) {
-      // error already handled by toast in slice
       console.error("Signup failed:", error);
     }
   };
@@ -199,9 +198,9 @@ const Signup = () => {
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     {showPassword ? (
-                      <EyeOff className="w-5 h-5" />
+                      <EyeOff className="w-5 h-5 cursor-pointer" />
                     ) : (
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-5 h-5 cursor-pointer" />
                     )}
                   </button>
                 </div>

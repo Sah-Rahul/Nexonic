@@ -11,6 +11,8 @@ import PublicRoute from "../components/PublicRoute";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
 import { useEffect } from "react";
+import ForgotPassword from "../pages/ForgotPassword";
+import PasswordReset from "../pages/PasswordReset";
 
 const AppRoutes = () => {
   const dispatch = useDispatch();
@@ -32,14 +34,16 @@ const AppRoutes = () => {
             <Route path="/login" element={<Login />} />
           </Route>
 
-          {/* 🔐 Protected routes */}
+          {/*   Protected routes */}
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<Hero />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/cart" element={<Cart />} />
           </Route>
 
-          {/* 404 */}
+          <Route path="/forgot/password" element={<ForgotPassword />} />
+          <Route path="/password/reset/:token" element={<PasswordReset />} />
+       
           <Route path="*" element={<NotFound />} />
         </Routes>
 

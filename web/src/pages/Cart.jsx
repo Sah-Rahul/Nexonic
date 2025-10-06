@@ -13,9 +13,10 @@ import {
 } from "lucide-react";
 import { removeFromCart, updateCartQuantity } from "../store/slices/cartSlice";
 import { useTheme } from "../context/ThemeContext";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
-  const { themeColor } = useTheme()
+  const { themeColor } = useTheme();
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
@@ -75,9 +76,11 @@ const Cart = () => {
                 Add some products to get started!
               </p>
 
-              <button className="px-8 py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-full font-semibold hover:from-blue-600 hover:to-teal-600 transform hover:scale-105 transition-all duration-300 shadow-lg">
-                Start Shopping
-              </button>
+              <Link to={"/products"}>
+                <button className="cursor-pointer px-8 py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-full font-semibold hover:from-blue-600 hover:to-teal-600 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                  Start Shopping
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -123,7 +126,7 @@ const Cart = () => {
                       <div className="flex justify-between items-start mb-3">
                         <div>
                           <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2">
-                            {item.product.name.slice(0,50)}...
+                            {item.product.name.slice(0, 50)}...
                           </h3>
                           <div className="flex items-center gap-2 mb-2">
                             <span className="text-yellow-500">
