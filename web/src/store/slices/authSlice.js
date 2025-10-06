@@ -149,6 +149,7 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.isSigningUp = false;
         state.authUser = action.payload;
+        localStorage.setItem("authUser", JSON.stringify(action.payload));
       })
       .addCase(register.rejected, (state) => {
         state.isSigningUp = false;
@@ -161,6 +162,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoggingIn = false;
         state.authUser = action.payload;
+        localStorage.setItem("authUser", JSON.stringify(action.payload));
       })
       .addCase(login.rejected, (state) => {
         state.isLoggingIn = false;
@@ -221,6 +223,7 @@ const authSlice = createSlice({
       // RESET PASSWORD
       .addCase(resetPassword.fulfilled, (state, action) => {
         state.authUser = action.payload;
+        localStorage.setItem("authUser", JSON.stringify(action.payload));
       });
   },
 });

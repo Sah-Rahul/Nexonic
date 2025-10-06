@@ -24,9 +24,9 @@ export const register = catchAsyncError(async (req, res, next) => {
   }
 
   // Check if user already exists
-  const existingUser = await db
-    .query(`SELECT * FROM users WHERE email = $1`, [email])
-    .select("-password");
+  const existingUser = await db.query(`SELECT * FROM users WHERE email = $1`, [
+    email,
+  ]);
 
   if (existingUser.rows.length > 0) {
     return next(new ErrorHandler("User already exists with this email.", 409));

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateProfile, logout } from "../store/slices/authSlice";
-import { Edit, Camera, Mail, User, Image, Save, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Edit, Camera, Mail, User, Save, Sparkles } from "lucide-react";
+import { Navigate } from "react-router-dom";
 import Layout from "../components/Layout";
-import toast from "react-hot-toast";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -30,7 +29,6 @@ const Profile = () => {
       alert("Passwords do not match!");
       return;
     }
-
     const updatedData = new FormData();
     updatedData.append("name", formData.name);
     updatedData.append("email", formData.email);
@@ -41,24 +39,7 @@ const Profile = () => {
   };
 
   if (!authUser) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 text-center max-w-md w-full transform hover:scale-105 transition-all duration-300">
-          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
-            <User className="w-10 h-10 text-red-500" />
-          </div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-2">
-            Access Denied
-          </h3>
-          <p className="text-red-500 mb-6">Please login to see your profile.</p>
-          <Link to={"/"}>
-            <button className="px-6 py-3 cursor-pointer bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-full font-semibold hover:from-red-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-300 shadow-lg">
-              Go to Home
-            </button>
-          </Link>
-        </div>
-      </div>
-    );
+    return <Navigate to={"/login"} />;
   }
 
   const handleLogout = () => {

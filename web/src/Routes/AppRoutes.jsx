@@ -6,19 +6,43 @@ import Signup from "../pages/Signup";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
 import Cart from "../pages/Cart";
+import ProtectedRoutes from "../components/ProtectedRoutes";
+import PublicRoute from "../components/PublicRoute";
+import { useDispatch } from "react-redux";
+import { login } from "../store/slices/authSlice";
+import { useEffect } from "react";
 
 const AppRoutes = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("authUser");
+    if (storedUser) {
+      dispatch(login.fulfilled(JSON.parse(storedUser)));
+    }
+  }, []);
+
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Hero />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/cart" element={<Cart />} />
+          {/*   Public routes only when NOT logged in */}
+          <Route element={<PublicRoute />}>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+          </Route>
+
+          {/* 🔐 Protected routes */}
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/" element={<Hero />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/cart" element={<Cart />} />
+          </Route>
+
+          {/* 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+
         <Toaster />
       </BrowserRouter>
     </>
