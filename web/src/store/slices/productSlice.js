@@ -90,7 +90,7 @@ export const createProduct = createAsyncThunk(
     try {
       const { data } = await axiosInstance.post("/create-product", productData);
       toast.success("Product created successfully");
-      return data.product; // backend me product object return hota hai
+      return data.product;
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to create product");
       return thunkApi.rejectWithValue(error.response?.data);
@@ -108,7 +108,7 @@ export const updateProduct = createAsyncThunk(
         productData
       );
       toast.success("Product updated successfully");
-      return data.product; // backend me updated product return hota hai
+      return data.product;
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update product");
       return thunkApi.rejectWithValue(error.response?.data);
@@ -123,7 +123,7 @@ export const deleteProduct = createAsyncThunk(
     try {
       await axiosInstance.delete(`/product/delete/${id}`);
       toast.success("Product deleted successfully");
-      return id; // return id taaki reducer me filter ho jaye
+      return id;
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete product");
       return thunkApi.rejectWithValue(error.response?.data);

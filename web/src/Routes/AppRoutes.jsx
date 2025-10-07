@@ -13,6 +13,8 @@ import { login } from "../store/slices/authSlice";
 import { useEffect } from "react";
 import ForgotPassword from "../pages/ForgotPassword";
 import PasswordReset from "../pages/PasswordReset";
+import HomeAppliances from "../pages/HomeAppliances";
+import Audiovideo from "../pages/Audiovideo";
 
 const AppRoutes = () => {
   const dispatch = useDispatch();
@@ -43,7 +45,15 @@ const AppRoutes = () => {
 
           <Route path="/forgot/password" element={<ForgotPassword />} />
           <Route path="/password/reset/:token" element={<PasswordReset />} />
-       
+
+          {/* pages routes  */}
+          <Route
+            path="/appliancess_home"element={<HomeAppliances />}
+          />
+          <Route
+            path="/video_and_audio"element={<Audiovideo />}
+          />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
 

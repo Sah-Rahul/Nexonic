@@ -8,7 +8,7 @@ const Footer = () => {
   const { themeColor } = useTheme();
   return (
     <>
-      <footer className="w-full ">
+      <footer className="w-full border-t-2 border-gray-400">
         <div
           style={{ backgroundColor: themeColor }}
           className="  text-white px-16 flex items-center justify-between h-72"
@@ -83,7 +83,6 @@ const Footer = () => {
               <div className="flex items-center gap-4">
                 <MdSupportAgent className="text-2xl" /> Support: 9800001111
               </div>
-              
             </div>
           </div>
         </div>
