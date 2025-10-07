@@ -37,11 +37,11 @@ const AppRoutes = () => {
           </Route>
 
           {/*   Protected routes */}
-          <Route element={<ProtectedRoutes />}>
+          {/* <Route element={<ProtectedRoutes />}> */}
             <Route path="/" element={<Hero />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/cart" element={<Cart />} />
-          </Route>
+          {/* </Route> */}
 
           <Route path="/forgot/password" element={<ForgotPassword />} />
           <Route path="/password/reset/:token" element={<PasswordReset />} />

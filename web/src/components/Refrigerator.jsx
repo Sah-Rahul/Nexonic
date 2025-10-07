@@ -13,7 +13,7 @@ import { addToCart } from "../store/slices/cartSlice";
 import { addToWishlist } from "../store/slices/wishlist";
 import toast from "react-hot-toast";
 
-const BestDeal = () => {
+const Refrigerator = () => {
   const { themeColor } = useTheme();
   const [hoveredItemId, setHoveredItemId] = useState(null);
   const dispatch = useDispatch();
@@ -153,4 +153,4 @@ const BestDeal = () => {
   );
 };
 
-export default BestDeal;
+export default Refrigerator;

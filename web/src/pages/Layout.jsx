@@ -4,12 +4,13 @@ import { Palette } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { useDispatch } from "react-redux";
 import { getMe } from "../store/slices/authSlice";
-import NavBar from "../components/Navbar";
+import NavBar from "../components/NavBar";
 import GoTop from "../components/GoTop";
 import Customize from "../components/Customize";
 import Footer from "../components/Footer";
 import { fetchAllProducts } from "../store/slices/productSlice";
 import { Link } from "react-router-dom";
+
 
 const Layout = ({ children }) => {
   const [hoveredCategory, setHoveredCategory] = useState(null);

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Footer from "./Footer";
 import GoTop from "./GoTop";
-import NavBar from "./Navbar";
+import NavBar from "./NavBar";
 import { Palette } from "lucide-react";
 import Customize from "./Customize";
 import { useTheme } from "../context/ThemeContext";
 import { useDispatch } from "react-redux";
 import { getMe } from "../store/slices/authSlice";
 import { fetchAllProducts } from "../store/slices/productSlice";
- 
+
 const Layout = ({ children }) => {
   const [showCustomize, setShowCustomize] = useState(false);
   const { themeColor } = useTheme();
@@ -20,11 +20,11 @@ const Layout = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getMe());  
+    dispatch(getMe());
   }, []);
 
   useEffect(() => {
-    dispatch((fetchAllProducts));  
+    dispatch(fetchAllProducts);
   }, []);
 
   return (
