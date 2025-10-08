@@ -2,23 +2,17 @@ import React, { useState } from "react";
 import Layout from "./Layout";
 import { Link, useLocation } from "react-router-dom";
 import { formatBreadcrumb } from "../lib/breadcrumb";
-<<<<<<< HEAD
 import audioandvideo from "../AlllJsonData/audioandvideo/audioandvideo.json";
-=======
 import airconditioner from "../AlllJsonData/AirConditioner/AirConditioner.json";
->>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
 import { MdPlayArrow } from "react-icons/md";
 import { BsCart4 } from "react-icons/bs";
 import { Badge } from "antd";
 import { useTheme } from "../context/ThemeContext";
 import { Heart } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-<<<<<<< HEAD
 import { addToCart } from "../store/slices/cartSlice";
 import toast from "react-hot-toast";
 import { addToWishlist } from "../store/slices/wishlist";
-=======
->>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
 
 const Audiovideo = () => {
   const location = useLocation();
@@ -53,11 +47,7 @@ const Audiovideo = () => {
           {formatBreadcrumb(location.pathname)}
         </h1>
         <div className="flex items-center gap-5 flex-wrap  ">
-<<<<<<< HEAD
           {audioandvideo.map((item, index) => (
-=======
-          {airconditioner.map((item, index) => (
->>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
             <div
               key={item.id}
               data-aos="fade-up"

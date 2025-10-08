@@ -153,11 +153,7 @@ const Layout = ({ children }) => {
           <div
             style={{ color: themeColor }}
             onClick={() => setShowCustomize(true)}
-<<<<<<< HEAD
             className="flex z-[999]  shadow-2xl cursor-pointer hover:text-white transition-all items-center justify-center gap-4 h-14 w-32 fixed top-[50%] right-0 bg-white"
-=======
-            className="flex   shadow-2xl cursor-pointer hover:text-white transition-all items-center justify-center gap-4 h-14 w-32 fixed top-[50%] right-0 bg-white"
->>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
           >
             <Palette />
             <h2 className="font-semibold">Customize</h2>
