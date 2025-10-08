@@ -1,4 +1,4 @@
- 
+
 
 
 
@@ -50,9 +50,31 @@ const KitchenAppliances = () => {
   return (
     <Layout>
       <div className="min-h-screen   mt-5 w-[94%] p-4">
-        <h1 className="text-2xl font-bold text-white">
+        <h1 className="text-2xl  mb-5 font-bold text-black">
           {formatBreadcrumb(location.pathname)}
         </h1>
+        <h1 className="mb-5 text-black">
+          Transform your cooking experience with our range of modern kitchen appliances. From mixers and grinders to microwaves and air fryers, we offer durable and efficient tools that make cooking easier and faster.
+        </h1>
+        <div className="  mb-4 h-14 px-4 w-full flex items-center justify-between text-black">
+          <span className="text-sm md:text-base">Showing all 5 results</span>
+
+          <div className="flex items-center space-x-2">
+            {/* <label htmlFor="sort" className="text-sm hidden md:inline text-white">Sort by:</label> */}
+            <select
+              id="sort"
+              name="sort"
+              className="px-1 font-semibold py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">Default sorting</option>
+              <option value="popularity">Sort by popularity</option>
+              <option value="rating">Sort by average rating</option>
+              <option value="latest">Sort by latest</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="price-low">Price: Low to High</option>
+            </select>
+          </div>
+        </div>
         <div className="flex items-center gap-5 flex-wrap  ">
           {kitchen.map((item, index) => (
             <div

@@ -22,8 +22,8 @@ import GiftCards from "../pages/GiftCards";
 import KitchenAppliances from "../pages/KitchenAppliances";
 import AirConditioner from "../pages/AirConditioner";
 import Gadgets from "../pages/Gadgets";
-import HomeSmart from "../pages/HomeSmart"; 
- import PcsAndLaptop from "../pages/PcsAndLaptop";
+import HomeSmart from "../pages/HomeSmart";
+import PcsAndLaptop from "../pages/PcsAndLaptop";
 
 const AppRoutes = () => {
   const dispatch = useDispatch();
@@ -53,14 +53,12 @@ const AppRoutes = () => {
             <Route path="/cart" element={<Cart />} />
           </Route>
 
-        
-
           <Route path="/forgot/password" element={<ForgotPassword />} />
           <Route path="/password/reset/:token" element={<PasswordReset />} />
 
           {/* pages routes  */}
 
-          <Route path="/gadgets" element={<Gadgets />} /> 
+          <Route path="/gadgets" element={<Gadgets />} />
           <Route path="/home_smart" element={<HomeSmart />} />
           <Route path="/gift-cards" element={<GiftCards />} />
           <Route path="/refrigerator" element={<Refrigerator />} />
@@ -71,15 +69,10 @@ const AppRoutes = () => {
           <Route path="/conditioner_air" element={<AirConditioner />} />
           <Route path="/laptop_and_pc" element={<PcsAndLaptop />} />
           <Route path="/appliances_kitchen" element={<KitchenAppliances />} />
+          <Route path="/appliancess_home" element={<HomeAppliances />} />
+          <Route path="/video_and_audio" element={<Audiovideo />} />
 
-          <Route
-            path="/appliancess_home"element={<HomeAppliances />}
-          />
-          <Route
-            path="/video_and_audio"element={<Audiovideo />}
-          />
-
-
+          {/* 404 page  */}
           <Route path="*" element={<NotFound />} />
         </Routes>
 

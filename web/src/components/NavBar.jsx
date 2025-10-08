@@ -24,7 +24,6 @@ const NavBar = () => {
     { label: "Refrigerator", link: "/refrigerator" },
     { label: "New arrivals", link: "/new-arrivals" },
     { label: "Todays deal", link: "/todays-deal" },
-    { label: "Gift cards", link: "/gift-cards" },
   ];
 
   const hoverlink = [
