@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "img": "/AirConditioner/Ac1.jpg",
+        "name": "Air Conditioner 5000 BTU, Efficient Cooling for Smaller Areas Like Bedrooms and Guest Rooms",
+        "price": 129.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "2 years warranty"
+        ]
+      },
+    {
+        "id": 2,
+        "img": "/AirConditioner/Ac1.jpg",
+        "name": "Dual Hose Portable Air Conditioner, Dehumidifier, Fan with Activated Carbon Filter in Platinum",
+        "price": 749.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "2 years warranty"
+        ]
+      },
+    {
+        "id": 3,
+        "img": "/AirConditioner/Ac1.jpg",
+        "name": "Star 9,500 BTU 115V Dual Inverter Window Air Conditioner with Wi-Fi Control",
+        "price": 1249.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "2 years warranty"
+        ]
+      },
+    {
+        "id": 4,
+        "img": "/AirConditioner/Ac1.jpg",
+        "name": "BTU 115V Window-Mounted Air Conditioner with Remote Control White",
+        "price": 1329.00,
+        "discount": 10,
+        "rating": "★★★★",
+        "qty":0,
+        "keyFeatures": [
+          "Newest technology",
+          "Best in class components",
+          "Dimensions - 69.5 x 75.0 x 169.0",
+          "Maintenance free",
+          "2 years warranty"
+        ]
+      }
+]

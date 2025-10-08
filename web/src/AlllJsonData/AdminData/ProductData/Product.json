@@ -1,0 +1,113 @@
+[
+    {
+      "id": 1,
+      "img": "/AdminProducts/admin-products1.png",
+      "name": "Black T-shirt",
+      "price": 629.00,
+      "rating": "★★★★",
+      "Size" :"S, M",
+      "Category":"Fashion",
+      "Stock":55,
+      "edit":"<AiOutlineEdit />"
+    },
+    {
+      "id": 2,
+      "img": "/AdminProducts/admin-products1.png",
+      "name":"Olive Green Leather Bag",
+      "price": 629.00,
+      "rating": "★★★★",
+      "Size" :"S, M",
+      "Category":"Fashion",
+      "Stock":55,
+      "edit":"<AiOutlineEdit />"
+    },
+    {
+      "id": 3,
+      "img": "/AdminProducts/admin-products1.png",
+      "name": "Women Golden Dress",
+      "price": 629.00,
+      "rating": "★★★★",
+      "Size" :"S, M",
+      "Category":"Fashion",
+      "Stock":55,
+      "edit":"<AiOutlineEdit />"
+    },
+    {
+      "id": 4,
+      "img": "/AdminProducts/admin-products1.png",
+      "name": "Gray Cap For Men",
+      "price": 629.00,
+      "rating": "★★★★",
+      "Size" :"S, M",
+      "Category":"Fashion",
+      "Stock":55,
+      "edit":"<AiOutlineEdit />"
+    },
+    {
+      "id": 5,
+      "img": "/AdminProducts/admin-products1.png",
+      "name": "Dark Green Cargo Pent",
+      "price": 629.00,
+      "rating": "★★★★",
+      "Size" :"S, M",
+      "Category":"Fashion",
+      "Stock":55,
+      "edit":"<AiOutlineEdit />"
+    },
+    {
+      "id": 6,
+      "img": "/AdminProducts/admin-products1.png",
+      "name": "Orange Multi Color Headphone",
+      "price": 629.00,
+      "rating": "★★★★",
+      "Size" :"S, M",
+      "Category":"Fashion",
+      "Stock":55,
+      "edit":"<AiOutlineEdit />"
+    },
+    {
+      "id": 7,
+      "img": "/AdminProducts/admin-products1.png",
+      "name": "Kid's Yellow Shoes",
+      "price": 629.00,
+      "rating": "★★★★",
+      "Size" :"S, M",
+      "Category":"Fashion",
+      "Stock":55,
+      "edit":"<AiOutlineEdit />"
+    },
+    {
+      "id": 8,
+      "img": "/AdminProducts/admin-products1.png",
+      "name": "White Rubber Band Smart Watch",
+      "price": 629.00,
+      "rating": "★★★★",
+      "Size" :"S, M",
+      "Category":"Fashion",
+      "Stock":55,
+      "edit":"<AiOutlineEdit />"
+    },
+    {
+      "id": 9,
+      "img": "/AdminProducts/admin-products1.png",
+      "name": "Multigroomer All-in-One Trimmer Series 5000, 23 Piece Mens Grooming Kit",
+      "price": 629.00,
+      "rating": "★★★★",
+      "Size" :"S, M",
+      "Category":"Fashion",
+      "Stock":55,
+      "edit":"<AiOutlineEdit />"
+    },
+    {
+      "id": 10,
+      "img": "/AdminProducts/admin-products1.png",
+      "name": "Men Brown Leather Shoes",
+      "price": 629.00,
+      "rating": "★★★★",
+      "Size" :"S, M",
+      "Category":"Fashion",
+      "Stock":55,
+      "edit":"<AiOutlineEdit />"
+    }
+  ]
+  

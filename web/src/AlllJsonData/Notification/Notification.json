@@ -1,0 +1,18 @@
+[
+    {
+      "id": 1,
+      "img": "/Notification/avatar-1.jpg",
+      "para": "You have a new message from Alex.  Check your inbox for details."
+    },
+    {
+      "id": 2,
+      "img": "/Notification/avatar-2.jpg",
+      "para": "Your order #45678 has been shipped. Track it now."
+    },
+    {
+      "id": 3,
+      "img": "/Notification/avatar-3.jpg",
+      "para": "Reminder: Your meeting with the marketing team starts at 3:00 PM."
+    }
+  ]
+  
