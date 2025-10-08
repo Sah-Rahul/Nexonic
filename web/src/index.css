@@ -8,7 +8,11 @@
 
 /* Scrollbar Thumb */
 ::-webkit-scrollbar-thumb {
+<<<<<<< HEAD
   background-color: #217eca;
+=======
+  background-color: #004ef5;
+>>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
   border-radius: 9999px;
   border: 2px solid white;
 }

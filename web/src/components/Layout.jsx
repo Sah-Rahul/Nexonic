@@ -33,7 +33,11 @@ const Layout = ({ children }) => {
 
       {children}
 
+<<<<<<< HEAD
       <div className="absolute bottom-5 z-[99999] right-14 ">
+=======
+      <div className="absolute bottom-5 right-14 ">
+>>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
         <GoTop />
       </div>
 

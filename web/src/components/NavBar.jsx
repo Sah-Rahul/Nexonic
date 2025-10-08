@@ -6,7 +6,11 @@ import { useTheme } from "../context/ThemeContext";
 import { useSelector } from "react-redux";
 
 const NavBar = () => {
+<<<<<<< HEAD
 
+=======
+  // const { authUser } = useSelector((state) => state.auth);
+>>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
   const authUser = useSelector((state) => state.auth.authUser);
   const [showAllProducts, setShowAllProducts] = useState(false);
   const [showCart, setShowCart] = useState(false);
@@ -70,7 +74,13 @@ const NavBar = () => {
           onClose={() => setShowCart(false)}
         />
 
+<<<<<<< HEAD
       
+=======
+        {/* SEARCHOVERLAY MODAL */}
+        {/* {showSearch && <SearchOverlay onClose={() => setShowSearch(false)} />} */}
+
+>>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
         {/* Second navbar */}
         <div className="h-28 px-16 flex items-center justify-between  ">
           <Link to={"/"}>

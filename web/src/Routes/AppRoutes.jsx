@@ -15,6 +15,7 @@ import ForgotPassword from "../pages/ForgotPassword";
 import PasswordReset from "../pages/PasswordReset";
 import HomeAppliances from "../pages/HomeAppliances";
 import Audiovideo from "../pages/Audiovideo";
+<<<<<<< HEAD
 import Refrigerator from "../pages/Refrigerator";
 import NewArrivals from "../pages/NewArrivals";
 import TodaysDeal from "../pages/TodaysDeal";
@@ -25,6 +26,8 @@ import Gadgets from "../pages/Gadgets";
 import HomeSmart from "../pages/HomeSmart"; 
  import PcsAndLaptop from "../pages/PcsAndLaptop";
 // import AirConditioner from "../pa/AirConditioner";
+=======
+>>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
 
 const AppRoutes = () => {
   const dispatch = useDispatch();
@@ -47,16 +50,25 @@ const AppRoutes = () => {
           </Route>
 
           {/*   Protected routes */}
+<<<<<<< HEAD
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<Hero />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/cart" element={<Cart />} />
           </Route>
+=======
+          {/* <Route element={<ProtectedRoutes />}> */}
+            <Route path="/" element={<Hero />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/cart" element={<Cart />} />
+          {/* </Route> */}
+>>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
 
           <Route path="/forgot/password" element={<ForgotPassword />} />
           <Route path="/password/reset/:token" element={<PasswordReset />} />
 
           {/* pages routes  */}
+<<<<<<< HEAD
           <Route path="/gadgets" element={<Gadgets />} /> 
           <Route path="/home_smart" element={<HomeSmart />} />
           <Route path="/gift-cards" element={<GiftCards />} />
@@ -68,6 +80,14 @@ const AppRoutes = () => {
           <Route path="/conditioner_air" element={<AirConditioner />} />
           <Route path="/laptop_and_pc" element={<PcsAndLaptop />} />
           <Route path="/appliances_kitchen" element={<KitchenAppliances />} />
+=======
+          <Route
+            path="/appliancess_home"element={<HomeAppliances />}
+          />
+          <Route
+            path="/video_and_audio"element={<Audiovideo />}
+          />
+>>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
 
           <Route path="*" element={<NotFound />} />
         </Routes>
