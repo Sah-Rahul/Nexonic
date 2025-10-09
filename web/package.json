@@ -23,10 +23,7 @@
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.9.3",
-<<<<<<< HEAD
     "swiper": "^12.0.2",
-=======
->>>>>>> 7a76f22615d9b02a0345d46e691c39ac5d0d233c
     "tailwindcss": "^4.1.13",
     "zod": "^4.1.11"
   },
