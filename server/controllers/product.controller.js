@@ -24,7 +24,7 @@ export const createProduct = catchAsyncError(async (req, res, next) => {
 
     for (const image of images) {
       const result = await cloudinary.uploader.upload(image.tempFilePath, {
-        folder: "Ecommerce_Product_Images",
+        folder: "Nexonic_ecommerce",
         width: 1000,
         crop: "scale",
       });
