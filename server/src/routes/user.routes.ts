@@ -3,20 +3,20 @@ import { changePassword, forgotPassword, getMe, loginUser, logoutUser, registerU
 import { isAuthenticated } from "../middleware/auth.middleware";
 import { upload } from "../middleware/multer.middleware";
  
-const router = Router();
+const userRouter = Router();
 
 // Public routes
-router.post("/register", registerUser);
-router.post("/verify-email", verifyEmail);
-router.post("/resend-otp", resendOtp);
-router.post("/login", loginUser);
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password", resetPassword);
+userRouter.post("/register", registerUser);
+userRouter.post("/verify-email", verifyEmail);
+userRouter.post("/resend-otp", resendOtp);
+userRouter.post("/login", loginUser);
+userRouter.post("/forgot-password", forgotPassword);
+userRouter.post("/reset-password", resetPassword);
 
 // Protected routes
-router.post("/logout", isAuthenticated, logoutUser);
-router.put("/update-profile", isAuthenticated, upload.single("avatar"), updateProfile);
-router.post("/change-password", isAuthenticated, changePassword);
-router.get("/me", isAuthenticated, getMe);
+userRouter.post("/logout", isAuthenticated, logoutUser);
+userRouter.put("/update-profile", isAuthenticated, upload.single("avatar"), updateProfile);
+userRouter.post("/change-password", isAuthenticated, changePassword);
+userRouter.get("/me", isAuthenticated, getMe);
 
-export default router;
+export default userRouter;
