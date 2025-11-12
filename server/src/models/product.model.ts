@@ -10,6 +10,7 @@ const productSchema = new mongoose.Schema(
     description: {
       type: String,
       maxlength: 500,
+      default: "",
     },
     price: {
       type: Number,
@@ -22,17 +23,30 @@ const productSchema = new mongoose.Schema(
     },
     KeyFeatures: {
       type: [String],
-      required: true,
+      default: [],
     },
     category: {
       type: String,
       enum: AllowedCategories,
       required: true,
     },
+    Rating: {
+      type: [Number],
+      default: [],
+    },
+    Reviews: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Review",
+    },
+    relatedProducts: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Product",
+      default: [],
+    },
     productImage: {
       type: String,
       required: true,
-      default:""
+      default: "",
     },
   },
   { timestamps: true }

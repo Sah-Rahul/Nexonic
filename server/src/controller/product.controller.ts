@@ -6,6 +6,7 @@ import { ProductZodSchema } from "../zodSchema/ProductZodSchema";
 import { uploadToCloudinary } from "../config/cloudinary.config";
 import ProductModel from "../models/product.model";
 import { AuthRequest } from "../types/Auth.interface";
+import ReviewModel from "../models/review.model";
 
 export const createProduct = asyncHandler(
   async (req: Request, res: Response) => {
@@ -167,28 +168,77 @@ export const deleteProduct = asyncHandler(
 export const getProductById = asyncHandler(
   async (req: Request, res: Response) => {
     const productId = req.params.id;
-    if (!productId) throw new ApiError(400, "Product ID is required");
 
-    const product = await ProductModel.findById(productId);
-    if (!product) throw new ApiError(404, "Product not found");
+    if (!productId) {
+      throw new ApiError(400, "Product ID is required");
+    }
+
+    const productWithReviews = await ProductModel.findById(productId)
+      .populate({
+        path: "Reviews",
+        populate: {
+          path: "user",
+          select: "fullName email profile",
+        },
+      })
+      .lean();
+
+    if (!productWithReviews) {
+      throw new ApiError(404, "Product not found");
+    }
 
     res
       .status(200)
       .json(
-        new ApiResponse(200, product.toObject(), "Product fetched successfully")
+        new ApiResponse(200, productWithReviews, "Product fetched successfully")
       );
   }
 );
 
 export const getAllProducts = asyncHandler(
   async (_req: Request, res: Response) => {
-    const products = await ProductModel.find({});
-    res.status(200).json(
-      new ApiResponse(
-        200,
-        products.map((p) => p.toObject()),
-        "Products fetched successfully"
-      )
-    );
+    const products = await ProductModel.find({})
+      .populate({
+        path: "Reviews",
+        populate: {
+          path: "user",
+          select: "fullName email profile",
+        },
+      })
+      .lean();
+
+    if (!products || products.length === 0) {
+      throw new ApiError(404, "No products found");
+    }
+    res
+      .status(200)
+      .json(new ApiResponse(200, products, "Products fetched successfully"));
+  }
+);
+
+export const getRelatedProduct = asyncHandler(
+  async (req: Request, res: Response) => {
+    const productId = req.params.id;
+    if (!productId) throw new ApiError(400, "Product ID is required");
+
+    const product = await ProductModel.findById(productId);
+    if (!product) throw new ApiError(404, "Product not found");
+
+    const relatedProducts = await ProductModel.find({
+      category: product.category,
+      _id: { $ne: product._id },
+    })
+      .limit(3)
+      .select("title price productImage category");
+
+    res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { product, relatedProducts },
+          "Product fetched successfully with related products"
+        )
+      );
   }
 );

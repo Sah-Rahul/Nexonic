@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProduct, deleteProduct, getAllProducts, getProductById, updateProduct } from "../controller/product.controller";
+import { createProduct, deleteProduct, getAllProducts, getProductById, getRelatedProduct, updateProduct } from "../controller/product.controller";
 import { upload } from "../middleware/multer.middleware";
 import { isAuthenticated } from "../middleware/auth.middleware";
  
@@ -9,6 +9,8 @@ const productRouter = Router();
 productRouter.get("/", getAllProducts);
 
 productRouter.get("/:id", getProductById);
+
+productRouter.get("/related-product/:id", getRelatedProduct);
 
 productRouter.post("/create-product", isAuthenticated, upload.single("productImage"), createProduct);
 

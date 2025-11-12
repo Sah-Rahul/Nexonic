@@ -17,6 +17,9 @@ export const ProductZodSchema = z.object({
   category: z.enum(AllowedCategories, {
     message: "Invalid category selected",
   }),
+  Rating: z.array(z.string()).optional(),
+  Review: z.string().optional(),
+  relatedProducts: z.array(z.string()).optional(),
 });
 
 export type ProductType = z.infer<typeof ProductZodSchema>;
