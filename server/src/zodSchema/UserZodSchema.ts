@@ -51,7 +51,6 @@ export const ResetPasswordSchema = z.object({
 
 export type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>;
 
-
 export const ChangePasswordSchema = z.object({
     currentPassword: z.string().min(8),
     newPassword: z
@@ -68,7 +67,6 @@ export const ChangePasswordSchema = z.object({
   });
 
 export type ChangePasswordInput = z.infer<typeof ChangePasswordSchema>;
-
 
 export const VerifyOtpSchema = z.object({
   email: z.string().email("Invalid email address"),

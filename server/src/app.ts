@@ -4,8 +4,12 @@ import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db";
-import userRouter from "./routes/user.routes";
 import { errorMiddleware } from "./middleware/error.middleware";
+
+// Routes
+import userRouter from "./routes/user.routes";
+import productRouter from "./routes/product.routes";
+
 
 const app: Application = express();
 
@@ -21,6 +25,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use('/api/v1/auth', userRouter)
+app.use('/api/v1/product', productRouter)
 
 
 app.use(errorMiddleware)
