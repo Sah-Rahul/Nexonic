@@ -7,13 +7,13 @@ const userRouter = Router();
 
 // Public routes
 userRouter.post("/register", registerUser);
-userRouter.post("/verify-email", verifyEmail);
-userRouter.post("/resend-otp", resendOtp);
+userRouter.post("/resend-otp",isAuthenticated, resendOtp);
 userRouter.post("/login", loginUser);
-userRouter.post("/forgot-password", forgotPassword);
+userRouter.post("/forgot-password", isAuthenticated,forgotPassword);
 userRouter.post("/reset-password", resetPassword);
 
 // Protected routes
+userRouter.post("/verify-email",isAuthenticated, verifyEmail);
 userRouter.post("/logout", isAuthenticated, logoutUser);
 userRouter.put("/update-profile", isAuthenticated, upload.single("avatar"), updateProfile);
 userRouter.post("/change-password", isAuthenticated, changePassword);

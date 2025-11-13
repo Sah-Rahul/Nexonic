@@ -8,8 +8,14 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { FormEvent, ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
+import { useMutation } from "@tanstack/react-query";
+import { loginUser } from "../redux/slices/userSlice";
+import toast from "react-hot-toast";
+import { loginUserApi } from "../api/authApi";
+import { UserLoginZodSchema } from "../zodValidation/AuthZodSchema";
 
 interface FormData {
   email: string;
@@ -17,15 +23,50 @@ interface FormData {
 }
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
   });
 
+  const mutation = useMutation({
+    mutationFn: loginUserApi,
+    onSuccess: (data) => {
+      console.log("API response:", data);
+
+      dispatch(loginUser(data.user));
+
+      toast.success(data.message || "Login successful!");
+
+      navigate("/");
+    },
+    onError: (err: any) => {
+      toast.error(
+        `Login failed: ${err?.response?.data?.message || err.message}`
+      );
+    },
+  });
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
+
+    const result = UserLoginZodSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: { email?: string; password?: string } = {};
+      result.error.issues.forEach((err) => {
+        fieldErrors[err.path[0] as "email" | "password"] = err.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setErrors({});
+    mutation.mutate(formData);
   };
 
   const handleInputChange = (field: keyof FormData, value: string) => {
@@ -103,6 +144,11 @@ const Login: React.FC = () => {
                     }
                     className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition-all duration-300"
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1 animate-pulse">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -121,6 +167,12 @@ const Login: React.FC = () => {
                     }
                     className="w-full pl-11 pr-12 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition-all duration-300"
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1 animate-pulse">
+                      {errors.email}
+                    </p>
+                  )}
+
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
@@ -132,6 +184,11 @@ const Login: React.FC = () => {
                       <Eye className="w-5 h-5 cursor-pointer" />
                     )}
                   </button>
+                  {errors.password && (
+                    <p className="text-red-500 text-sm mt-1 animate-pulse">
+                      {errors.password}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -141,9 +198,14 @@ const Login: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full cursor-pointer bg-teal-500 text-white py-3 rounded-xl font-semibold hover:bg-teal-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                disabled={mutation.isPending}
+                className={`w-full cursor-pointer bg-teal-500 text-white py-3 rounded-xl font-semibold
+    ${
+      mutation.isPending ? "opacity-70 cursor-not-allowed" : "hover:bg-teal-600"
+    }
+  `}
               >
-                LoggIn
+                {mutation.isPending ? "Logging in..." : "Login"}
               </button>
             </div>
 

@@ -111,105 +111,111 @@ export const registerUser = asyncHandler(
 );
 
 export const verifyEmail = asyncHandler(
-  async (req: Request, res: Response) => {
-  const parsed = VerifyOtpSchema.safeParse(req.body);
-  if (!parsed.success) {
-    const formattedErrors = parsed.error.issues.map(
-      (issue) => `${issue.path.join(".")}: ${issue.message}`
-    );
-    throw new ApiError(400, "Invalid input", formattedErrors);
+  async (req: AuthRequest, res: Response) => {
+    const parsed = VerifyOtpSchema.safeParse(req.body);
+    if (!parsed.success) {
+      const formattedErrors = parsed.error.issues.map(
+        (issue) => `${issue.path.join(".")}: ${issue.message}`
+      );
+      throw new ApiError(400, "Invalid input", formattedErrors);
+    }
+
+    const { otp } = parsed.data;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      throw new ApiError(401, "Unauthorized: Missing user ID");
+    }
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+
+    const otpRecord = await OtpModel.findOne({
+      userId: user._id,
+      otp,
+      expiresAt: { $gt: new Date() },
+    });
+
+    if (!otpRecord) {
+      throw new ApiError(400, "Invalid or expired OTP");
+    }
+
+    user.isActive = true;
+    await user.save();
+
+    await OtpModel.deleteOne({ _id: otpRecord._id });
+
+    const welcomeEmailHtml = generateWelcomeEmailTemplate({
+      userName: user.fullName,
+      dashboardUrl: process.env.FRONTEND_URL!,
+    });
+
+    await sendEmail({
+      email: user.email,
+      subject: "Welcome to Nexonic!",
+      html: welcomeEmailHtml,
+    });
+
+    res
+      .status(200)
+      .json(
+        new ApiResponse(200, { isActive: true }, "Email verified successfully")
+      );
   }
-
-  const { email, otp } = parsed.data;
-
-  const user = await UserModel.findOne({ email });
-  if (!user) {
-    throw new ApiError(404, "User not found");
-  }
-
-  const otpRecord = await OtpModel.findOne({
-    userId: user._id,
-    otp,
-    expiresAt: { $gt: new Date() },
-  });
-
-  if (!otpRecord) {
-    throw new ApiError(400, "Invalid or expired OTP");
-  }
-
-  user.isActive = true;
-  await user.save();
-
-  await OtpModel.deleteOne({ _id: otpRecord._id });
-
-  const welcomeEmailHtml = generateWelcomeEmailTemplate({
-    userName: user.fullName,
-    dashboardUrl: process.env.FRONTEND_URL!,
-  });
-
-  await sendEmail({
-    email: user.email,
-    subject: "Welcome to Nexonic!",
-    html: welcomeEmailHtml,
-  });
-
-  res
-    .status(200)
-    .json(
-      new ApiResponse(200, { isActive: true }, "Email verified successfully")
-    );
-});
+);
 
 export const resendOtp = asyncHandler(
-  async (req: Request, res: Response) => {
-  const parsed = ResendOtpSchema.safeParse(req.body);
-  if (!parsed.success) {
-    const formattedErrors = parsed.error.issues.map(
-      (issue) => `${issue.path.join(".")}: ${issue.message}`
-    );
-    throw new ApiError(400, "Invalid input", formattedErrors);
+  async (req: AuthRequest, res: Response) => {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      throw new ApiError(401, "Unauthorized");
+    }
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+
+    if (user.isActive) {
+      throw new ApiError(400, "Email is already verified");
+    }
+
+    await OtpModel.deleteMany({ userId: user._id });
+
+    const otp = crypto.randomInt(100000, 999999).toString();
+
+    await OtpModel.create({
+      userId: user._id,
+      otp,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
+    });
+
+    const verificationEmailHtml = GenerateVerifyEmailTemplate({
+      userName: user.fullName,
+      verificationUrl: `${process.env.FRONTEND_URL}/verify-email`,
+      verificationCode: otp,
+    });
+
+    await sendEmail({
+      email: user.email,
+      subject: "Verify Your Email - Nexonic",
+      html: verificationEmailHtml,
+    });
+
+    res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          {},
+          "Verification code has been resent to your email"
+        )
+      );
   }
-
-  const { email } = parsed.data;
-
-  const user = await UserModel.findOne({ email });
-  if (!user) {
-    throw new ApiError(404, "User not found");
-  }
-
-  if (user.isActive) {
-    throw new ApiError(400, "Email is already verified");
-  }
-
-  await OtpModel.deleteMany({ userId: user._id });
-
-  const otp = crypto.randomInt(100000, 999999).toString();
-  const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?email=${email}&otp=${otp}`;
-
-  await OtpModel.create({
-    userId: user._id,
-    otp,
-    expiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes
-  });
-
-  const verificationEmailHtml = GenerateVerifyEmailTemplate({
-    userName: user.fullName,
-    verificationUrl,
-    verificationCode: otp,
-  });
-
-  await sendEmail({
-    email: user.email,
-    subject: "Verify Your Email - Nexonic",
-    html: verificationEmailHtml,
-  });
-
-  res
-    .status(200)
-    .json(
-      new ApiResponse(200, "Verification code has been resent to your email")
-    );
-});
+);
 
 export const loginUser = asyncHandler(
   async (req: AuthRequest, res: Response) => {
@@ -284,8 +290,7 @@ export const loginUser = asyncHandler(
   }
 );
 
-export const logoutUser = asyncHandler(
-  async (req: Request, res: Response) => {
+export const logoutUser = asyncHandler(async (req: Request, res: Response) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -368,7 +373,7 @@ export const forgotPassword = asyncHandler(
     await OtpModel.create({
       userId: user._id,
       otp,
-      expiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
     });
 
     const emailHtml = GeneratePasswordResetEmail({
@@ -389,7 +394,8 @@ export const forgotPassword = asyncHandler(
       .json(
         new ApiResponse(
           200,
-          `Password reset code sent to your ${email}. Please check your inbox.`
+          {},
+          `Password reset code sent to your email. Please check your inbox.`
         )
       );
   }
@@ -480,8 +486,7 @@ export const changePassword = asyncHandler(
   }
 );
 
-export const getMe = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
   const userId = req.user?.id;
   if (!userId) throw new ApiError(401, "Unauthorized");
 

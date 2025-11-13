@@ -8,18 +8,62 @@ import {
   ShoppingBag,
   Sparkles,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { signupUserApi } from "../api/authApi";
+import toast from "react-hot-toast";
+import { UserSignupZodSchema } from "../zodValidation/AuthZodSchema";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState<{
+    fullName?: String;
+    email?: string;
+    password?: string;
+  }>({});
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     email: "",
     password: "",
   });
 
+  const mutation = useMutation({
+    mutationFn: signupUserApi,
+    onSuccess: (data) => {
+      console.log("API response:", data);
+
+      toast.success(data.message || "Signup successful!");
+
+      navigate("/verify-email");
+    },
+    onError: (err: any) => {
+      toast.error(
+        `Signup failed: ${err?.response?.data?.message || err.message}`
+      );
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(formData);
+    const result = UserSignupZodSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors: {
+        fullName?: String;
+        email?: string;
+        password?: string;
+      } = {};
+      result.error.issues.forEach((err) => {
+        fieldErrors[err.path[0] as "fullName" | "email" | "password"] =
+          err.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setErrors({});
+    mutation.mutate(formData);
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -29,7 +73,6 @@ const SignUp = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-6xl flex flex-col lg:flex-row-reverse items-center gap-8 lg:gap-16">
-        {/* Right Side - Illustration */}
         <div className="flex-1 w-full flex flex-col items-center justify-center">
           <div className="relative w-full max-w-md">
             <div className="relative">
@@ -89,10 +132,17 @@ const SignUp = () => {
                   <input
                     type="text"
                     placeholder="Enter your name"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    value={formData.fullName}
+                    onChange={(e) =>
+                      handleInputChange("fullName", e.target.value)
+                    }
                     className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:outline-none transition-all duration-300"
                   />
+                  {errors.fullName && (
+                    <p className="text-red-500 text-sm mt-1 animate-pulse">
+                      {errors.fullName}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -109,6 +159,11 @@ const SignUp = () => {
                     onChange={(e) => handleInputChange("email", e.target.value)}
                     className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:outline-none transition-all duration-300"
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1 animate-pulse">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -138,16 +193,34 @@ const SignUp = () => {
                       <Eye className="w-5 h-5 cursor-pointer" />
                     )}
                   </button>
+                  {errors.password && (
+                    <p className="text-red-500 text-sm mt-1 animate-pulse">
+                      {errors.password}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full cursor-pointer bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl mt-8 transition duration-300"
+              disabled={mutation.isPending}
+              className={`w-full cursor-pointer bg-orange-500 mt-8 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold
+    ${
+      mutation.isPending
+        ? "opacity-70 cursor-not-allowed"
+        : "hover:bg-orange-600"
+    }
+  `}
             >
-              Sign up
+              {mutation.isPending ? " Sign in..." : "Sign up"}
             </button>
+
+            <div className="flex items-center my-6">
+              <div className="flex-1 border-t border-gray-200"></div>
+              <span className="px-4 text-sm text-gray-500">OR</span>
+              <div className="flex-1 border-t border-gray-200"></div>
+            </div>
 
             <p className="text-sm text-center text-gray-600 mt-6">
               Already have an account?{" "}

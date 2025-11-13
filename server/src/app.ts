@@ -18,8 +18,11 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
 app.use(cookieParser());
+app.use(cors({
+  origin:process.env.FRONTEND_URL,
+  credentials:true
+}));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("API is running!");

@@ -16,7 +16,7 @@ const Footer = () => {
           <div className="mb-4 md:mt-0 mt-5 md:mb-0">
             <img
               className="  h-24 bg-transparent"
-              src="/images/logo7.png"
+              src="/images/logo6.png"
               alt="Logo"
             />
           </div>

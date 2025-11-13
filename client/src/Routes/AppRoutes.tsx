@@ -14,6 +14,7 @@ import SmartHome from "../pages/SmartHome";
 import Login from "../Auth/Login";
 import ForgotPassword from "../Auth/ForgotPassword";
 import SignUp from "../Auth/SignUp";
+import VerifyEmail from "../Auth/VerifyEmail";
 
 const AppRoutes = () => {
   return (
@@ -23,6 +24,7 @@ const AppRoutes = () => {
           <Route path="/" element={<Hero />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/forgot/password" element={<ForgotPassword />} />
           // pages routes
           <Route path="/appliancess_home" element={<HomeAppliances />} />
