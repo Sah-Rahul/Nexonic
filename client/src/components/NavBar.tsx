@@ -5,6 +5,7 @@ import { useTheme } from "../context/ThemeContext";
 import CartModal from "./CartModal";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
+import UserModal from "./UserModal";
 
 interface MenuItem {
   label: string;
@@ -16,7 +17,7 @@ const NavBar: React.FC = () => {
   const [showAllProducts, setShowAllProducts] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { themeColor } = useTheme();
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useSelector((state: RootState) => state.auth);
 
   console.log(user);
@@ -162,7 +163,10 @@ const NavBar: React.FC = () => {
 
             <div>
               {user ? (
-                <div className="h-12 w-12 overflow-hidden cursor-pointer   rounded-full">
+                <div
+                  onClick={() => setIsModalOpen(!isModalOpen)}
+                  className="h-12 w-12 overflow-hidden cursor-pointer   rounded-full"
+                >
                   {user?.profile && user.profile.trim() !== "" ? (
                     <img
                       className="h-full w-full"
@@ -186,6 +190,9 @@ const NavBar: React.FC = () => {
                 </Link>
               )}
             </div>
+            {isModalOpen && (
+              <UserModal closeModal={() => setIsModalOpen(false)} />
+            )}
           </div>
         </div>
       </div>

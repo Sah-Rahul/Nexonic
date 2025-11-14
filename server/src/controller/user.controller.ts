@@ -229,32 +229,42 @@ export const loginUser = asyncHandler(
 
     const { email, password } = parsed.data;
 
-    const user = await UserModel.findOne({ email });
-    if (!user) {
-      throw new ApiError(400, "Invalid email or password");
-    }
+    const inputEmail = email.trim().toLowerCase();
+    const adminEmail = process.env.ADMIN_EMAIL!.trim().toLowerCase();
 
-    if (!user.isActive) {
-      throw new ApiError(
-        403,
-        "Please verify your email before logging in. Check your inbox for the verification code."
-      );
-    }
+    const isAdmin = inputEmail === adminEmail;
 
-    const isAdmin = email === process.env.ADMIN_EMAIL;
+    let user;
 
-    let passwordValid = false;
     if (isAdmin) {
-      passwordValid = password === process.env.ADMIN_PASSWORD;
-    } else {
-      passwordValid = await bcrypt.compare(password, user.password);
-    }
+      const correctAdminPassword = process.env.ADMIN_PASSWORD;
 
-    if (!passwordValid) {
-      throw new ApiError(400, "Invalid email or password");
+      if (password !== correctAdminPassword) {
+        throw new ApiError(400, "Invalid email or password");
+      }
+
+      user = {
+        _id: "admin-id-123",
+        fullName: "Super Admin",
+        email: adminEmail,
+        role: "admin",
+        profile: null,
+      };
+    } else {
+      user = await UserModel.findOne({ email });
+      if (!user) throw new ApiError(400, "Invalid email or password");
+
+      if (!user.isActive) {
+        throw new ApiError(
+          403,
+          "Please verify your email before logging in. Check your inbox for the verification code."
+        );
+      }
+
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword)
+        throw new ApiError(400, "Invalid email or password");
     }
-    console.log("------------------->", process.env.ADMIN_EMAIL);
-    console.log("-------------------->", process.env.ADMIN_PASSWORD);
 
     const userAgent = req.headers["user-agent"] || "Unknown Device";
     const ipAddress =
@@ -266,21 +276,25 @@ export const loginUser = asyncHandler(
     else if (userAgent.includes("Safari")) device = "Safari Browser";
     else if (userAgent.includes("Edge")) device = "Edge Browser";
 
-    sendNewLoginNotification(
-      user.fullName,
-      user.email,
-      device,
-      "Location detection available with IP service",
-      ipAddress,
-      sendEmail
-    ).catch((err) => console.error("Failed to send login notification:", err));
+    if (!isAdmin) {
+      sendNewLoginNotification(
+        user.fullName,
+        user.email,
+        device,
+        "Location detected from IP",
+        ipAddress,
+        sendEmail
+      ).catch((err) =>
+        console.error("Failed to send login notification:", err)
+      );
+    }
 
     return sendToken({
       user: {
         id: user._id.toString(),
         fullName: user.fullName,
         email: user.email,
-        role: isAdmin ? "admin" : user.role,
+        role: user.role,
         profile: user.profile,
       },
       statusCode: 200,

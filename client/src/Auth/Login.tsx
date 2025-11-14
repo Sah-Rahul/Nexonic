@@ -36,15 +36,29 @@ const Login: React.FC = () => {
 
   const mutation = useMutation({
     mutationFn: loginUserApi,
+
     onSuccess: (data) => {
       console.log("API response:", data);
 
       dispatch(loginUser(data.user));
-
       toast.success(data.message || "Login successful!");
 
-      navigate("/");
+      const role = data?.user?.role;
+
+      switch (role) {
+        case "admin":
+          navigate("/admin/dashboard");
+          break;
+
+        case "user":
+          navigate("/");
+          break;
+
+        default:
+          navigate("/");
+      }
     },
+
     onError: (err: any) => {
       toast.error(
         `Login failed: ${err?.response?.data?.message || err.message}`
