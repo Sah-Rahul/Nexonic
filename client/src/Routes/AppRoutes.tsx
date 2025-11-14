@@ -15,6 +15,10 @@ import Login from "../Auth/Login";
 import ForgotPassword from "../Auth/ForgotPassword";
 import SignUp from "../Auth/SignUp";
 import VerifyEmail from "../Auth/VerifyEmail";
+import Dashboard from "@/Admin/Dashboard";
+// import Dashboard from "@/Admin/Dashboard";
+// import { Navigate } from "react-router-dom";
+// import Layout from "@/Admin/Layout";
 
 const AppRoutes = () => {
   return (
@@ -38,6 +42,10 @@ const AppRoutes = () => {
           <Route path="/laptop_and_pc" element={<PcAndLaptop />} />
           <Route path="/gadgets" element={<Gadgets />} />
           <Route path="/home-smart" element={<SmartHome />} />
+          // admin routes
+          <Route path="/admin">
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
