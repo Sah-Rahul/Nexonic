@@ -15,10 +15,19 @@ import Login from "../Auth/Login";
 import ForgotPassword from "../Auth/ForgotPassword";
 import SignUp from "../Auth/SignUp";
 import VerifyEmail from "../Auth/VerifyEmail";
+
+// admin routes
 import Dashboard from "@/Admin/Dashboard";
-// import Dashboard from "@/Admin/Dashboard";
-// import { Navigate } from "react-router-dom";
-// import Layout from "@/Admin/Layout";
+import Users from "@/Admin/Users";
+import Orders from "@/Admin/Orders";
+import Products from "@/Admin/Products";
+import Chat from "@/Admin/Chat";
+import Calendar from "@/Admin/Calendar";
+import Reviews from "@/Admin/Reviews";
+import Settings from "@/Admin/Settings";
+import Category from "@/Admin/Category";
+import Profile from "@/Admin/Profile";
+import Layout from "@/Admin/Layout";
 
 const AppRoutes = () => {
   return (
@@ -30,6 +39,7 @@ const AppRoutes = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/forgot/password" element={<ForgotPassword />} />
+
           // pages routes
           <Route path="/appliancess_home" element={<HomeAppliances />} />
           <Route path="/video_and_audio" element={<Audiovideo />} />
@@ -42,10 +52,21 @@ const AppRoutes = () => {
           <Route path="/laptop_and_pc" element={<PcAndLaptop />} />
           <Route path="/gadgets" element={<Gadgets />} />
           <Route path="/home-smart" element={<SmartHome />} />
+
           // admin routes
-          <Route path="/admin">
-            <Route path="dashboard" element={<Dashboard />} />
-          </Route>
+          <Route path="/admin" element={<Layout />}>
+    <Route path="dashboard" element={<Dashboard />} />
+    <Route path="users" element={<Users />} />
+    <Route path="orders" element={<Orders />} />
+    <Route path="products" element={<Products />} />
+    <Route path="category" element={<Category />} />
+    <Route path="chat" element={<Chat />} />
+    <Route path="calendar" element={<Calendar />} />
+    <Route path="reviews" element={<Reviews />} />
+    <Route path="profile" element={<Profile />} />
+    <Route path="settings" element={<Settings />} />
+</Route>
+
         </Routes>
       </BrowserRouter>
     </>
