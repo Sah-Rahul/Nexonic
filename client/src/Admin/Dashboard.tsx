@@ -30,6 +30,7 @@ import {
   TrendingUp,
   TrendingDown,
 } from "lucide-react";
+import { useEffect } from "react";
 
 const salesData = [
   { month: "Jan", sales: 4000, revenue: 2400, orders: 240 },
@@ -66,6 +67,10 @@ const recentOrders = [
 ];
 
 const Dashboard = () => {
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
+
   return (
     <>
       <div className="space-y-6 p-4 md:p-6">
