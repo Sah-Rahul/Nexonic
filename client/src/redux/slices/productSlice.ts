@@ -31,15 +31,16 @@ const productSlice = createSlice({
       state.products = action.payload;
     },
     removeProduct(state, action: PayloadAction<string>) {
-      state.products = state.products.filter(p => p._id !== action.payload);
+      state.products = state.products.filter((p) => p._id !== action.payload);
     },
     updateProduct(state, action: PayloadAction<Product>) {
-      state.products = state.products.map(p =>
+      state.products = state.products.map((p) =>
         p._id === action.payload._id ? action.payload : p
       );
     },
   },
 });
 
-export const { setProducts, removeProduct, updateProduct } = productSlice.actions;
+export const { setProducts, removeProduct, updateProduct } =
+  productSlice.actions;
 export default productSlice.reducer;

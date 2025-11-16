@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import SidebarMenu from "./SidebarMenu";
 import { RiMenu3Line } from "react-icons/ri";
-import { MessageCircle, Moon } from "lucide-react";
+import { Moon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -52,10 +52,6 @@ const Layout = () => {
         </div>
 
         <div className="flex items-center gap-5 text-white">
-          <button className="hover:text-gray-300 transition">
-            <MessageCircle size={22} />
-          </button>
-
           <button className="hover:text-gray-300 transition">
             <Moon size={22} />
           </button>

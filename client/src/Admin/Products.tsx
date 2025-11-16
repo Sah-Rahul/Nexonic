@@ -32,7 +32,11 @@ import {
 } from "@/api/productApi";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setProducts } from "@/redux/slices/productSlice";
+import {
+  removeProduct,
+  setProducts,
+  updateProduct,
+} from "@/redux/slices/productSlice";
 import MyPagination from "./Pagination";
 
 const CATEGORIES = [
@@ -51,6 +55,8 @@ const Products = () => {
   const [openForm, setOpenForm] = useState(false);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [search, setSearch] = useState("");
   const queryClient = useQueryClient();
 
@@ -78,7 +84,7 @@ const Products = () => {
 
   useEffect(() => {
     if (productsData?.data) {
-      dispatch(setProducts(productsData.data));
+      dispatch(setProducts(productsData));
     }
   }, [productsData, dispatch]);
 
@@ -114,12 +120,20 @@ const Products = () => {
     Object.entries(newProduct).forEach(([key, value]) => {
       if (key === "KeyFeatures" && Array.isArray(value)) {
         value.forEach((feat) => fd.append("KeyFeatures[]", feat));
+      } else if (key === "Rating" && Array.isArray(value)) {
+        value.forEach((r) => fd.append("Rating[]", String(r)));
       } else if (key === "productImage" && value instanceof File) {
         fd.append("productImage", value);
-      } else {
-        fd.append(key, value as string);
+      } else if (
+        typeof value === "string" ||
+        typeof value === "number" ||
+        typeof value === "boolean"
+      ) {
+        fd.append(key, String(value));
       }
     });
+
+    console.log("FormData entries:", [...fd.entries()]);
 
     createMutation.mutate(fd);
   };
@@ -127,12 +141,14 @@ const Products = () => {
   const handleDelete = (id: string) => {
     if (confirm("Are you sure you want to delete this product?")) {
       deleteMutation.mutate(id);
+      dispatch(removeProduct(productsData));
     }
   };
 
   const handleEditClick = (product: any) => {
     setEditingProduct(product);
     setOpenEditForm(true);
+    dispatch(updateProduct(productsData));
   };
 
   const handleUpdateProduct = ({ id, formData }: any) => {
@@ -141,206 +157,210 @@ const Products = () => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+    setCurrentPage(1);
   };
 
-  console.log(productsData);
   const filteredProducts = (productsData || []).filter((product: any) =>
     product.title.toLowerCase().includes(search.toLowerCase())
   );
 
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
   return (
-    <>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Products</h1>
-            <p className="text-muted-foreground">
-              Manage your product inventory
-            </p>
-          </div>
-          <Button onClick={() => setOpenForm(true)}>
-            <Plus className="w-4 h-4 mr-2" /> Add Product
-          </Button>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Products</h1>
+          <p className="text-muted-foreground">Manage your product inventory</p>
         </div>
+        <Button onClick={() => setOpenForm(true)}>
+          <Plus className="w-4 h-4 mr-2" /> Add Product
+        </Button>
+      </div>
 
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            value={search}
-            onChange={handleSearch}
-            placeholder="Search products..."
-            className="pl-8"
-          />
-        </div>
+      <div className="relative w-full sm:w-64">
+        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          value={search}
+          onChange={handleSearch}
+          placeholder="Search products..."
+          className="pl-8"
+        />
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card className="p-4 shadow">
-            <CardTitle className="text-sm text-muted-foreground">
-              Total Products
-            </CardTitle>
-            <CardContent className="pt-2">
-              <div className="text-3xl font-bold">
-                {productsData?.length || 0}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="p-4 shadow">
-            <CardTitle className="text-sm text-muted-foreground">
-              Total Categories
-            </CardTitle>
-            <CardContent className="pt-2">
-              <div className="text-3xl font-bold">{CATEGORIES.length}</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>All Products</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="text-center py-8">
-                <p>Loading products...</p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Product</TableHead>
-                      <TableHead>Description</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Discount</TableHead>
-                      <TableHead>Total Price</TableHead>
-                      <TableHead>Rating</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredProducts.length > 0 ? (
-                      filteredProducts.map((product: any) => (
-                        <TableRow key={product._id}>
-                          <TableCell>
-                            <Link to={`/admin/details/${product._id}`}>
-                              <div className="flex items-center gap-3">
-                                <img
-                                  src={product.productImage}
-                                  alt={product.title}
-                                  className="h-10 w-10 object-cover rounded"
-                                />
-                                <span className="hover:text-blue-600 transition-colors">
-                                  {product.title.slice(0, 20)}...
-                                </span>
-                              </div>
-                            </Link>
-                          </TableCell>
-                          <TableCell>
-                            {product.description.slice(0, 20)}...
-                          </TableCell>
-                          <TableCell>
-                            <span className="text-xs bg-muted px-2 py-1 rounded">
-                              {product.category}
-                            </span>
-                          </TableCell>
-                          <TableCell>
-                            {product.createdAt
-                              ? moment(product.createdAt).format("DD MMM YYYY")
-                              : "N/A"}
-                          </TableCell>
-                          <TableCell>₹{product.price}</TableCell>
-                          <TableCell>{product.discount}%</TableCell>
-                          <TableCell className="font-semibold">
-                            ₹{product.totalPrice || product.price}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-0.5">
-                              {Array.from({ length: 5 }, (_, i) => {
-                                const avgRating =
-                                  product.Rating?.length > 0
-                                    ? product.Rating.reduce(
-                                        (sum: number, r: number) =>
-                                          sum + Number(r),
-                                        0
-                                      ) / product.Rating.length
-                                    : 0;
-
-                                return (
-                                  <Star
-                                    key={i}
-                                    className={`w-4 h-4 ${
-                                      i < Math.round(avgRating)
-                                        ? "text-red-500 fill-red-500"
-                                        : "text-gray-300"
-                                    }`}
-                                  />
-                                );
-                              })}
-                            </div>
-                          </TableCell>
-
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                  <MoreVertical className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <DropdownMenuItem
-                                  onClick={() => handleEditClick(product)}
-                                >
-                                  <Edit className="w-4 h-4 mr-2" /> Edit
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => handleDelete(product._id)}
-                                  className="text-red-600"
-                                >
-                                  <Trash2 className="w-4 h-4 mr-2" /> Delete
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={9} className="text-center py-8">
-                          No products found
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-
-            <div className="flex justify-end">
-              <MyPagination />
-            </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Card className="p-4 shadow">
+          <CardTitle className="text-sm text-muted-foreground">
+            Total Products
+          </CardTitle>
+          <CardContent className="pt-2">
+            <div className="text-3xl font-bold">{filteredProducts.length}</div>
           </CardContent>
         </Card>
 
-        <AddProductModal
-          open={openForm}
-          setOpen={setOpenForm}
-          onAddProduct={handleAddProduct}
-          isLoading={createMutation.isPending}
-        />
-
-        <EditProductModal
-          open={openEditForm}
-          setOpen={setOpenEditForm}
-          product={editingProduct}
-          onEditProduct={handleUpdateProduct}
-          isLoading={editMutation.isPending}
-        />
+        <Card className="p-4 shadow">
+          <CardTitle className="text-sm text-muted-foreground">
+            Total Categories
+          </CardTitle>
+          <CardContent className="pt-2">
+            <div className="text-3xl font-bold">{CATEGORIES.length}</div>
+          </CardContent>
+        </Card>
       </div>
-    </>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>All Products</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="text-center py-8">Loading products...</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Product</TableHead>
+                    <TableHead>Description</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Discount</TableHead>
+                    <TableHead>Total Price</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paginatedProducts.length > 0 ? (
+                    paginatedProducts.map((product: any) => (
+                      <TableRow key={product._id}>
+                        <TableCell>
+                          <Link to={`/admin/details/${product._id}`}>
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={product.productImage}
+                                alt={product.title}
+                                className="h-10 w-10 object-cover rounded"
+                              />
+                              <span className="hover:text-blue-600 transition-colors">
+                                {product.title.slice(0, 20)}...
+                              </span>
+                            </div>
+                          </Link>
+                        </TableCell>
+                        <TableCell>
+                          {product.description.slice(0, 20)}...
+                        </TableCell>
+                        <TableCell>
+                          <span className="text-xs bg-muted px-2 py-1 rounded">
+                            {product.category}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          {product.createdAt
+                            ? moment(product.createdAt).format("DD MMM YYYY")
+                            : "N/A"}
+                        </TableCell>
+                        <TableCell>₹{product.price}</TableCell>
+                        <TableCell>{product.discount}%</TableCell>
+                        <TableCell className="font-semibold">
+                          ₹{product.totalPrice || product.price}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-0.5">
+                            {Array.from({ length: 5 }, (_, i) => {
+                              const avgRating =
+                                product.Rating?.length > 0
+                                  ? product.Rating.reduce(
+                                      (sum: number, r: number) =>
+                                        sum + Number(r),
+                                      0
+                                    ) / product.Rating.length
+                                  : 0;
+
+                              return (
+                                <Star
+                                  key={i}
+                                  className={`w-4 h-4 ${
+                                    i < Math.round(avgRating)
+                                      ? "text-red-500 fill-red-500"
+                                      : "text-gray-300"
+                                  }`}
+                                />
+                              );
+                            })}
+                          </div>
+                        </TableCell>
+
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <MoreVertical className="w-4 h-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuItem
+                                onClick={() => handleEditClick(product)}
+                              >
+                                <Edit className="w-4 h-4 mr-2" /> Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(product._id)}
+                                className="text-red-600"
+                              >
+                                <Trash2 className="w-4 h-4 mr-2" /> Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={9} className="text-center py-8">
+                        No products found
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+
+          <div className="flex justify-end mt-4">
+            <MyPagination
+              currentPage={currentPage}
+              totalItems={filteredProducts.length}
+              itemsPerPage={itemsPerPage}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <AddProductModal
+        open={openForm}
+        setOpen={setOpenForm}
+        onAddProduct={handleAddProduct}
+        isLoading={createMutation.isPending}
+      />
+
+      <EditProductModal
+        open={openEditForm}
+        setOpen={setOpenEditForm}
+        product={editingProduct}
+        onEditProduct={handleUpdateProduct}
+        isLoading={editMutation.isPending}
+      />
+    </div>
   );
 };
 

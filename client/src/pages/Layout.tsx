@@ -13,12 +13,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
-  const [hoveredAvailability, setHoveredAvailability] = useState<number | null>(
-    null
-  );
-  const [hoveredRating, setHoveredRating] = useState<number | null>(null);
   const [showCustomize, setShowCustomize] = useState<boolean>(false);
-
   const { themeColor } = useTheme();
 
   useEffect(() => {
@@ -31,9 +26,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { label: "Refrigerator", link: "/refrigerator" },
     { label: "Smart Home", link: "/home-smart" },
   ];
-
-  const availability = ["In Stock", "Out of Stock", "Limited Stock"];
-  const ratings = ["★ ★ ★ ★", "★ ★ ★", "★ ★", "★"];
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -67,66 +59,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </li>
               ))}
             </ul>
-          </div>
-
-          <div className="mt-10">
-            <h2 className="text-black font-semibold mb-4">Availability</h2>
-            <ul className="space-y-2">
-              {availability.map((status, index) => (
-                <li
-                  key={index}
-                  onMouseEnter={() => setHoveredAvailability(index)}
-                  onMouseLeave={() => setHoveredAvailability(null)}
-                  style={{
-                    color:
-                      hoveredAvailability === index ? themeColor : "#4B5563",
-                    fontWeight: hoveredAvailability === index ? 600 : 500,
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  {status}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mt-10">
-            <h2 className="text-black font-semibold mb-4">Rating</h2>
-            <ul className="space-y-2">
-              {ratings.map((rating, index) => (
-                <li
-                  key={index}
-                  onMouseEnter={() => setHoveredRating(index)}
-                  onMouseLeave={() => setHoveredRating(null)}
-                  style={{
-                    color: hoveredRating === index ? themeColor : "#4B5563",
-                    fontWeight: hoveredRating === index ? 600 : 500,
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  {rating}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mt-10">
-            <h2 className="text-black font-semibold mb-4">Price Range</h2>
-            <div className="flex flex-col space-y-2">
-              <input
-                style={{ accentColor: themeColor }}
-                type="range"
-                min="1000"
-                max="50000"
-                className="cursor-pointer w-42"
-              />
-              <div className="h-12 w-42 flex items-center justify-between">
-                <p>$1,000</p>
-                <p>$50,000</p>
-              </div>
-            </div>
           </div>
         </aside>
 

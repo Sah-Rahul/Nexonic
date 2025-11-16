@@ -9,9 +9,7 @@ import {
   Users,
   ShoppingCart,
   Package,
-  MessageCircle,
   Calendar,
-  Star,
   Settings,
   LayoutGrid,
   UserPen,
@@ -31,9 +29,7 @@ const menuItems: MenuItem[] = [
   { title: "Orders", icon: ShoppingCart, path: "/admin/orders" },
   { title: "Products", icon: Package, path: "/admin/products" },
   { title: "Category", icon: LayoutGrid, path: "/admin/category" },
-  { title: "Chat", icon: MessageCircle, path: "/admin/chat" },
   { title: "Calendar", icon: Calendar, path: "/admin/calendar" },
-  { title: "Reviews", icon: Star, path: "/admin/reviews" },
   { title: "Profile", icon: UserPen, path: "/admin/profile" },
   { title: "Settings", icon: Settings, path: "/admin/settings" },
 ];
@@ -55,7 +51,6 @@ const SidebarMenu = ({
         style={{ width }}
         className="h-screen fixed left-0 top-0 bg-red-500 transition-all duration-300 overflow-hidden z-50"
       >
-        {/* LOGO / TITLE */}
         <div className="h-16 flex items-center justify-center text-white font-bold text-xl border-b border-red-600/30">
           {collapsed ? (
             <div className="h-12 w-12 shadow-lg bg-white overflow-hidden rounded-full transition-transform duration-300 hover:scale-110">
@@ -78,15 +73,11 @@ const SidebarMenu = ({
           )}
         </div>
 
-        {/* MENU ITEMS */}
         <div className="py-4">
           {menuItems.map((item, index) => (
             <Tooltip key={item.title} delayDuration={300}>
               <TooltipTrigger asChild>
-                <Link
-                  to={item.path}
-                  onClick={(e) => e.stopPropagation()} // 🟢 prevents sidebar toggle
-                >
+                <Link to={item.path} onClick={(e) => e.stopPropagation()}>
                   <div
                     className={`
                       flex items-center p-3 mx-2 rounded-lg cursor-pointer text-white
@@ -123,7 +114,6 @@ const SidebarMenu = ({
                 </Link>
               </TooltipTrigger>
 
-              {/* Tooltip only when collapsed */}
               {collapsed && (
                 <TooltipContent side="right" className="bg-gray-900 text-white">
                   {item.title}

@@ -21,9 +21,7 @@ import Dashboard from "@/Admin/Dashboard";
 import Users from "@/Admin/Users";
 import Orders from "@/Admin/Orders";
 import Products from "@/Admin/Products";
-import Chat from "@/Admin/Chat";
 import Calendar from "@/Admin/Calendar";
-import Reviews from "@/Admin/Reviews";
 import Settings from "@/Admin/Settings";
 import Category from "@/Admin/Category";
 import Profile from "@/Admin/Profile";
@@ -59,9 +57,7 @@ const AppRoutes = () => {
             <Route path="orders" element={<Orders />} />
             <Route path="products" element={<Products />} />
             <Route path="category" element={<Category />} />
-            <Route path="chat" element={<Chat />} />
             <Route path="calendar" element={<Calendar />} />
-            <Route path="reviews" element={<Reviews />} />
             <Route path="profile" element={<Profile />} />
             <Route path="settings" element={<Settings />} />
             <Route path="details/:id" element={<ProductDetails />} />

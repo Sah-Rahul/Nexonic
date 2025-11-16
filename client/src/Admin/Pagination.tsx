@@ -1,33 +1,70 @@
 import {
   Pagination as UIPagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-const MyPagination = () => {
-  return (
+interface MyPaginationProps {
+  totalItems: number;
+  itemsPerPage: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+}
 
-    <div className="flex flex-col-reverse">
-        <UIPagination>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious href="#" />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext href="#" />
-        </PaginationItem>
-      </PaginationContent>
-    </UIPagination>
+const MyPagination: React.FC<MyPaginationProps> = ({
+  totalItems,
+  itemsPerPage,
+  currentPage,
+  onPageChange,
+}) => {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  if (totalPages === 0) return null;
+
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  return (
+    <div className="flex justify-center mt-4">
+      <UIPagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (currentPage > 1) onPageChange(currentPage - 1);
+              }}
+            />
+          </PaginationItem>
+
+          {pages.map((page) => (
+            <PaginationItem key={page}>
+              <PaginationLink
+                href="#"
+                className={page === currentPage ? "bg-blue-500 text-white" : ""}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onPageChange(page);
+                }}
+              >
+                {page}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (currentPage < totalPages) onPageChange(currentPage + 1);
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </UIPagination>
     </div>
   );
 };
