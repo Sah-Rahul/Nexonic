@@ -33,6 +33,7 @@ import {
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setProducts } from "@/redux/slices/productSlice";
+import MyPagination from "./Pagination";
 
 const CATEGORIES = [
   "AIR CONDITIONER",
@@ -92,7 +93,7 @@ const Products = () => {
       toast.error(err?.response?.data?.message || err.message);
     },
   });
- 
+
   const editMutation = useMutation({
     mutationFn: ({ id, updatedProduct }: any) =>
       updateProductApi(id, updatedProduct),
@@ -142,10 +143,10 @@ const Products = () => {
     setSearch(e.target.value);
   };
 
-  const filteredProducts =
-    productsData?.data.filter((product: any) =>
-      product.title.toLowerCase().includes(search.toLowerCase())
-    ) || [];
+  console.log(productsData);
+  const filteredProducts = (productsData || []).filter((product: any) =>
+    product.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <>
@@ -179,7 +180,7 @@ const Products = () => {
             </CardTitle>
             <CardContent className="pt-2">
               <div className="text-3xl font-bold">
-                {productsData?.data?.length || 0}
+                {productsData?.length || 0}
               </div>
             </CardContent>
           </Card>
@@ -317,6 +318,10 @@ const Products = () => {
                 </Table>
               </div>
             )}
+
+            <div className="flex justify-end">
+              <MyPagination />
+            </div>
           </CardContent>
         </Card>
 

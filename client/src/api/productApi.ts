@@ -15,7 +15,7 @@ export const createProductApi = async (product: FormData) => {
 
 export const getProductsApi = async () => {
   const { data } = await axiosInstance.get("/api/v1/product/");
-  return data;
+  return data.data;
 };
 
 export const updateProductApi = async (id: string, product: FormData) => {
