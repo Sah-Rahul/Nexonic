@@ -49,12 +49,15 @@ export const createProduct = asyncHandler(
       throw new ApiError(400, "Invalid input", formattedErrors);
     }
 
-    const { title, description, price, category, KeyFeatures, discount } =
-      parsed.data;
+    const { title, description, price, category, KeyFeatures } = parsed.data;
+    const discount = parsed.data.discount ?? 0;
 
     if (!req.file || !req.file.buffer) {
       throw new ApiError(400, "Product image is required");
     }
+
+    const discountAmount = (price * discount) / 100;
+    const totalPrice = price - discountAmount;
 
     const uploadedImage = await uploadToCloudinary(
       req.file.buffer,
@@ -68,6 +71,7 @@ export const createProduct = asyncHandler(
       category,
       KeyFeatures,
       discount,
+      totalPrice,
       productImage: uploadedImage.secure_url,
     });
 
@@ -102,7 +106,7 @@ export const updateProduct = asyncHandler(
       throw new ApiError(400, "Invalid input", formattedErrors);
     }
 
-    const { title, description, price, category, KeyFeatures, discount } =
+    const { title, description, price, category, KeyFeatures, Rating, discount } =
       parsed.data;
     const productId = req.params.id;
     if (!productId) throw new ApiError(400, "Product ID is required");
@@ -124,6 +128,7 @@ export const updateProduct = asyncHandler(
         price,
         category,
         KeyFeatures,
+        Rating,
         discount,
         ...(productImage && { productImage }),
       },

@@ -94,7 +94,7 @@ const AddProductModal: React.FC<AddModalProps> = ({
 
         <div className="space-y-4">
           <div>
-            <Label>Title</Label>
+            <Label className="mb-2">Title</Label>
             <Input
               value={formData.title}
               onChange={(e) =>

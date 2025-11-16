@@ -21,6 +21,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
     KeyFeatures: {
       type: [String],
       default: [],

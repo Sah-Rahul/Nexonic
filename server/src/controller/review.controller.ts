@@ -5,6 +5,7 @@ import { Response } from "express";
 import { AuthRequest } from "../types/Auth.interface";
 import ReviewModel from "../models/review.model";
 import ProductModel from "../models/product.model";
+import mongoose from "mongoose";
 
 export const addReviewOnProducts = asyncHandler(
   async (req: AuthRequest, res: Response) => {
@@ -109,6 +110,86 @@ export const deleteReview = asyncHandler(
           200,
           existingReview.toObject(),
           "Review deleted successfully"
+        )
+      );
+  }
+);
+
+export const getTotalReviews = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const productId = req.params.id;
+
+    const totalReviews = await ReviewModel.countDocuments({
+      product: productId,
+    });
+
+    res
+      .status(200)
+      .json(
+        new ApiResponse(200, totalReviews, "Total reviews fetched successfully")
+      );
+  }
+);
+
+export const getAverageReviews = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const productId = req.params.id;
+
+    const result = await ReviewModel.aggregate([
+      { $match: { product: new mongoose.Types.ObjectId(productId) } },
+      { $group: { _id: null, averageRating: { $avg: "$rating" } } },
+    ]);
+
+    const averageReviews = result[0]?.averageRating || 0;
+    res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          averageRating: averageReviews,
+        },
+        "Review stats fetched successfully"
+      )
+    );
+  }
+);
+
+export const getFiveStarReviews = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const productId = req.params.id;
+
+    const fiveStarCount = await ReviewModel.countDocuments({
+      product: productId,
+      rating: 5,
+    });
+
+    res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { fiveStarReviews: fiveStarCount },
+          "5-star reviews fetched successfully"
+        )
+      );
+  }
+);
+
+export const getLowRatedReviews = asyncHandler(
+  async (req: AuthRequest, res: Response) => {
+    const productId = req.params.id;
+
+    const lowRatedCount = await ReviewModel.countDocuments({
+      product: productId,
+      rating: { $lte: 2 },
+    });
+
+    res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { lowRatedReviews: lowRatedCount },
+          "Low-rated reviews fetched successfully"
         )
       );
   }
