@@ -7,6 +7,8 @@ export const AllowedCategories = [
   "PCS & LAPTOP",
   "REFRIGERATOR",
   "SMART HOME",
+  "BEST DEALS",
+  "NEW ARRIVALS"
 ] as const;
 
 export type CategoryType = (typeof AllowedCategories)[number];

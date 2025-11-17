@@ -1,6 +1,5 @@
 import AOS from "aos";
 import { Link } from "react-router-dom";
-import { BsCart4 } from "react-icons/bs";
 import Layout from "../components/Layout";
 import { useEffect, useState } from "react";
 import dealdata from "../AlllJsonData/TodayDeals/TodayDeals.json";
@@ -98,10 +97,6 @@ const TodaysDeal = () => {
                   <span className="py-2 px-4 sm:px-6 font-bold rounded-full bg-white text-blue-500 shadow-md text-xs sm:text-sm absolute top-3 left-3">
                     {item.discount}% off
                   </span>
-
-                  <button className=" h-8 w-8 flex items-center justify-center font-bold rounded-full bg-blue-500 text-white text-xs absolute top-3 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out">
-                    <BsCart4 className="text-lg" />
-                  </button>
                 </div>
               ))}
             </div>
@@ -138,38 +133,34 @@ const TodaysDeal = () => {
 
             <div className="md:px2 px-5 flex gap-4 flex-wrap justify-center">
               {comingsoondata.map((item) => (
-                <Link to={``} key={item.id}>
-                  <div
-                    data-aos="fade-up"
-                    className=" sm:px-6 overflow-hidden relative md:h-[50vw] md:w-[90vw] sm:h-[40vw] sm:w-[42vw] lg:h-[30vw] lg:w-[22vw] group"
-                  >
-                    <div className="flex flex-col items-center">
-                      <img
-                        src={item.img}
-                        alt={item.name}
-                        className="h-44 sm:h-48 lg:h-52 object-cover transition-all duration-300 ease-in-out"
-                      />
-                      <div className="flex flex-col">
-                        <span className="pt-2 text-sm sm:text-base lg:text-xl text-yellow-400">
-                          {item.rating}
-                        </span>
-                        <span className="pt-2 font-bold text-sm sm:text-base lg:text-lg">
-                          {item.name.slice(0, 60)}...
-                        </span>
+                <div
+                  data-aos="fade-up"
+                  className=" sm:px-6 overflow-hidden relative md:h-[50vw] md:w-[90vw] sm:h-[40vw] sm:w-[42vw] lg:h-[30vw] lg:w-[22vw] group"
+                >
+                  <div className="flex flex-col items-center">
+                    <img
+                      src={item.img}
+                      alt={item.name}
+                      className="h-44 sm:h-48 lg:h-52 object-cover transition-all duration-300 ease-in-out"
+                    />
+                    <div className="flex flex-col">
+                      <span className="pt-2 text-sm sm:text-base lg:text-xl text-yellow-400">
+                        {item.rating}
+                      </span>
+                      <span className="pt-2 font-bold text-sm sm:text-base lg:text-lg">
+                        {item.name.slice(0, 60)}...
+                      </span>
 
-                        <div className="pt-5 flex gap-3 text-xs sm:text-sm lg:text-base">
-                          <label className="font-semibold">
-                            Rs{item.price}
-                          </label>
-                        </div>
+                      <div className="pt-5 flex gap-3 text-xs sm:text-sm lg:text-base">
+                        <label className="font-semibold">Rs{item.price}</label>
                       </div>
                     </div>
-
-                    <span className="py-2 px-4 sm:px-6 font-bold rounded-full bg-white text-blue-500 shadow-md text-xs sm:text-sm absolute top-3 left-3">
-                      Coming Soon
-                    </span>
                   </div>
-                </Link>
+
+                  <span className="py-2 px-4 sm:px-6 font-bold rounded-full bg-white text-blue-500 shadow-md text-xs sm:text-sm absolute top-3 left-3">
+                    Coming Soon
+                  </span>
+                </div>
               ))}
             </div>
           </div>

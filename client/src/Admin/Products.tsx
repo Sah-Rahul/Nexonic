@@ -48,6 +48,8 @@ const CATEGORIES = [
   "PCS & LAPTOP",
   "REFRIGERATOR",
   "SMART HOME",
+  "BEST DEALS",
+  "NEW ARRIVALS"
 ];
 
 const Products = () => {
