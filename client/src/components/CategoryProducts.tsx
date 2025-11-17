@@ -9,6 +9,10 @@ import { useQuery } from "@tanstack/react-query";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { getProductsApi } from "@/api/productApi";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/redux/slices/cartSlice";
+import toast from "react-hot-toast";
+import type { Product } from "@/redux/slices/productSlice";
 
 interface Props {
   category: string;
@@ -16,6 +20,7 @@ interface Props {
 
 const CategoryProducts = ({ category }: Props) => {
   const { themeColor } = useTheme();
+  const dispatch = useDispatch();
   const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -50,6 +55,11 @@ const CategoryProducts = ({ category }: Props) => {
         ))}
       </div>
     );
+  };
+
+  const handleAddToCart = (product: Product) => {
+    dispatch(addToCart(product));
+    toast.success("Product added to cart");
   };
 
   return (
@@ -103,7 +113,9 @@ const CategoryProducts = ({ category }: Props) => {
               className="h-8 w-8 flex items-center justify-center mt-2 rounded-full text-white absolute top-6 right-[-30px]
               opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300"
             >
-              <BsCart4 className="text-xl cursor-pointer" />
+              <button onClick={() => handleAddToCart(item)}>
+                <BsCart4 className="text-xl cursor-pointer" />
+              </button>
             </div>
 
             {hoveredItemId === item._id && (

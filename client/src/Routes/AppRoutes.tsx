@@ -27,6 +27,7 @@ import Category from "@/Admin/Category";
 import Profile from "@/Admin/Profile";
 import Layout from "@/Admin/Layout";
 import ProductDetails from "@/Admin/ProductDetails";
+import Cart from "@/components/Cart";
 
 const AppRoutes = () => {
   return (
@@ -50,6 +51,8 @@ const AppRoutes = () => {
           <Route path="/laptop_and_pc" element={<PcAndLaptop />} />
           <Route path="/gadgets" element={<Gadgets />} />
           <Route path="/home-smart" element={<SmartHome />} />
+          <Route path="/cart" element={<Cart />} />
+
           // admin routes
           <Route path="/admin" element={<Layout />}>
             <Route path="dashboard" element={<Dashboard />} />

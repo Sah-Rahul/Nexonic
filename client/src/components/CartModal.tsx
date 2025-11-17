@@ -4,28 +4,37 @@ import { RxCross2 } from "react-icons/rx";
 import { useTheme } from "../context/ThemeContext";
 import { Link } from "react-router-dom";
 import EmptyCart from "./EmptyCart";
-
-interface Product {
-  id: string | number;
-  name: string;
-  img: string;
-  price: number;
-}
-
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
+import {
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+} from "@/redux/slices/cartSlice";
+import toast from "react-hot-toast";
 
 interface CartModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data: CartItem[];
 }
 
-const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, data }) => {
+const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const { themeColor } = useTheme();
+  const dispatch = useDispatch();
+  const { products } = useSelector((state: RootState) => state.cart);
+  console.log(products);
 
+  const handleIncrease = (product: string) => {
+    dispatch(increaseQuantity(product));
+  };
+  const handleDecrease = (product: string) => {
+    dispatch(decreaseQuantity(product));
+  };
+
+  const handleRemoveCart = (product: string) => {
+    dispatch(removeFromCart(product));
+    toast.success("Product Remove from cart");
+  };
   return (
     <>
       <div
@@ -54,35 +63,46 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, data }) => {
         </div>
 
         <div className="h-[calc(100%-8rem)] overflow-y-auto p-4">
-          {data && data.length > 0 ? (
-            data.map((item, index) => (
+          {products.length > 0 ? (
+            products.map((item, index) => (
               <div
                 key={index}
                 className="flex items-center justify-between p-2 h-24 mb-3 border rounded-lg"
               >
                 <div className="h-full w-20 flex items-center justify-center bg-gray-200">
                   <img
-                    src={item.product.img}
-                    alt={item.product.name}
+                    src={item.productImage}
+                    alt={item.title}
                     className="w-full h-full object-cover"
                   />
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <button className="w-8 h-8 cursor-pointer bg-white rounded-full flex items-center justify-center font-bold text-pink-500 hover:bg-gray-100">
+                  <button
+                    onClick={() => handleDecrease(item._id)}
+                    className="w-8 h-8 cursor-pointer bg-white rounded-full flex items-center justify-center font-bold text-pink-500 hover:bg-gray-100"
+                  >
                     -
                   </button>
-                  <span className="font-semibold text-lg">{item.quantity}</span>
-                  <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center cursor-pointer font-bold text-pink-500 hover:bg-gray-100">
+                  <span className="font-semibold text-lg text-black">
+                    {item.quantity}
+                  </span>
+                  <button
+                    onClick={() => handleIncrease(item._id)}
+                    className="w-8 h-8 bg-white rounded-full flex items-center justify-center cursor-pointer font-bold text-pink-500 hover:bg-gray-100"
+                  >
                     +
                   </button>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="font-semibold">
-                    ${item.product.price * item.quantity}
+                  <span className="font-semibold text-black">
+                    Rs{item.price * item.quantity}
                   </span>
-                  <button className="text-red-500 cursor-pointer hover:text-red-700 transition-colors">
+                  <button
+                    onClick={() => handleRemoveCart(item._id)}
+                    className="text-red-500 cursor-pointer hover:text-red-700 transition-colors"
+                  >
                     <Trash2 className="w-6 h-6" />
                   </button>
                 </div>
@@ -95,7 +115,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose, data }) => {
           )}
         </div>
 
-        {data && data.length > 0 && (
+        {products && products.length > 0 && (
           <div
             style={{ background: themeColor }}
             className="h-[62px] w-full fixed bottom-0 p-2"

@@ -19,8 +19,7 @@ const NavBar: React.FC = () => {
   const { themeColor } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useSelector((state: RootState) => state.auth);
-
-  console.log(user);
+  const { products } = useSelector((state: RootState) => state.cart);
 
   const menu: MenuItem[] = [
     { label: "Home Appliances", link: "/appliancess_home" },
@@ -38,26 +37,7 @@ const NavBar: React.FC = () => {
     { label: "Gadgets", link: "/gadgets" },
     { label: "Smart home", link: "/home-smart" },
   ];
-  const dummyCart = [
-    {
-      product: {
-        id: 1,
-        name: "Smartphone",
-        img: "https://via.placeholder.com/100",
-        price: 599,
-      },
-      quantity: 2,
-    },
-    {
-      product: {
-        id: 2,
-        name: "Headphones",
-        img: "https://via.placeholder.com/100",
-        price: 199,
-      },
-      quantity: 1,
-    },
-  ];
+  
 
   return (
     <>
@@ -143,7 +123,7 @@ const NavBar: React.FC = () => {
               </Link>
             ))}
             <CartModal
-              data={dummyCart}
+              
               isOpen={showCart}
               onClose={() => setShowCart(false)}
             />
@@ -156,7 +136,7 @@ const NavBar: React.FC = () => {
               </button>
               <div className="h-6 w-6 rounded-full flex items-center justify-center bg-white absolute -top-4 right-0">
                 <span style={{ color: themeColor }} className="font-semibold">
-                  4
+                  {products.length}
                 </span>
               </div>
             </div>
