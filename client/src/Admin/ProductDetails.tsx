@@ -15,7 +15,6 @@ import {
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
-import {SlideshowLightbox} from 'lightbox.js-react'
 
 const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,11 +22,7 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const {
-    data: getProducts = [],
-    isLoading,
-    error,
-  } = useQuery<Product[], Error>({
+  const { data: getProducts = [] } = useQuery<Product[], Error>({
     queryKey: ["products"],
     queryFn: getProductsApi,
   });
@@ -108,23 +103,12 @@ const ProductDetails = () => {
             <span className="bg-green-200 text-green-800 px-3 py-1 rounded-md text-sm font-semibold">
               {product.discount}% OFF
             </span>
-          </div>
-
-          <section className="mt-8 bg-orange-100 p-6 rounded-md max-w-full md:max-w-[96]">
-            <h3 className="text-xl font-semibold mb-3 text-orange-900">
-              Key Features:
-            </h3>
-            <ul className="list-disc pl-6 space-y-2 text-gray-800 text-sm md:text-base">
-              {product.KeyFeatures?.map((feature: string, index: number) => (
-                <li key={index}>{feature}</li>
-              ))}
-            </ul>
 
             <div className="mt-5 flex items-center space-x-4 w-full max-w-xs rounded-md p-2">
-              <div className="flex items-center bg-white rounded-md overflow-hidden">
+              <div className="border flex items-center bg-white rounded-md overflow-hidden">
                 <button
                   onClick={() => handleDecrease(product._id)}
-                  className="px-4 py-2 cursor-pointer font-bold transition"
+                  className="px-4 py-2 border hover:bg-gray-400 cursor-pointer font-bold transition"
                   aria-label="Decrease quantity"
                   disabled={productQuantity === 0}
                 >
@@ -137,7 +121,7 @@ const ProductDetails = () => {
 
                 <button
                   onClick={() => handleIncrease(product._id)}
-                  className="px-4 py-2 cursor-pointer font-bold transition"
+                  className="px-4 py-2 border hover:bg-gray-400 cursor-pointer font-bold transition"
                 >
                   +
                 </button>
@@ -146,19 +130,30 @@ const ProductDetails = () => {
               {productInCart ? (
                 <button
                   onClick={() => navigate("/cart")}
-                  className="flex-1 bg-white text-red-500 font-semibold rounded-md py-2 cursor-pointer"
+                  className="flex-1    bg-gray-400 text-black font-semibold rounded-md py-2 cursor-pointer"
                 >
                   View Cart
                 </button>
               ) : (
                 <button
                   onClick={() => handleAddToCart(product)}
-                  className="flex-1 bg-white text-red-500 font-semibold rounded-md py-2 cursor-pointer"
+                  className="flex-1 bg-gray-500 text-white font-semibold rounded-md py-2 cursor-pointer"
                 >
                   Add to cart
                 </button>
               )}
             </div>
+          </div>
+
+          <section className="mt-8 bg-orange-100 p-6 rounded-md max-w-full md:max-w-[96]">
+            <h3 className="text-xl font-semibold mb-3 text-orange-900">
+              Key Features:
+            </h3>
+            <ul className="list-disc pl-6 space-y-2 text-gray-800 text-sm md:text-base">
+              {product.KeyFeatures?.map((feature: string, index: number) => (
+                <li key={index}>{feature}</li>
+              ))}
+            </ul>
           </section>
         </div>
       </main>

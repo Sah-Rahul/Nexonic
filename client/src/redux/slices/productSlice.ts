@@ -10,6 +10,7 @@ export interface Product {
   productImage: string;
   category: string;
   quantity: number; 
+  Rating: number
 }
 
 interface ProductState {

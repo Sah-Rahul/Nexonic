@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import type { RootState } from "@/redux/store";
 import { useTheme } from "@/context/ThemeContext";
+import EmptyCart from "./EmptyCart";
 
 const Cart: React.FC = () => {
   const [showCouponInput, setShowCouponInput] = useState(false);
@@ -43,6 +44,10 @@ const Cart: React.FC = () => {
   );
 
   const total = subtotal;
+
+  if (products.length === 0) {
+    return <EmptyCart />;
+  }
 
   return (
     <Layout>

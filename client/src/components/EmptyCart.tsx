@@ -57,9 +57,9 @@ const EmptyCart = () => {
         </p>
       </div>
 
-      <Link to={"/products"}>
+      <Link to={"/"}>
         <button
-          className="mt-8 px-8 py-3 bg-gradient-to- from-blue-500 to-teal-500 text-white rounded-full cursor-pointer font-semibold hover:from-blue-600 hover:to-teal-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl animate-fade-in"
+          className="mt-8 px-8 py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-black rounded-full cursor-pointer font-semibold hover:from-blue-600 hover:to-teal-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl animate-fade-in"
           style={{ animationDelay: "0.3s" }}
         >
           Start Shopping

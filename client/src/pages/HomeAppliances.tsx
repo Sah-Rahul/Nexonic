@@ -8,21 +8,18 @@ import { Badge } from "antd";
 import { Heart, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { formatBreadcrumb } from "../lib/breadcrumb";
+import { addToCart } from "@/redux/slices/cartSlice";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { addToWishlist } from "@/redux/slices/Wishlist";
+import type { Product } from "@/redux/slices/productSlice";
 
-interface Product {
-  id: string | number;
-  title: string;
-  productImage: string;
-  price: number;
-  discount: number;
-  Rating: number;
-  category: string;
-}
+
 
 const HomeAppliances = () => {
   const { themeColor } = useTheme();
   const location = useLocation();
-
+  const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState("Default sorting");
 
@@ -35,6 +32,7 @@ const HomeAppliances = () => {
     queryFn: getProductsApi,
   });
 
+  console.log(products);
   const filteredProducts = products.filter(
     (p) => p.category?.toUpperCase() === "HOME APPLIANCES"
   );
@@ -70,6 +68,16 @@ const HomeAppliances = () => {
         ))}
       </div>
     );
+  };
+
+  const handleAddToCart = (product: Product) => {
+    dispatch(addToCart(product));
+    toast.success("Product added to cart");
+  };
+
+  const handleAddToWishList = (product: Product) => {
+    dispatch(addToWishlist(product));
+    toast.success("Product added in wishlist");
   };
 
   return (
@@ -159,7 +167,7 @@ const HomeAppliances = () => {
 
         <div className="flex items-center gap-5 flex-wrap">
           {filteredProducts.map((item, idx) => (
-            <div key={item.id} className="relative md:w-[22vw] group mb-6">
+            <div key={item._id} className="relative md:w-[22vw] group mb-6">
               {idx === 0 && (
                 <Badge.Ribbon
                   text="Sale"
@@ -169,7 +177,7 @@ const HomeAppliances = () => {
               )}
 
               <div className="flex flex-col items-center">
-                <Link to={`/productsdetails/${item.id}`}>
+                <Link to={`/products-details/${item._id}`}>
                   <img
                     src={item.productImage}
                     alt={item.title}
@@ -177,7 +185,7 @@ const HomeAppliances = () => {
                   />
                 </Link>
 
-                <Link to={`/productsdetails/${item.id}`}>
+                <Link to={`/products-details/${item._id}`}>
                   <div className="px-6 flex flex-col">
                     <span className="pt-2 md:text-xl text-xl  ">
                       {item.title.slice(0, 60)}
@@ -207,6 +215,7 @@ const HomeAppliances = () => {
               </div>
 
               <div
+              onClick={() => handleAddToCart(item)}
                 style={{ backgroundColor: themeColor }}
                 className="h-8 w-8 flex items-center justify-center font-bold rounded-full text-white text-xs absolute top-3 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
               >
@@ -214,6 +223,7 @@ const HomeAppliances = () => {
               </div>
 
               <div
+              onClick={() => handleAddToWishList(item)}
                 style={{ backgroundColor: themeColor }}
                 className="h-8 w-8 flex items-center justify-center font-bold rounded-full text-white text-xs absolute top-14 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
               >

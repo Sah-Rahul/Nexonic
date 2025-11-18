@@ -9,6 +9,7 @@ export interface Product {
   keyFeatures: string[];
   productImage: string;
   category: string;
+  quantity: number
 }
 
 export interface WishlistProduct extends Product {}

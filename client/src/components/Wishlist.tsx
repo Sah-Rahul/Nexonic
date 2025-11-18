@@ -88,7 +88,7 @@ const Wishlist = () => {
                   >
                     <CardContent className="p-0">
                       <div className="relative">
-                        <Link to={`/product/${item._id}`}>
+                        <Link to={`/products-details/${item._id}`}>
                           <img
                             src={item.productImage}
                             alt={item.title}
@@ -117,7 +117,7 @@ const Wishlist = () => {
                           {item.category}
                         </Badge>
 
-                        <Link to={`/product/${item._id}`}>
+                        <Link to={`/products-details/${item._id}`}>
                           <h3 className="font-semibold text-sm line-clamp-2 hover:text-blue-600 transition-colors min-h-[10">
                             {item.title}
                           </h3>
