@@ -22,7 +22,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const { themeColor } = useTheme();
   const dispatch = useDispatch();
   const { products } = useSelector((state: RootState) => state.cart);
-  console.log(products);
+ 
 
   const handleIncrease = (product: string) => {
     dispatch(increaseQuantity(product));

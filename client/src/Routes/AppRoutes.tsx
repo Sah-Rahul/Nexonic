@@ -54,6 +54,7 @@ const AppRoutes = () => {
           <Route path="/home-smart" element={<SmartHome />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/products-details/:id" element={  <ProductDetails />} />
 
 
           // admin routes
@@ -66,7 +67,6 @@ const AppRoutes = () => {
             <Route path="calendar" element={<Calendar />} />
             <Route path="profile" element={<Profile />} />
             <Route path="settings" element={<Settings />} />
-            <Route path="details/:id" element={<ProductDetails />} />
 
           </Route>
         </Routes>

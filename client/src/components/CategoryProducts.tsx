@@ -84,7 +84,7 @@ const CategoryProducts = ({ category }: Props) => {
             <Badge.Ribbon text="Sale" color={themeColor} />
 
             <div className="flex flex-col items-center">
-              <Link to={`/productsdetails/${item._id}`}>
+              <Link to={`/products-details/${item._id}`}>
                 <img
                   src={item.productImage}
                   alt={item.title}
@@ -92,7 +92,7 @@ const CategoryProducts = ({ category }: Props) => {
                 />
               </Link>
 
-              <Link to={`/productsdetails/${item._id}`}>
+              <Link to={`/products-details/${item._id}`}>
                 <div className="px-6 flex flex-col">
                   <span className="pt-2 font-bold">
                     {item.title.slice(0, 70)}...
