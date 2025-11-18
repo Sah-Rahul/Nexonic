@@ -14,11 +14,14 @@ import storage from "redux-persist/lib/storage";
 import userReducer from "./slices/userSlice";
 import productReducer from "./slices/productSlice";
 import cartReducer from "./slices/cartSlice";
+import WishlistReducer from "./slices/Wishlist"
 
 const rootReducer = combineReducers({
   auth: userReducer,
   product: productReducer,
-  cart:cartReducer
+  cart:cartReducer,
+  wishList:WishlistReducer
+
 });
 
 const persistConfig = {

@@ -1,11 +1,11 @@
-import { Toaster } from "react-hot-toast";
 import AppRoutes from "./Routes/AppRoutes";
+import CustomToast from "./components/CustomToast";
 
 const App = () => {
   return (
     <>
       <AppRoutes />
-      <Toaster />
+      <CustomToast />
     </>
   );
 };

@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSlice";
 import toast from "react-hot-toast";
 import type { Product } from "@/redux/slices/productSlice";
+import { addToWishlist } from "@/redux/slices/Wishlist";
 
 interface Props {
   category: string;
@@ -60,6 +61,11 @@ const CategoryProducts = ({ category }: Props) => {
   const handleAddToCart = (product: Product) => {
     dispatch(addToCart(product));
     toast.success("Product added to cart");
+  };
+
+  const handleAddToWishList = (product: Product) => {
+    dispatch(addToWishlist(product));
+    toast.success("Product added in wishlist");
   };
 
   return (
@@ -138,7 +144,7 @@ const CategoryProducts = ({ category }: Props) => {
               className="h-8 w-8 flex items-center justify-center rounded-full text-white absolute top-18 right-[-30px]
               opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300"
             >
-              <button>
+              <button onClick={() => handleAddToWishList(item)}>
                 <Heart className="w-4 h-4 cursor-pointer" />
               </button>
             </div>
