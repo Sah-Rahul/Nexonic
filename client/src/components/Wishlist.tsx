@@ -20,6 +20,7 @@ import Layout from "./Layout";
 import type { Product } from "@/redux/slices/productSlice";
 import { addToCart } from "@/redux/slices/cartSlice";
 import toast from "react-hot-toast";
+import { useTheme } from "@/context/ThemeContext";
 
 const Wishlist = () => {
   const products = useSelector(
@@ -27,7 +28,7 @@ const Wishlist = () => {
   ) as WishlistProduct[];
 
   const dispatch = useDispatch();
-
+  const { themeColor } = useTheme();
   const handleAddToCart = (product: Product) => {
     dispatch(addToCart(product));
     dispatch(removeFromWishlist(product._id));
@@ -66,8 +67,11 @@ const Wishlist = () => {
         <div className="min-h-screen bg-background">
           <div className="container mx-auto px-4 py-8">
             <div className="mb-8">
-              <div className="flex items-center gap-3 mb-2">
-                <Heart className="w-8 h-8 text-red-500 fill-red-500" />
+              <div
+                style={{ color: themeColor }}
+                className="flex items-center gap-3 mb-2"
+              >
+                <Heart className="w-8 h-8" style={{ fill: themeColor }} />
                 <h1 className="text-3xl font-bold">My Wishlist</h1>
               </div>
               <p className="text-muted-foreground">
@@ -92,12 +96,15 @@ const Wishlist = () => {
                           <img
                             src={item.productImage}
                             alt={item.title}
-                            className="w-full h-64 object-contain bg-gray-50 group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-64 object-contain  group-hover:scale-105 transition-transform duration-300"
                           />
                         </Link>
 
                         {item.discount > 0 && (
-                          <Badge className="absolute top-3 left-3 bg-red-500 hover:bg-red-600">
+                          <Badge
+                            style={{ background: themeColor }}
+                            className="absolute top-3 left-3    "
+                          >
                             {item.discount}% OFF
                           </Badge>
                         )}
@@ -108,7 +115,10 @@ const Wishlist = () => {
                           className="absolute top-3 right-3 cursor-pointer bg-white/90 hover:bg-white"
                           onClick={() => dispatch(removeFromWishlist(item._id))}
                         >
-                          <Trash2 className="w-4 h-4 text-red-500 cursor-pointer" />
+                          <Trash2
+                            style={{ color: themeColor }}
+                            className="w-4 h-4   cursor-pointer"
+                          />
                         </Button>
                       </div>
 
@@ -145,10 +155,11 @@ const Wishlist = () => {
                           </p>
                         )}
 
-                        <div className="flex gap-2 pt-2 ">
+                        <div className="flex   gap-2 pt-2 ">
                           <Button
+                            style={{ background: themeColor }}
                             onClick={() => handleAddToCart(item)}
-                            className="flex-1 gap-2 cursor-pointer"
+                            className="flex-1  gap-2 cursor-pointer"
                           >
                             <ShoppingCart className="w-4 h-4 cursor-pointer" />
                             Add to Cart

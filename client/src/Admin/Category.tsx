@@ -94,8 +94,6 @@ const Category = () => {
     queryFn: () => getProductsApi(),
   });
 
-  console.log(data);
-
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
@@ -132,7 +130,8 @@ const Category = () => {
               <Package className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{data.length}</div>
+              <div className="text-2xl font-bold">{data?.length ?? 0}</div>
+
               <p className="text-xs text-muted-foreground">
                 Across all categories
               </p>

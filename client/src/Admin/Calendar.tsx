@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import CalendarLib from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import {
   Card,
   CardContent,
@@ -9,10 +11,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
+  Plus,
+  Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
-  Calendar as CalendarIcon,
-  Plus,
 } from "lucide-react";
 
 interface Event {
@@ -22,11 +24,23 @@ interface Event {
   type: "meeting" | "deadline" | "task";
 }
 
-const Calendar = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const today = new Date();
+const getEventColor = (type: string) => {
+  switch (type) {
+    case "meeting":
+      return "bg-blue-500";
+    case "deadline":
+      return "bg-red-500";
+    case "task":
+      return "bg-green-500";
+    default:
+      return "bg-gray-500";
+  }
+};
 
-  const [events] = useState<Event[]>([
+const Calendar = () => {
+  const [date, setDate] = useState(new Date());
+
+  const events: Event[] = [
     {
       id: "1",
       title: "Team Meeting",
@@ -45,296 +59,203 @@ const Calendar = () => {
       date: new Date(2024, 10, 18),
       type: "task",
     },
-  ]);
-
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
-
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
   ];
 
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-  const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
-
-  const goToPreviousMonth = () => {
-    setCurrentDate(new Date(currentYear, currentMonth - 1, 1));
-  };
-
-  const goToNextMonth = () => {
-    setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
-  };
-
-  const goToToday = () => {
-    setCurrentDate(new Date());
-  };
-
-  const isToday = (day: number) => {
-    return (
-      day === today.getDate() &&
-      currentMonth === today.getMonth() &&
-      currentYear === today.getFullYear()
+  const getEventsForDate = (d: Date) =>
+    events.filter(
+      (e) =>
+        e.date.getFullYear() === d.getFullYear() &&
+        e.date.getMonth() === d.getMonth() &&
+        e.date.getDate() === d.getDate()
     );
-  };
 
-  const getEventsForDate = (day: number) => {
-    return events.filter(
-      (event) =>
-        event.date.getDate() === day &&
-        event.date.getMonth() === currentMonth &&
-        event.date.getFullYear() === currentYear
-    );
-  };
-
-  const generateCalendarDays = () => {
-    const days = [];
-
-    for (let i = firstDayOfMonth - 1; i >= 0; i--) {
-      days.push({
-        day: daysInPrevMonth - i,
-        isCurrentMonth: false,
-        isToday: false,
-      });
-    }
-
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push({
-        day: i,
-        isCurrentMonth: true,
-        isToday: isToday(i),
-      });
-    }
-
-    const remainingDays = 42 - days.length;
-    for (let i = 1; i <= remainingDays; i++) {
-      days.push({
-        day: i,
-        isCurrentMonth: false,
-        isToday: false,
-      });
-    }
-
-    return days;
-  };
-
-  const calendarDays = generateCalendarDays();
-
-  const getEventColor = (type: string) => {
-    switch (type) {
-      case "meeting":
-        return "bg-blue-500";
-      case "deadline":
-        return "bg-red-500";
-      case "task":
-        return "bg-green-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
-
-  useEffect(() => {
-    window.scroll(0, 0);
-  }, []);
+  const goToToday = () => setDate(new Date());
+  const goToPreviousMonth = () =>
+    setDate(new Date(date.getFullYear(), date.getMonth() - 1, 1));
+  const goToNextMonth = () =>
+    setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1));
 
   return (
-    <>
-      <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold">Calendar</h1>
-            <p className="text-muted-foreground">
-              Manage your schedule and events
-            </p>
-          </div>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Event
-          </Button>
+    <div className="space-y-6 p-6 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <div>
+          <CardTitle className="text-2xl font-semibold tracking-tight">
+            {date.toLocaleString("default", { month: "long" })}{" "}
+            {date.getFullYear()}
+          </CardTitle>
+          <p className="text-muted-foreground text-sm">
+            Manage your schedule and events
+          </p>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-2xl">
-                  {monthNames[currentMonth]} {currentYear}
-                </CardTitle>
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={goToToday}>
-                    <CalendarIcon className="w-4 h-4 mr-2" />
-                    Today
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={goToPreviousMonth}
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </Button>
-                  <Button variant="outline" size="icon" onClick={goToNextMonth}>
-                    <ChevronRight className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-7 gap-2">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-                  (day) => (
-                    <div
-                      key={day}
-                      className="text-center text-sm font-semibold text-muted-foreground py-2"
-                    >
-                      {day}
-                    </div>
-                  )
-                )}
-
-                {calendarDays.map((dayObj, index) => {
-                  const dayEvents = dayObj.isCurrentMonth
-                    ? getEventsForDate(dayObj.day)
-                    : [];
-
-                  return (
-                    <div
-                      key={index}
-                      className={`
-                        min-h-20 p-2 border rounded-lg cursor-pointer
-                        transition-all hover:shadow-md
-                        ${
-                          !dayObj.isCurrentMonth
-                            ? "bg-muted/30 text-muted-foreground"
-                            : "bg-background"
-                        }
-                        ${
-                          dayObj.isToday
-                            ? "bg-blue-500 text-white font-bold ring-2 ring-blue-600 shadow-lg"
-                            : ""
-                        }
-                      `}
-                    >
-                      <div className="text-sm font-medium mb-1">
-                        {dayObj.day}
-                      </div>
-                      <div className="space-y-1">
-                        {dayEvents.map((event) => (
-                          <div
-                            key={event.id}
-                            className={`text-xs px-1 py-0.5 rounded text-white truncate ${getEventColor(
-                              event.type
-                            )}`}
-                          >
-                            {event.title}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Upcoming Events</CardTitle>
-              <CardDescription>Your scheduled activities</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {events
-                .sort((a, b) => a.date.getTime() - b.date.getTime())
-                .map((event) => (
-                  <div
-                    key={event.id}
-                    className="p-3 rounded-lg border bg-muted/30 hover:bg-muted/50 transition-colors"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="font-medium">{event.title}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {event.date.toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
-                        </div>
-                      </div>
-                      <Badge
-                        variant="secondary"
-                        className={`${getEventColor(event.type)} text-white`}
-                      >
-                        {event.type}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium">
-                Total Events
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">{events.length}</div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium">This Month</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">
-                {
-                  events.filter(
-                    (e) =>
-                      e.date.getMonth() === currentMonth &&
-                      e.date.getFullYear() === currentYear
-                  ).length
-                }
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium">Today</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">
-                {
-                  events.filter(
-                    (e) =>
-                      e.date.getDate() === today.getDate() &&
-                      e.date.getMonth() === today.getMonth() &&
-                      e.date.getFullYear() === today.getFullYear()
-                  ).length
-                }
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <Button className="inline-flex items-center px-4 py-2">
+          <Plus className="w-4 h-4 mr-2" />
+          Add Event
+        </Button>
       </div>
-    </>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="  lg:col-span-2 p-6 min-h-[520px]">
+          <CardHeader className="flex items-center justify-between mb-6">
+            <p></p>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={goToToday}
+                className="flex items-center space-x-1"
+              >
+                <CalendarIcon className="w-4 h-4" />
+                <span>Today</span>
+              </Button>
+              <Button variant="outline" size="icon" onClick={goToPreviousMonth}>
+                <ChevronLeft className="w-5 h-5" />
+              </Button>
+              <Button variant="outline" size="icon" onClick={goToNextMonth}>
+                <ChevronRight className="w-5 h-5" />
+              </Button>
+            </div>
+          </CardHeader>
+
+          <CalendarLib
+            value={date}
+            onChange={(value) => {
+              if (value && !(value instanceof Array)) {
+                setDate(value);
+              }
+            }}
+            calendarType="iso8601"
+            tileClassName={({ date: d, view }) => {
+              if (view === "month") {
+                const isSelected =
+                  d.getDate() === date.getDate() &&
+                  d.getMonth() === date.getMonth() &&
+                  d.getFullYear() === date.getFullYear();
+
+                return isSelected
+                  ? "bg-blue-600 text-white rounded-lg shadow-md"
+                  : "rounded-lg hover:bg-blue-100";
+              }
+              return "";
+            }}
+            tileContent={({ date: d, view }) => {
+              if (view === "month") {
+                const dayEvents = getEventsForDate(d);
+                return (
+                  <div className="mt-1 flex flex-col gap-0.5 px-0.5">
+                    {dayEvents.map((e) => (
+                      <span
+                        key={e.id}
+                        className={`text-[10px] px-1 rounded text-white truncate ${getEventColor(
+                          e.type
+                        )}`}
+                        title={e.title}
+                      >
+                        {e.title}
+                      </span>
+                    ))}
+                  </div>
+                );
+              }
+              return null;
+            }}
+            prevLabel={<ChevronLeft className="w-5 h-5" />}
+            nextLabel={<ChevronRight className="w-5 h-5" />}
+            formatDay={(locale, date) => date.getDate().toString()}
+            className="border border-gray-300 rounded-lg overflow-hidden
+              react-calendar-custom"
+          />
+        </Card>
+
+        <Card className="p-6">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">
+              Upcoming Events
+            </CardTitle>
+            <CardDescription className="text-sm text-muted-foreground">
+              Your scheduled activities
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4 pt-4 max-h-[480px] overflow-y-auto">
+            {events
+              .sort((a, b) => a.date.getTime() - b.date.getTime())
+              .map((event) => (
+                <div
+                  key={event.id}
+                  className="p-3 rounded-lg border border-gray-200 bg-muted/40 hover:bg-muted/60 transition-colors cursor-pointer"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">
+                        {event.title}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {event.date.toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </div>
+                    </div>
+                    <Badge
+                      variant="secondary"
+                      className={`${getEventColor(
+                        event.type
+                      )} text-white capitalize`}
+                    >
+                      {event.type}
+                    </Badge>
+                  </div>
+                </div>
+              ))}
+          </CardContent>
+        </Card>
+      </div>
+
+      <style>{`
+        /* Override default react-calendar styles for bigger calendar */
+        .react-calendar-custom {
+          width: 100% !important;
+          max-width: none !important;
+          font-family: inherit;
+          font-size: 1rem;
+        }
+
+        .react-calendar-custom .react-calendar__tile {
+          padding: 12px 10px !important;
+          border-radius: 0.5rem !important;
+          height: 80px !important;
+          max-height: 80px !important;
+          line-height: 1.2 !important;
+        }
+
+        .react-calendar-custom .react-calendar__month-view__weekdays__weekday {
+          font-weight: 600;
+          font-size: 0.875rem;
+          padding: 8px 0 !important;
+          text-transform: uppercase;
+        }
+
+        /* Adjust event badges inside tiles to fit better */
+        .react-calendar-custom .react-calendar__tile > div {
+          margin-top: 6px;
+        }
+
+        @media (max-width: 1024px) {
+          /* Responsive tweaks */
+          .react-calendar-custom .react-calendar__tile {
+            height: 64px !important;
+            padding: 8px 6px !important;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .react-calendar-custom .react-calendar__tile {
+            height: 56px !important;
+            padding: 6px 4px !important;
+          }
+        }
+      `}</style>
+    </div>
   );
 };
 

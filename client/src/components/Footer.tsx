@@ -11,7 +11,7 @@ const Footer = () => {
       <footer className="w-full border-t-2 border-gray-400">
         <div
           style={{ backgroundColor: themeColor }}
-          className="  text-white px-16 flex items-center justify-between h-72"
+          className="  text-white px-16 flex   items-center justify-between h-72"
         >
           <div className="mb-4 md:mt-0 mt-5 md:mb-0">
             <img
@@ -93,7 +93,7 @@ const Footer = () => {
         <div className="bg-[#1B3C53] h-24 flex items-center">
           <div className="w-full px-16 flex items-center justify-between text-white">
             <span>
-              © {new Date().getFullYear()} Electronic Store. Powered & Develop
+              © {new Date().getFullYear()} Nexonic Store. Powered & Develop
               by ❤{" "}
               <span style={{ color: themeColor }}>
                 <b>Rahul Sah</b>
