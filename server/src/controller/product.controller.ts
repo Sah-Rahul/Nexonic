@@ -7,6 +7,10 @@ import { uploadToCloudinary } from "../config/cloudinary.config";
 import ProductModel from "../models/product.model";
 import { AuthRequest } from "../types/Auth.interface";
 import ReviewModel from "../models/review.model";
+import {
+  AllowedCategories,
+  CategoryType,
+} from "../constants/category.constant";
 
 export const createProduct = asyncHandler(
   async (req: Request, res: Response) => {
@@ -106,8 +110,15 @@ export const updateProduct = asyncHandler(
       throw new ApiError(400, "Invalid input", formattedErrors);
     }
 
-    const { title, description, price, category, KeyFeatures, Rating, discount } =
-      parsed.data;
+    const {
+      title,
+      description,
+      price,
+      category,
+      KeyFeatures,
+      Rating,
+      discount,
+    } = parsed.data;
     const productId = req.params.id;
     if (!productId) throw new ApiError(400, "Product ID is required");
 
@@ -247,3 +258,35 @@ export const getRelatedProduct = asyncHandler(
       );
   }
 );
+
+export const getProductsByCategory = asyncHandler(
+  async (req, res) => {
+  const slug = req.params.category;
+
+  if (!slug) {
+    throw new ApiError(400, "Category is required");
+  }
+  const slugToCategory = (slug: string) => {
+    return slug.replace(/-/g, " ").toUpperCase();
+  };
+
+  const upper = slugToCategory(slug);
+
+  if (!AllowedCategories.includes(upper as CategoryType)) {
+    throw new ApiError(400, "Invalid category");
+  }
+
+  const products = await ProductModel.find({
+    category: upper as CategoryType,
+  });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { count: products.length, products },
+        "Products fetched successfully"
+      )
+    );
+});

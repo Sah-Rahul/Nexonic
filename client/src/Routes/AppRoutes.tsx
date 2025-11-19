@@ -29,6 +29,7 @@ import Layout from "@/Admin/Layout";
 import ProductDetails from "@/Admin/ProductDetails";
 import Cart from "@/components/Cart";
 import Wishlist from "@/components/Wishlist";
+import GetCategoryByProducts from "@/Admin/GetCategoryByProducts";
 
 const AppRoutes = () => {
   return (
@@ -54,8 +55,10 @@ const AppRoutes = () => {
           <Route path="/home-smart" element={<SmartHome />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/products-details/:id" element={  <ProductDetails />} />
+          <Route path="/products-details/:id" element={<ProductDetails />} />
+          <Route path="/category/:category" element={<GetCategoryByProducts />} />
 
+ 
 
           // admin routes
           <Route path="/admin" element={<Layout />}>
@@ -67,7 +70,6 @@ const AppRoutes = () => {
             <Route path="calendar" element={<Calendar />} />
             <Route path="profile" element={<Profile />} />
             <Route path="settings" element={<Settings />} />
-
           </Route>
         </Routes>
       </BrowserRouter>

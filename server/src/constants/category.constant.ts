@@ -8,7 +8,7 @@ export const AllowedCategories = [
   "REFRIGERATOR",
   "SMART HOME",
   "BEST DEALS",
-  "NEW ARRIVALS"
+  "NEW ARRIVALS",
 ] as const;
 
 export type CategoryType = (typeof AllowedCategories)[number];

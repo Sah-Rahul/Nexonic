@@ -39,8 +39,14 @@ export const deleteProductApi = async (id: string) => {
 };
 
 export const getProductById = async (id: string) => {
+  const { data } = await axiosInstance.get(`/api/v1/product/:/${id}`);
+  return data;
+};
+
+export const getProductByCategory = async (slug: string) => {
+  const encodedSlug = encodeURIComponent(slug);
   const { data } = await axiosInstance.get(
-    `/api/v1/product/:/${id}`
+    `/api/v1/product/category/${encodedSlug}`
   );
   return data;
 };

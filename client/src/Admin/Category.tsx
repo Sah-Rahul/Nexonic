@@ -8,18 +8,13 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  LayoutGrid,
-  TrendingUp,
-  Package,
-  Home,
-  Music,
-  Tv,
-  Laptop,
-} from "lucide-react";
+import { LayoutGrid, Package, Home, Music, Tv, Laptop } from "lucide-react";
 import { BiSolidFridge } from "react-icons/bi";
 import { CgSmartHomeWashMachine } from "react-icons/cg";
 import { FaKitchenSet } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+import { getProductsApi } from "@/api/productApi";
+import { useQuery } from "@tanstack/react-query";
 
 const ALLOWED_CATEGORIES = [
   "AIR CONDITIONER",
@@ -30,6 +25,7 @@ const ALLOWED_CATEGORIES = [
   "PCS & LAPTOP",
   "REFRIGERATOR",
   "SMART HOME",
+  "NEW ARRIVALS",
 ] as const;
 
 type CategoryType = (typeof ALLOWED_CATEGORIES)[number];
@@ -37,81 +33,68 @@ type CategoryType = (typeof ALLOWED_CATEGORIES)[number];
 interface CategoryData {
   name: CategoryType;
   icon: React.ElementType;
-  productCount: number;
   color: string;
-  description: string;
 }
 
 const categoriesData: CategoryData[] = [
   {
     name: "AIR CONDITIONER",
     icon: Tv,
-    productCount: 156,
     color: "bg-blue-500",
-    description: "Phones, laptops, gadgets",
   },
   {
     name: "AUDIO & VIDEO",
     icon: Music,
-    productCount: 243,
     color: "bg-pink-500",
-    description: "Fashion and apparel",
   },
   {
     name: "GADGETS",
     icon: Laptop,
-    productCount: 98,
     color: "bg-green-500",
-    description: "Furniture and decor",
   },
   {
     name: "HOME APPLIANCES",
     icon: Home,
-    productCount: 187,
     color: "bg-yellow-500",
-    description: "Books and magazines",
   },
   {
     name: "KITCHEN APPLIANCES",
     icon: FaKitchenSet,
-    productCount: 76,
     color: "bg-orange-500",
-    description: "Sports equipment",
   },
   {
     name: "PCS & LAPTOP",
     icon: Laptop,
-    productCount: 124,
     color: "bg-purple-500",
-    description: "Kids toys and games",
   },
   {
     name: "REFRIGERATOR",
     icon: BiSolidFridge,
-    productCount: 45,
     color: "bg-red-500",
-    description: "Musical instruments",
   },
   {
     name: "SMART HOME",
     icon: CgSmartHomeWashMachine,
-    productCount: 89,
     color: "bg-teal-500",
-    description: "Smart home devices",
+  },
+  {
+    name: "NEW ARRIVALS",
+    icon: CgSmartHomeWashMachine,
+    color: "bg-indigo-500",
   },
 ];
 
 const Category = () => {
+  const navigate = useNavigate();
+
   const [categories] = useState<CategoryData[]>(categoriesData);
 
-  const totalProducts = categories.reduce(
-    (sum, cat) => sum + cat.productCount,
-    0
-  );
+  const { data } = useQuery({
+    queryKey: ["getProductsApi"],
+    queryFn: () => getProductsApi(),
+  });
 
-  const mostPopular = categories.reduce((max, cat) =>
-    cat.productCount > max.productCount ? cat : max
-  );
+  console.log(data);
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -149,24 +132,9 @@ const Category = () => {
               <Package className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totalProducts}</div>
+              <div className="text-2xl font-bold">{data.length}</div>
               <p className="text-xs text-muted-foreground">
                 Across all categories
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                Most Popular
-              </CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-xl font-bold">{mostPopular.name}</div>
-              <p className="text-xs text-muted-foreground">
-                {mostPopular.productCount} products
               </p>
             </CardContent>
           </Card>
@@ -198,20 +166,25 @@ const Category = () => {
                         <Badge
                           variant="secondary"
                           className="text-lg font-bold"
-                        >
-                          {category.productCount}
-                        </Badge>
+                        ></Badge>
                       </div>
 
                       <h3 className="font-bold text-lg mb-1">
                         {category.name}
                       </h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        {category.description}
-                      </p>
-
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" className="flex-1">
+                        <Button
+                          onClick={() =>
+                            navigate(
+                              `/category/${category.name
+                                .toLowerCase()
+                                .replace(/\s+/g, "-")}`
+                            )
+                          }
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 cursor-pointer"
+                        >
                           View Products
                         </Button>
                       </div>
@@ -245,41 +218,6 @@ const Category = () => {
             <p>
               • Contact development team to add new categories to the system
             </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Product Distribution</CardTitle>
-            <CardDescription>Products per category</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {categories
-                .sort((a, b) => b.productCount - a.productCount)
-                .map((category) => {
-                  const percentage = (
-                    (category.productCount / totalProducts) *
-                    100
-                  ).toFixed(1);
-                  return (
-                    <div key={category.name} className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="font-medium">{category.name}</span>
-                        <span className="text-muted-foreground">
-                          {category.productCount} ({percentage}%)
-                        </span>
-                      </div>
-                      <div className="h-2 bg-muted rounded-full overflow-hidden">
-                        <div
-                          className={`h-full ${category.color} transition-all duration-500`}
-                          style={{ width: `${percentage}%` }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
           </CardContent>
         </Card>
       </div>
