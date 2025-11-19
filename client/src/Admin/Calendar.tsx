@@ -16,6 +16,8 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
 
 interface Event {
   id: string;
@@ -39,24 +41,25 @@ const getEventColor = (type: string) => {
 
 const Calendar = () => {
   const [date, setDate] = useState(new Date());
+  const darkMode = useSelector((state: RootState) => state.theme.darkMode);
 
   const events: Event[] = [
     {
       id: "1",
       title: "Team Meeting",
-      date: new Date(2024, 10, 15),
+      date: new Date(2025, 9, 15),
       type: "meeting",
     },
     {
       id: "2",
       title: "Product Launch",
-      date: new Date(2024, 10, 20),
+      date: new Date(2025, 10, 22),
       type: "deadline",
     },
     {
       id: "3",
       title: "Review Orders",
-      date: new Date(2024, 10, 18),
+      date: new Date(2025, 11, 18),
       type: "task",
     },
   ];
@@ -161,8 +164,10 @@ const Calendar = () => {
             prevLabel={<ChevronLeft className="w-5 h-5" />}
             nextLabel={<ChevronRight className="w-5 h-5" />}
             formatDay={(locale, date) => date.getDate().toString()}
-            className="border border-gray-300 rounded-lg overflow-hidden
-              react-calendar-custom"
+            className={`border ${
+              darkMode ? "text-black" : "text-black"
+            }  border-gray-300 rounded-lg overflow-hidden
+              react-calendar-custom`}
           />
         </Card>
 
@@ -185,7 +190,7 @@ const Calendar = () => {
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-gray-400">
                         {event.title}
                       </div>
                       <div className="text-sm text-muted-foreground">

@@ -7,6 +7,7 @@ const userSchema = new Schema(
       required: true,
       trim: true,
     },
+
     email: {
       type: String,
       required: true,
@@ -14,37 +15,51 @@ const userSchema = new Schema(
       lowercase: true,
       trim: true,
     },
+
     password: {
       type: String,
       required: true,
       minlength: 8,
     },
+
     profile: {
+      type: String, // profile image URL
+      default: "",
+    },
+
+    bio: {
       type: String,
       default: "",
     },
-    bio:{
-      type:String
+
+    phone: {
+      type: String,
+      default: "",
     },
+
+    location: {
+      type: String,
+      default: "",
+    },
+
     role: {
       type: String,
       enum: ["user", "admin"],
       default: "user",
     },
-    wishlist: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
-    cart: [
-      {
-        product: { type: Schema.Types.ObjectId, ref: "Product" },
-      },
-    ],
+
     isActive: {
       type: Boolean,
       default: true,
+    },
+
+    department: {
+      type: String,
+      default: "",
+    },
+
+    lastLogin: {
+      type: Date,
     },
 
     resetPasswordToken: { type: String },

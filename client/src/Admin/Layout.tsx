@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import SidebarMenu from "./SidebarMenu";
 import { RiMenu3Line } from "react-icons/ri";
-import { Moon } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -11,13 +11,22 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
+import { toggleDarkMode } from "@/redux/slices/themeSlice";
+import { logoutUser } from "@/redux/slices/userSlice";
+import toast from "react-hot-toast";
 
 const Layout = () => {
   const [closeSideBar, setCloseSideBar] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
   const width = closeSideBar ? 60 : 250;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const darkMode = useSelector((state: RootState) => state.theme.darkMode);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const update = () => setIsMobile(window.innerWidth < 768);
@@ -33,13 +42,27 @@ const Layout = () => {
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/login");
+    toast.success("logout successfull");
+  };
   return (
     <>
       {!isMobile && <SidebarMenu collapsed={closeSideBar} width={width} />}
 
       <nav
         style={{ marginLeft: isMobile ? 0 : width }}
-        className="h-16 bg-red-900 transition-all duration-300 flex items-center justify-between px-4"
+        className="h-16 bg-[#006A67] transition-all duration-300 flex items-center justify-between px-4"
       >
         <div className="flex items-center gap-5">
           <button
@@ -52,14 +75,29 @@ const Layout = () => {
         </div>
 
         <div className="flex items-center gap-5 text-white">
-          <button className="hover:text-gray-300 transition">
-            <Moon size={22} />
+          <button
+            className="hover:text-gray-300 cursor-pointer transition"
+            onClick={() => dispatch(toggleDarkMode())}
+          >
+            {darkMode ? <Moon size={22} /> : <Sun size={22} />}
           </button>
 
           <DropdownMenu>
             <DropdownMenuTrigger className="focus:outline-none">
               <Avatar className="cursor-pointer w-9 h-9">
-                <AvatarImage src="https://i.pravatar.cc/300" />
+                {user?.profile && user.profile.trim() !== "" ? (
+                  <AvatarImage
+                    className="h-full w-full"
+                    src={user.profile}
+                    alt="user"
+                  />
+                ) : (
+                  <img
+                    className="h-full w-full"
+                    src="https://avatar.iran.liara.run/public"
+                    alt="default avatar"
+                  />
+                )}
                 <AvatarFallback>U</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
@@ -76,9 +114,8 @@ const Layout = () => {
                 <Link to="/admin/settings">Settings</Link>
               </DropdownMenuItem>
 
-              <DropdownMenuItem>Billing</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-600">
+              <DropdownMenuItem onClick={handleLogout} className="text-red-600">
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>

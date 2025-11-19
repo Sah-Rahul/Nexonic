@@ -327,7 +327,7 @@ export const updateProfile = asyncHandler(
       throw new ApiError(400, "Invalid input", errors);
     }
 
-    const { fullName, bio } = parsed.data;
+    const { fullName, bio, phone, location } = parsed.data;
     const userId = req.user?.id;
     if (!userId) throw new ApiError(401, "Unauthorized");
 
@@ -342,6 +342,8 @@ export const updateProfile = asyncHandler(
       {
         fullName,
         bio,
+        phone,
+        location,
         ...(avatarUrl && { profile: avatarUrl }),
       },
       { new: true, runValidators: true }
@@ -510,4 +512,17 @@ export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
   if (!user) throw new ApiError(404, "User not found");
 
   res.status(200).json(new ApiResponse(200, user, "User fetched successfully"));
+});
+
+export const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await UserModel.find().select(
+    "-password -resetPasswordToken -resetPasswordExpires"
+  );
+  const totalUsers = await UserModel.countDocuments();
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, { users, totalUsers }, "Users fetched successfully")
+    );
 });

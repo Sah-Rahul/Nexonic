@@ -49,9 +49,9 @@ const SidebarMenu = ({
     <TooltipProvider>
       <div
         style={{ width }}
-        className="h-screen fixed left-0 top-0 bg-red-500 transition-all duration-300 overflow-hidden z-50"
+        className="h-screen fixed left-0 top-0 bg-[#174143] transition-all duration-300 overflow-hidden z-50"
       >
-        <div className="h-16 flex items-center justify-center text-white font-bold text-xl border-b border-red-600/30">
+        <div className="h-16 flex items-center justify-center text-white font-bold text-xl border-b border-white">
           {collapsed ? (
             <div className="h-12 w-12 shadow-lg bg-white overflow-hidden rounded-full transition-transform duration-300 hover:scale-110">
               <img
@@ -84,8 +84,8 @@ const SidebarMenu = ({
                       transition-all duration-300 ease-in-out
                       ${
                         isActive(item.path)
-                          ? "bg-red-600 shadow-lg"
-                          : "hover:bg-red-600/70"
+                          ? "bg-[#235658c2] shadow-lg"
+                          : "hover:bg-[#23565850]"
                       }
                     `}
                     style={{

@@ -42,6 +42,20 @@ const CategoryProducts = ({ category }: Props) => {
       item.category?.trim().toLowerCase() === category.trim().toLowerCase()
   );
 
+  const saleBadgeMap: Record<string, number[]> = {
+    "AIR CONDITIONER": [1],
+    "AUDIO & VIDEO": [1, 3],
+    GADGETS: [3],
+    "HOME APPLIANCES": [0, 1, 2],
+    "KITCHEN APPLIANCES": [0, 1, 3],
+    "PCS & LAPTOP": [2, 3],
+    REFRIGERATOR: [1, 2, 3],
+    "SMART HOME": [],
+    "BEST DEALS": [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    "NEW ARRIVALS": [],
+  };
+  const saleIndexes = saleBadgeMap[category] || [];
+
   const renderStars = (rating: number) => {
     return (
       <div className="flex ">
@@ -75,13 +89,15 @@ const CategoryProducts = ({ category }: Props) => {
       </h1>
 
       <div className="relative p-5 bg-white flex flex-wrap justify-between mt-5">
-        {filteredProducts.map((item: any) => (
+        {filteredProducts.map((item: any, index: number) => (
           <div
             key={item._id}
             data-aos="fade-up"
             className="relative md:w-[22vw] group mb-6"
           >
-            <Badge.Ribbon text="Sale" color={themeColor} />
+            {saleIndexes.includes(index) && (
+              <Badge.Ribbon text="Sale" color={themeColor} />
+            )}
 
             <div className="flex flex-col items-center">
               <Link to={`/products-details/${item._id}`}>

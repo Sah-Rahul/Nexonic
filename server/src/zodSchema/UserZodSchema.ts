@@ -33,9 +33,17 @@ export const UserLoginZodSchema = z.object({
 export type UserLoginType = z.infer<typeof UserLoginZodSchema>;
 
 export const UpdateProfileZodSchema = z.object({
-  fullName: z.string().min(4).optional(),
-  profile: z.string().url().optional(),
-  bio: z.string().max(160).optional(),
+  fullName: z.string().min(4, "Name must be at least 4 characters").optional(),
+
+  phone: z
+    .string()
+    .min(10, "Phone must be at least 10 digits")
+    .max(10)
+    .optional(),
+
+  location: z.string().max(100).optional(),
+
+  bio: z.string().max(300, "Bio cannot exceed 300 characters").optional(),
 });
 
 export type UpdateProfileType = z.infer<typeof UpdateProfileZodSchema>;
@@ -51,7 +59,8 @@ export const ResetPasswordSchema = z.object({
 
 export type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>;
 
-export const ChangePasswordSchema = z.object({
+export const ChangePasswordSchema = z
+  .object({
     currentPassword: z.string().min(8),
     newPassword: z
       .string()

@@ -35,20 +35,31 @@ import {
   Download,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/redux/store";
+import { toggleDarkMode } from "@/redux/slices/themeSlice";
 
 const Settings = () => {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(false);
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState("en");
   const [timezone, setTimezone] = useState("UTC");
 
+  const dispatch = useDispatch();
+  const darkMode = useSelector((state: RootState) => state.theme.darkMode);
 
-  useEffect(() =>{
-      window.scroll(0,0)
-    },[])
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
 
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
 
   return (
     <>
@@ -279,6 +290,7 @@ const Settings = () => {
                   Customize how the dashboard looks
                 </CardDescription>
               </CardHeader>
+
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5 flex-1">
@@ -293,13 +305,13 @@ const Settings = () => {
                       </Label>
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Switch to dark theme
+                      Switch to {darkMode ? "light" : "dark"} theme
                     </p>
                   </div>
                   <Switch
                     id="dark-mode"
                     checked={darkMode}
-                    onCheckedChange={setDarkMode}
+                    onCheckedChange={() => dispatch(toggleDarkMode())}
                   />
                 </div>
               </CardContent>

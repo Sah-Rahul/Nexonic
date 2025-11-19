@@ -15,12 +15,14 @@ import userReducer from "./slices/userSlice";
 import productReducer from "./slices/productSlice";
 import cartReducer from "./slices/cartSlice";
 import WishlistReducer from "./slices/Wishlist"
+import themeReducer from "./slices/themeSlice"
 
 const rootReducer = combineReducers({
   auth: userReducer,
   product: productReducer,
   cart:cartReducer,
-  wishList:WishlistReducer
+  wishList:WishlistReducer,
+  theme: themeReducer,
 
 });
 

@@ -1,5 +1,5 @@
  import { Router } from "express";
-import { changePassword, forgotPassword, getMe, loginUser, logoutUser, registerUser, resendOtp, resetPassword, updateProfile, verifyEmail } from "../controller/user.controller";
+import { changePassword, forgotPassword, getAllUsers, getMe, loginUser, logoutUser, registerUser, resendOtp, resetPassword, updateProfile, verifyEmail } from "../controller/user.controller";
 import { isAuthenticated } from "../middleware/auth.middleware";
 import { upload } from "../middleware/multer.middleware";
  
@@ -18,5 +18,6 @@ userRouter.post("/logout", isAuthenticated, logoutUser);
 userRouter.put("/update-profile", isAuthenticated, upload.single("avatar"), updateProfile);
 userRouter.post("/change-password", isAuthenticated, changePassword);
 userRouter.get("/me", isAuthenticated, getMe);
+userRouter.get('/users',isAuthenticated, getAllUsers);
 
 export default userRouter;
