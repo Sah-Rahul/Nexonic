@@ -37,7 +37,6 @@ const NavBar: React.FC = () => {
     { label: "Gadgets", link: "/gadgets" },
     { label: "Smart home", link: "/home-smart" },
   ];
-  
 
   return (
     <>
@@ -122,11 +121,7 @@ const NavBar: React.FC = () => {
                 {item.label}
               </Link>
             ))}
-            <CartModal
-              
-              isOpen={showCart}
-              onClose={() => setShowCart(false)}
-            />
+            <CartModal isOpen={showCart} onClose={() => setShowCart(false)} />
             <div className="border-r border-gray-400 pr-4 relative">
               <button
                 onClick={() => setShowCart(true)}

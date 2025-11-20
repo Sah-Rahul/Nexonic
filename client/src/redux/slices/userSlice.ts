@@ -1,13 +1,12 @@
-import { createSlice,  } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit"
-
-
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface User {
   id: string;
   name: string;
   email: string;
   profile?: string;
+  role: "admin" | "user";
 }
 
 export interface UserState {
