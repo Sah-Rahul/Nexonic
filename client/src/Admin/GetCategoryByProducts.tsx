@@ -5,14 +5,7 @@ import { getProductByCategory } from "@/api/productApi";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  ArrowLeft,
-  Search,
-  ShoppingCart,
-  Heart,
-  Star,
-  Package,
-} from "lucide-react";
+import { ArrowLeft, Search, Heart, Star, Package } from "lucide-react";
 import Loading from "@/components/Loading";
 
 interface Product {
@@ -140,7 +133,7 @@ const GetCategoryByProducts: React.FC = () => {
                 >
                   <CardContent className="p-0">
                     <div className="relative">
-                      <Link to={`/products-details/${product._id}`}>
+                      <Link to={`/admin-products-details/${product._id}`}>
                         <img
                           src={product.productImage}
                           alt={product.title}
@@ -165,7 +158,7 @@ const GetCategoryByProducts: React.FC = () => {
 
                     <div className="p-4 space-y-3">
                       <h3 className="font-semibold text-sm line-clamp-2 hover:text-blue-600 transition-colors min-h-10">
-                        <Link to={`/products-details/${product._id}`}>
+                        <Link to={`/admin-products-details/${product._id}`}>
                           {product.title}
                         </Link>
                       </h3>
@@ -210,13 +203,6 @@ const GetCategoryByProducts: React.FC = () => {
                           ).toFixed(2)}
                         </p>
                       )}
-
-                      <div className="flex gap-2 pt-2">
-                        <Button className="flex-1 gap-2">
-                          <ShoppingCart className="w-4 h-4" />
-                          Add to Cart
-                        </Button>
-                      </div>
                     </div>
                   </CardContent>
                 </Card>

@@ -39,6 +39,8 @@ import Settings from "@/Admin/Settings";
 import Category from "@/Admin/Category";
 import Profile from "@/Admin/Profile";
 import BlockUserPagesForAdmin from "@/Auth/BlockUserPagesForAdmin";
+import AdminProductDetails from "@/Admin/AdminProductDetails";
+import NotFound from "@/components/NotFound";
 
 const AppRoutes = () => {
   return (
@@ -113,7 +115,9 @@ const AppRoutes = () => {
         <Route path="/gadgets" element={<Gadgets />} />
         <Route path="/home-smart" element={<SmartHome />} />
         <Route path="/products-details/:id" element={<ProductDetails />} />
+        <Route path="/admin-products-details/:id" element={<AdminProductDetails />} />
         <Route path="/category/:category" element={<GetCategoryByProducts />} />
+        <Route path="/*" element={<NotFound />} />
 
         {/* ADMIN PROTECTED ROUTES */}
         <Route
