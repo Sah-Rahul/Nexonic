@@ -41,6 +41,9 @@ import Profile from "@/Admin/Profile";
 import BlockUserPagesForAdmin from "@/Auth/BlockUserPagesForAdmin";
 import AdminProductDetails from "@/Admin/AdminProductDetails";
 import NotFound from "@/components/NotFound";
+import PaymentSuccess from "@/components/PaymentSuccess";
+import PaymentCancel from "@/components/PaymentCancel";
+import MyOrder from "@/components/MyOrder";
 
 const AppRoutes = () => {
   return (
@@ -118,6 +121,11 @@ const AppRoutes = () => {
         <Route path="/admin-products-details/:id" element={<AdminProductDetails />} />
         <Route path="/category/:category" element={<GetCategoryByProducts />} />
         <Route path="/*" element={<NotFound />} />
+        <Route path="/success" element={<PaymentSuccess />} />
+        <Route path="/cancel" element={<PaymentCancel />} />
+        <Route path="/my-orders" element={<MyOrder />} />
+
+
 
         {/* ADMIN PROTECTED ROUTES */}
         <Route

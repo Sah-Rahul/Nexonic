@@ -13,6 +13,7 @@ import reviewRouter from "./routes/review.routes";
 import orderRouter from "./routes/order.routes";
 import statsRouter from "./routes/stats.routes";
 import salesRouter from "./routes/sales.routes";
+import paymentRouter from "./routes/payment.routes";
 
 
 const app: Application = express();
@@ -37,6 +38,7 @@ app.use('/api/v1/review', reviewRouter)
 app.use('/api/v1/order', orderRouter)
 app.use('/api/v1/stats', statsRouter)
 app.use("/api/v1/sales", salesRouter);
+app.use("/api/v1/payment", paymentRouter);
 
 app.use(errorMiddleware)
 export default app;

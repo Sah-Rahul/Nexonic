@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { Link } from "react-router-dom";
 import Layout from "./Layout";
 import {
   decreaseQuantity,
@@ -12,6 +11,7 @@ import toast from "react-hot-toast";
 import type { RootState } from "@/redux/store";
 import { useTheme } from "@/context/ThemeContext";
 import EmptyCart from "./EmptyCart";
+import { loadStripe } from "@stripe/stripe-js";
 
 const Cart: React.FC = () => {
   const [showCouponInput, setShowCouponInput] = useState(false);
@@ -48,6 +48,32 @@ const Cart: React.FC = () => {
   if (products.length === 0) {
     return <EmptyCart />;
   }
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+  const handleCheckout = async () => {
+    try {
+      await stripePromise;
+
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/v1/payment/create-checkout-session`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cartItems: products }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      toast.error("Stripe checkout failed");
+    }
+  };
 
   return (
     <Layout>
@@ -154,14 +180,13 @@ const Cart: React.FC = () => {
               </div>
             )}
             <div className="mt-6">
-              <Link to={"/check-out-page"}>
-                <button
-                  style={{ background: themeColor }}
-                  className="w-full cursor-pointer font-semibold text-white   py-3 hover:bg-blue-600"
-                >
-                  Proceed to Checkout
-                </button>
-              </Link>
+              <button
+                onClick={handleCheckout}
+                style={{ background: themeColor }}
+                className="w-full cursor-pointer font-semibold text-white   py-3 hover:bg-blue-600"
+              >
+                Proceed to Checkout
+              </button>
             </div>
           </div>
         </div>
