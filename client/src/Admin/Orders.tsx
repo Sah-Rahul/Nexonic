@@ -45,12 +45,7 @@ import {
 import { getOrderStatsApi } from "@/api/statsApi";
 import { useQuery } from "@tanstack/react-query";
 
-type OrderStatus =
-  | "Cancelled"
-  | "Shipped"
-  | "Delivering"
-  | "In Progress"
-  | "Delivered";
+type OrderStatus = "Cancelled" | "Shipped" | "Processing" | "Delivered";
 type PaymentStatus = "Paid" | "Pending" | "Failed";
 
 interface Order {
@@ -83,7 +78,7 @@ const ordersData: Order[] = [
     paymentStatus: "Paid",
     items: 2,
     deliveryNumber: "TRK123457",
-    orderStatus: "Delivering",
+    orderStatus: "Delivered",
   },
   {
     id: "ORD-003",
@@ -93,7 +88,7 @@ const ordersData: Order[] = [
     paymentStatus: "Pending",
     items: 5,
     deliveryNumber: "TRK123458",
-    orderStatus: "In Progress",
+    orderStatus: "Processing",
   },
   {
     id: "ORD-004",
@@ -139,7 +134,7 @@ const Orders = () => {
     queryFn: getOrderStatsApi,
   });
 
-  console.log(monthlyOrders?.data);
+  console.log(monthlyOrders);
   const getStatusBadge = (status: OrderStatus) => {
     const statusConfig = {
       Delivered: {
@@ -157,8 +152,21 @@ const Orders = () => {
         icon: Package,
         className: "bg-purple-500 hover:bg-purple-600",
       },
-      "In Progress": { variant: "secondary", icon: Clock, className: "" },
-      Cancelled: { variant: "destructive", icon: XCircle, className: "" },
+      Processing: {
+        variant: "secondary",
+        icon: Clock,
+        className: "bg-yellow-500 hover:bg-yellow-600",
+      },
+      "In Progress": {
+        variant: "secondary",
+        icon: Clock,
+        className: "",
+      },
+      Cancelled: {
+        variant: "destructive",
+        icon: XCircle,
+        className: "",
+      },
     };
 
     const config = statusConfig[status];
@@ -193,7 +201,7 @@ const Orders = () => {
   const stats = {
     total: orders.length,
     delivered: orders.filter((o) => o.orderStatus === "Delivered").length,
-    inProgress: orders.filter((o) => o.orderStatus === "In Progress").length,
+    inProgress: orders.filter((o) => o.orderStatus === "Processing").length,
     cancelled: orders.filter((o) => o.orderStatus === "Cancelled").length,
     totalRevenue: orders
       .filter((o) => o.paymentStatus === "Paid")
@@ -289,7 +297,8 @@ const Orders = () => {
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="Delivered">Delivered</SelectItem>
-                    <SelectItem value="Delivering">In Progress</SelectItem>
+                    <SelectItem value="Shipped">Shipped</SelectItem>
+                    <SelectItem value="Processing">Processing</SelectItem>
                     <SelectItem value="Cancelled">Cancelled</SelectItem>
                   </SelectContent>
                 </Select>

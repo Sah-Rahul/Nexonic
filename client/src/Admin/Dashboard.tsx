@@ -318,7 +318,7 @@ const Dashboard = () => {
                     `${name} (${((percent ?? 0) * 100).toFixed(1)}%)`
                   }
                 >
-                  {transformedCategoryData.map((entry: any, i: any) => (
+                  {transformedCategoryData?.map((entry: any, i: any) => (
                     <Cell key={i} fill={entry.color} />
                   ))}
                 </Pie>
