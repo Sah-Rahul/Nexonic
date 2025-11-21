@@ -12,12 +12,11 @@ userRouter.post("/login", loginUser);
 userRouter.post("/forgot-password", isAuthenticated,forgotPassword);
 userRouter.post("/reset-password", resetPassword);
 
-// Protected routes
 userRouter.post("/verify-email",isAuthenticated, verifyEmail);
 userRouter.post("/logout", isAuthenticated, logoutUser);
 userRouter.put("/update-profile", isAuthenticated, upload.single("avatar"), updateProfile);
 userRouter.post("/change-password", isAuthenticated, changePassword);
 userRouter.get("/me", isAuthenticated, getMe);
-userRouter.get('/users',isAuthenticated, getAllUsers);
+userRouter.get('/users',isAuthenticated,  getAllUsers);
 
 export default userRouter;

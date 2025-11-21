@@ -49,7 +49,7 @@ interface User {
   createdAt: string;
 }
 
-interface UsersResponse {
+export interface UsersResponse {
   statusCode: number;
   success: boolean;
   message: string;

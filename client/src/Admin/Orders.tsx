@@ -42,6 +42,8 @@ import {
   Clock,
   DollarSign,
 } from "lucide-react";
+import { getOrderStatsApi } from "@/api/statsApi";
+import { useQuery } from "@tanstack/react-query";
 
 type OrderStatus =
   | "Cancelled"
@@ -132,6 +134,12 @@ const Orders = () => {
     return matchesSearch && matchesStatus;
   });
 
+  const { data: monthlyOrders } = useQuery({
+    queryKey: ["stats", "monthlyOrders"],
+    queryFn: getOrderStatsApi,
+  });
+
+  console.log(monthlyOrders?.data);
   const getStatusBadge = (status: OrderStatus) => {
     const statusConfig = {
       Delivered: {
@@ -192,9 +200,9 @@ const Orders = () => {
       .reduce((sum, o) => sum + o.total, 0),
   };
 
-  useEffect(() =>{
-      window.scroll(0,0)
-    },[])
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
 
   return (
     <>
@@ -281,9 +289,7 @@ const Orders = () => {
                   <SelectContent>
                     <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="Delivered">Delivered</SelectItem>
-                    <SelectItem value="Delivering">Delivering</SelectItem>
-                    <SelectItem value="Shipped">Shipped</SelectItem>
-                    <SelectItem value="In Progress">In Progress</SelectItem>
+                    <SelectItem value="Delivering">In Progress</SelectItem>
                     <SelectItem value="Cancelled">Cancelled</SelectItem>
                   </SelectContent>
                 </Select>

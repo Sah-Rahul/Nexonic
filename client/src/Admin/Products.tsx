@@ -58,7 +58,7 @@ const Products = () => {
   const [openEditForm, setOpenEditForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(5);
   const [search, setSearch] = useState("");
   const queryClient = useQueryClient();
 
@@ -171,7 +171,7 @@ const Products = () => {
     currentPage * itemsPerPage
   );
 
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+    Math.ceil(filteredProducts.length / itemsPerPage);
 
   return (
     <div className="space-y-6">
@@ -272,7 +272,7 @@ const Products = () => {
                         <TableCell>₹{product.price}</TableCell>
                         <TableCell>{product.discount}%</TableCell>
                         <TableCell className="font-semibold">
-                          ₹{product.totalPrice || product.price}
+                          Rs{product.totalPrice || product.price}
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-0.5">
