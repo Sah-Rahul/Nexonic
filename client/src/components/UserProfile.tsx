@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -12,8 +12,11 @@ import Layout from "./Layout";
 import type { WishlistProduct } from "@/redux/slices/Wishlist";
 import { useQuery } from "@tanstack/react-query";
 import { getMyOrderApi } from "@/api/orderApi";
+import { logoutUser } from "@/redux/slices/userSlice";
+import toast from "react-hot-toast";
 
 const UserProfile = () => {
+  const dispatch = useDispatch()
   const { user } = useSelector((state: RootState) => state.auth);
   const { products } = useSelector((state: RootState) => state.cart);
   const wishlistProducts = useSelector(
@@ -67,6 +70,10 @@ const UserProfile = () => {
     );
   };
 
+  const handleLogout = () =>{
+    dispatch(logoutUser())
+    toast.success("LogOut successfull")
+  }
   return (
     <Layout>
       <div className="space-y-6 p-6 bg-white min-h-screen">
@@ -77,8 +84,8 @@ const UserProfile = () => {
               Welcome back, {userData.fullName} 👋
             </p>
           </div>
-          <Button variant="destructive" size="sm">
-            <LogOut className="mr-2 h-4 w-4" /> Logout
+          <Button onClick={handleLogout} variant="destructive" size="sm" className="cursor-pointer">
+            <LogOut className="mr-2 h-4 w-4 cursor-pointer" /> Logout
           </Button>
         </Card>
 
