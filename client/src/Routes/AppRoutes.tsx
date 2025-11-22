@@ -44,6 +44,7 @@ import NotFound from "@/components/NotFound";
 import PaymentSuccess from "@/components/PaymentSuccess";
 import PaymentCancel from "@/components/PaymentCancel";
 import MyOrder from "@/components/MyOrder";
+import CheckOutPage from "@/components/CheckOutPage";
 
 const AppRoutes = () => {
   return (
@@ -123,7 +124,9 @@ const AppRoutes = () => {
         <Route path="/*" element={<NotFound />} />
         <Route path="/success" element={<PaymentSuccess />} />
         <Route path="/cancel" element={<PaymentCancel />} />
-        <Route path="/my-orders" element={<MyOrder />} />
+        <Route path="/my-orders" element={<MyOrder />} /> 
+        <Route path="/check-out-page" element={<CheckOutPage />} /> 
+
 
 
 

@@ -52,9 +52,9 @@ export const fetchMyOrders = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const userId = req.user?.id;
 
-    const orders = await Order.find({ buyerId: userId }).sort({
-      createdAt: -1,
-    });
+    const orders = await Order.find({ buyerId: userId })
+      .populate("items.productId", "title productImage price")
+      .sort({ createdAt: -1 });
 
     return res
       .status(200)
@@ -106,5 +106,3 @@ export const updateOrderStatus = asyncHandler(
       .json(new ApiResponse(200, order, "Order status updated successfully"));
   }
 );
-
-  

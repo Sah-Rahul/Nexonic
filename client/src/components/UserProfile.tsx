@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { LogOut, Edit2, Save, X } from "lucide-react";
 import Layout from "./Layout";
 import type { WishlistProduct } from "@/redux/slices/Wishlist";
+import { useQuery } from "@tanstack/react-query";
+import { getMyOrderApi } from "@/api/orderApi";
 
 const UserProfile = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -34,9 +36,13 @@ const UserProfile = () => {
   });
 
   const [tempUserData, setTempUserData] = useState(userData);
+  const { data } = useQuery({
+    queryKey: ["orders"],
+    queryFn: getMyOrderApi,
+  });
 
   const stats = [
-    { label: "Total Orders", value: "200" },
+    { label: "Total Orders", value: data?.data?.length || 0 },
     { label: "Wishlist", value: wishlistProducts.length },
     { label: "Cart Items", value: products.length },
     { label: "Rewards", value: "2,450" },
@@ -211,9 +217,72 @@ const UserProfile = () => {
           </TabsContent>
 
           <TabsContent value="orders">
-            <Card className="p-6">
-              <CardTitle>Orders</CardTitle>
-              <CardContent>Recent orders will be displayed here.</CardContent>
+            <Card className="p-6 space-y-4">
+              <CardTitle className="mb-4 text-xl font-semibold">
+                My Orders
+              </CardTitle>
+
+              {!data || data.length === 0 ? (
+                <p className="text-muted-foreground">No orders found.</p>
+              ) : (
+                <div className="space-y-4">
+                  {data.data?.map((order: any) => (
+                    <Card key={order._id} className="p-4 space-y-4 border">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="font-semibold">
+                            Order ID:{" "}
+                            <span className="text-muted-foreground">
+                              {order._id}
+                            </span>
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Status: {order.orderStatus}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Paid At:{" "}
+                            {new Date(order.paidAt).toLocaleDateString()}
+                          </p>
+                        </div>
+
+                        <p className="font-bold text-lg">
+                          Rs {order.totalPrice.toLocaleString()}
+                        </p>
+                      </div>
+
+                      {/* Items */}
+                      <div className="space-y-2">
+                        {order.items.map((item: any) => (
+                          <div
+                            key={item._id}
+                            className="flex items-center justify-between bg-gray-50 p-3 rounded-lg"
+                          >
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={item.productId.productImage}
+                                alt={item.productId.title}
+                                className="w-16 h-16 object-cover rounded-lg"
+                              />
+                              <div>
+                                <p className="font-medium">
+                                  {item.productId.title}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                  Qty: {item.quantity}
+                                </p>
+                              </div>
+                            </div>
+
+                            <p className="font-semibold">
+                              Rs {(item.quantity * item.price).toLocaleString()}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </Card>
           </TabsContent>
 
@@ -303,7 +372,6 @@ const UserProfile = () => {
                           )}
                         </div>
                       </div>
-                       
                     </Card>
                   ))
                 )}

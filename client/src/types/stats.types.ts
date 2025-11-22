@@ -1,4 +1,4 @@
- export interface TotalRevenueResponse {
+export interface TotalRevenueResponse {
   data: {
     totalRevenue: number;
   };
@@ -16,21 +16,21 @@ export interface OrderStatsResponse {
 
 export interface MonthlyRevenueResponse {
   data: {
-    _id: number;        // month number
+    _id: number;
     revenue: number;
   }[];
 }
 
 export interface MonthlyOrdersResponse {
   data: {
-    _id: number;        // month number
+    _id: number;
     totalOrders: number;
   }[];
 }
 
 export interface CategoryStatsResponse {
   data: {
-    _id: string;        // category name
+    _id: string;
     totalSales: number;
   }[];
 }

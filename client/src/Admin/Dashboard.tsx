@@ -138,7 +138,6 @@ const Dashboard = () => {
     })
   );
 
-  const recentOrders = (orderStats as any)?.data?.recentOrders || [];
   const TotalRevenue =
     (totalRevenue?.data?.totalRevenue ?? 0) *
     (orderStats?.data?.totalOrders ?? 0);
@@ -330,66 +329,6 @@ const Dashboard = () => {
                 />
               </PieChart>
             </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-[#111] border border-white/6 shadow-lg">
-          <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
-            <CardDescription>Latest customer activity</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {(recentOrders.length
-                ? recentOrders
-                : [
-                    {
-                      id: "#1234",
-                      customer: "John Doe",
-                      amount: 120,
-                      status: "Completed",
-                    },
-                    {
-                      id: "#1235",
-                      customer: "Jane Smith",
-                      amount: 90,
-                      status: "Pending",
-                    },
-                  ]
-              ).map((o: any, i: number) => (
-                <div
-                  key={i}
-                  className="flex justify-between items-center p-4 rounded-lg bg-[#181818] border border-white/5 hover:bg-[#1f1f1f] transition"
-                >
-                  <div>
-                    <p className="font-medium">
-                      {o.user?.fullName || o.customer}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Order #{o._id?.slice(-6) || o.id}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold">
-                      ₹{o.totalAmount || o.amount}
-                    </p>
-                    <p
-                      className={`text-xs ${
-                        ["Completed", "Delivered"].includes(o.status)
-                          ? "text-green-400"
-                          : o.status === "Pending"
-                          ? "text-yellow-400"
-                          : o.status === "Cancelled"
-                          ? "text-red-400"
-                          : "text-blue-400"
-                      }`}
-                    >
-                      {o.status}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </CardContent>
         </Card>
       </div>

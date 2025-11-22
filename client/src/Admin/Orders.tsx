@@ -40,9 +40,8 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  DollarSign,
 } from "lucide-react";
-import { getOrderStatsApi } from "@/api/statsApi";
+import { getOrderStatsApi, getTotalRevenueApi } from "@/api/statsApi";
 import { useQuery } from "@tanstack/react-query";
 
 type OrderStatus = "Cancelled" | "Shipped" | "Processing" | "Delivered";
@@ -129,12 +128,6 @@ const Orders = () => {
     return matchesSearch && matchesStatus;
   });
 
-  const { data: monthlyOrders } = useQuery({
-    queryKey: ["stats", "monthlyOrders"],
-    queryFn: getOrderStatsApi,
-  });
-
-  console.log(monthlyOrders);
   const getStatusBadge = (status: OrderStatus) => {
     const statusConfig = {
       Delivered: {
@@ -212,6 +205,25 @@ const Orders = () => {
     window.scroll(0, 0);
   }, []);
 
+  const { data: orderData } = useQuery({
+    queryKey: ["stats", "orderStats"],
+    queryFn: getOrderStatsApi,
+  });
+
+  const { data: totalRevenue } = useQuery({
+    queryKey: ["stats", "totalRevenue"],
+    queryFn: getTotalRevenueApi,
+  });
+
+  const { data: orderStats } = useQuery({
+    queryKey: ["stats", "orderStats"],
+    queryFn: getOrderStatsApi,
+  });
+
+  const TotalRevenue =
+    (totalRevenue?.data?.totalRevenue ?? 0) *
+    (orderStats?.data?.totalOrders ?? 0);
+
   return (
     <>
       <div className="space-y-6">
@@ -230,7 +242,10 @@ const Orders = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
+              <div className="text-2xl font-bold">
+                {" "}
+                {orderData?.data?.totalOrders}
+              </div>
             </CardContent>
           </Card>
 
@@ -273,8 +288,7 @@ const Orders = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold flex items-center">
-                <DollarSign className="w-5 h-5" />
-                {stats.totalRevenue.toFixed(2)}
+                Rs{""} {TotalRevenue?.toLocaleString()}
               </div>
             </CardContent>
           </Card>

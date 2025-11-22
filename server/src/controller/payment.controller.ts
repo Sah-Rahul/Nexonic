@@ -28,7 +28,7 @@ export const createCheckoutSession = async (req, res) => {
       payment_method_types: ["card"],
       mode: "payment",
       line_items: lineItems,
-      success_url: "http://localhost:5173/success",
+      success_url: `http://localhost:5173/user/profile`,
       cancel_url: "http://localhost:5173/cancel",
     });
 
