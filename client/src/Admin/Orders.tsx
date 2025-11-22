@@ -42,172 +42,34 @@ import {
   Clock,
 } from "lucide-react";
 import { getOrderStatsApi, getTotalRevenueApi } from "@/api/statsApi";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAllOrderApi, updateOrderStatusApi } from "@/api/orderApi";
+import { toast } from "sonner";
 
 type OrderStatus = "Cancelled" | "Shipped" | "Processing" | "Delivered";
-type PaymentStatus = "Paid" | "Pending" | "Failed";
-
-interface Order {
-  id: string;
-  createdAt: string;
-  customer: string;
-  total: number;
-  paymentStatus: PaymentStatus;
-  items: number;
-  deliveryNumber: string;
-  orderStatus: OrderStatus;
-}
-
-const ordersData: Order[] = [
-  {
-    id: "ORD-001",
-    createdAt: "2024-11-10",
-    customer: "John Doe",
-    total: 299.99,
-    paymentStatus: "Paid",
-    items: 3,
-    deliveryNumber: "TRK123456",
-    orderStatus: "Delivered",
-  },
-  {
-    id: "ORD-002",
-    createdAt: "2024-11-12",
-    customer: "Jane Smith",
-    total: 149.5,
-    paymentStatus: "Paid",
-    items: 2,
-    deliveryNumber: "TRK123457",
-    orderStatus: "Delivered",
-  },
-  {
-    id: "ORD-003",
-    createdAt: "2024-11-13",
-    customer: "Mike Johnson",
-    total: 599.0,
-    paymentStatus: "Pending",
-    items: 5,
-    deliveryNumber: "TRK123458",
-    orderStatus: "Processing",
-  },
-  {
-    id: "ORD-004",
-    createdAt: "2024-11-14",
-    customer: "Sarah Wilson",
-    total: 89.99,
-    paymentStatus: "Paid",
-    items: 1,
-    deliveryNumber: "TRK123459",
-    orderStatus: "Shipped",
-  },
-  {
-    id: "ORD-005",
-    createdAt: "2024-11-15",
-    customer: "David Brown",
-    total: 349.99,
-    paymentStatus: "Failed",
-    items: 4,
-    deliveryNumber: "TRK123460",
-    orderStatus: "Cancelled",
-  },
-];
 
 const Orders = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [orders] = useState<Order[]>(ordersData);
+  const queryClient = useQueryClient();
 
-  const filteredOrders = orders.filter((order) => {
-    const matchesSearch =
-      order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.deliveryNumber.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesStatus =
-      statusFilter === "all" || order.orderStatus === statusFilter;
-
-    return matchesSearch && matchesStatus;
+  const { data: orderData, isLoading } = useQuery({
+    queryKey: ["allOrders"],
+    queryFn: getAllOrderApi,
   });
 
-  const getStatusBadge = (status: OrderStatus) => {
-    const statusConfig = {
-      Delivered: {
-        variant: "default",
-        icon: CheckCircle,
-        className: "bg-green-500 hover:bg-green-600",
-      },
-      Delivering: {
-        variant: "default",
-        icon: Truck,
-        className: "bg-blue-500 hover:bg-blue-600",
-      },
-      Shipped: {
-        variant: "default",
-        icon: Package,
-        className: "bg-purple-500 hover:bg-purple-600",
-      },
-      Processing: {
-        variant: "secondary",
-        icon: Clock,
-        className: "bg-yellow-500 hover:bg-yellow-600",
-      },
-      "In Progress": {
-        variant: "secondary",
-        icon: Clock,
-        className: "",
-      },
-      Cancelled: {
-        variant: "destructive",
-        icon: XCircle,
-        className: "",
-      },
-    };
+  const orders = orderData?.data || [];
 
-    const config = statusConfig[status];
-    const Icon = config.icon;
-
-    return (
-      <Badge variant={config.variant as any} className={config.className}>
-        <Icon className="w-3 h-3 mr-1" />
-        {status}
-      </Badge>
-    );
-  };
-
-  const getPaymentBadge = (status: PaymentStatus) => {
-    const variants = {
-      Paid: "default",
-      Pending: "secondary",
-      Failed: "destructive",
-    };
-
-    return <Badge variant={variants[status] as any}>{status}</Badge>;
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const stats = {
-    total: orders.length,
-    delivered: orders.filter((o) => o.orderStatus === "Delivered").length,
-    inProgress: orders.filter((o) => o.orderStatus === "Processing").length,
-    cancelled: orders.filter((o) => o.orderStatus === "Cancelled").length,
-    totalRevenue: orders
-      .filter((o) => o.paymentStatus === "Paid")
-      .reduce((sum, o) => sum + o.total, 0),
-  };
-
-  useEffect(() => {
-    window.scroll(0, 0);
-  }, []);
-
-  const { data: orderData } = useQuery({
-    queryKey: ["stats", "orderStats"],
-    queryFn: getOrderStatsApi,
+  const { mutate: updateStatus, isPending: isUpdating } = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: string }) =>
+      updateOrderStatusApi({ id, status }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allOrders"] });
+      toast.success("Order status updated successfully!");
+    },
+    onError: () => {
+      toast.error("Failed to update order status");
+    },
   });
 
   const { data: totalRevenue } = useQuery({
@@ -220,9 +82,102 @@ const Orders = () => {
     queryFn: getOrderStatsApi,
   });
 
+  const filteredOrders = orders.filter((order: any) => {
+    const matchesSearch =
+      order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.buyerId?.fullName
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      order.buyerId?.email?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all" || order.orderStatus === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  const stats = {
+    total: orders.length,
+    delivered: orders.filter((o: any) => o.orderStatus === "Delivered").length,
+    shipped: orders.filter((o: any) => o.orderStatus === "Shipped").length,
+    inProgress: orders.filter((o: any) => o.orderStatus === "Processing")
+      .length,
+    cancelled: orders.filter((o: any) => o.orderStatus === "Cancelled").length,
+    totalRevenue: orders
+      .filter((o: any) => o.isPaid)
+      .reduce((sum: number, o: any) => sum + o.totalPrice, 0),
+  };
+
+  const getStatusBadge = (status: OrderStatus) => {
+    const statusConfig = {
+      Delivered: {
+        variant: "default",
+        icon: CheckCircle,
+        className: "bg-green-500 hover:bg-green-600",
+      },
+      Shipped: {
+        variant: "default",
+        icon: Truck,
+        className: "bg-blue-500 hover:bg-blue-600",
+      },
+      Processing: {
+        variant: "secondary",
+        icon: Clock,
+        className: "bg-yellow-500 hover:bg-yellow-600",
+      },
+      Cancelled: {
+        variant: "destructive",
+        icon: XCircle,
+        className: "",
+      },
+    };
+
+    const config = statusConfig[status] || statusConfig["Processing"];
+    const Icon = config.icon;
+
+    return (
+      <Badge variant={config.variant as any} className={config.className}>
+        <Icon className="w-3 h-3 mr-1" />
+        {status}
+      </Badge>
+    );
+  };
+
+  const getPaymentBadge = (isPaid: boolean) => {
+    return (
+      <Badge variant={isPaid ? "default" : "secondary"}>
+        {isPaid ? "Paid" : "Pending"}
+      </Badge>
+    );
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const handleUpdateStatus = (orderId: string, newStatus: string) => {
+    updateStatus({ id: orderId, status: newStatus });
+  };
+
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
+
   const TotalRevenue =
     (totalRevenue?.data?.totalRevenue ?? 0) *
     (orderStats?.data?.totalOrders ?? 0);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -242,10 +197,7 @@ const Orders = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
-                {" "}
-                {orderData?.data?.totalOrders}
-              </div>
+              <div className="text-2xl font-bold">{stats.total}</div>
             </CardContent>
           </Card>
 
@@ -288,7 +240,7 @@ const Orders = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold flex items-center">
-                Rs{""} {TotalRevenue?.toLocaleString()}
+                Rs {TotalRevenue}
               </div>
             </CardContent>
           </Card>
@@ -339,25 +291,34 @@ const Orders = () => {
                     <TableHead>Total</TableHead>
                     <TableHead>Payment Status</TableHead>
                     <TableHead>Items</TableHead>
-                    <TableHead>Delivery Number</TableHead>
                     <TableHead>Order Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredOrders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell className="font-medium">{order.id}</TableCell>
+                  {filteredOrders.map((order: any) => (
+                    <TableRow key={order._id}>
+                      <TableCell className="font-medium font-mono text-sm">
+                        #{order._id.slice(-8)}
+                      </TableCell>
                       <TableCell>{formatDate(order.createdAt)}</TableCell>
-                      <TableCell>{order.customer}</TableCell>
-                      <TableCell>${order.total.toFixed(2)}</TableCell>
                       <TableCell>
-                        {getPaymentBadge(order.paymentStatus)}
+                        <div className="flex items-center gap-2">
+                          <div>
+                            <p className="font-medium">
+                              {order.buyerId?.fullName}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {order.buyerId?.email}
+                            </p>
+                          </div>
+                        </div>
                       </TableCell>
-                      <TableCell>{order.items}</TableCell>
-                      <TableCell className="font-mono text-sm">
-                        {order.deliveryNumber}
+                      <TableCell className="font-bold">
+                        Rs {order.totalPrice?.toLocaleString()}
                       </TableCell>
+                      <TableCell>{getPaymentBadge(order.isPaid)}</TableCell>
+                      <TableCell>{order.items?.length || 0}</TableCell>
                       <TableCell>{getStatusBadge(order.orderStatus)}</TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
@@ -369,11 +330,50 @@ const Orders = () => {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>Track Delivery</DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Update Status</DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600">
-                              Cancel Order
+                            <DropdownMenuLabel className="text-xs text-muted-foreground">
+                              Update Status
+                            </DropdownMenuLabel>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleUpdateStatus(order._id, "Processing")
+                              }
+                              disabled={
+                                isUpdating || order.orderStatus === "Processing"
+                              }
+                            >
+                              <Clock className="w-3 h-3 mr-2" /> Processing
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleUpdateStatus(order._id, "Shipped")
+                              }
+                              disabled={
+                                isUpdating || order.orderStatus === "Shipped"
+                              }
+                            >
+                              <Truck className="w-3 h-3 mr-2" /> Shipped
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleUpdateStatus(order._id, "Delivered")
+                              }
+                              disabled={
+                                isUpdating || order.orderStatus === "Delivered"
+                              }
+                            >
+                              <CheckCircle className="w-3 h-3 mr-2" /> Delivered
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleUpdateStatus(order._id, "Cancelled")
+                              }
+                              disabled={
+                                isUpdating || order.orderStatus === "Cancelled"
+                              }
+                              className="text-red-600"
+                            >
+                              <XCircle className="w-3 h-3 mr-2" /> Cancelled
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -385,12 +385,14 @@ const Orders = () => {
             </div>
 
             <div className="lg:hidden space-y-4">
-              {filteredOrders.map((order) => (
-                <Card key={order.id}>
+              {filteredOrders.map((order: any) => (
+                <Card key={order._id}>
                   <CardContent className="p-4 space-y-3">
                     <div className="flex justify-between items-start">
                       <div>
-                        <div className="font-bold text-lg">{order.id}</div>
+                        <div className="font-bold text-lg font-mono">
+                          #{order._id.slice(-8)}
+                        </div>
                         <div className="text-sm text-muted-foreground">
                           {formatDate(order.createdAt)}
                         </div>
@@ -404,47 +406,100 @@ const Orders = () => {
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem>View Details</DropdownMenuItem>
-                          <DropdownMenuItem>Track Delivery</DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem>Update Status</DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-600">
-                            Cancel Order
+                          <DropdownMenuLabel className="text-xs text-muted-foreground">
+                            Update Status
+                          </DropdownMenuLabel>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleUpdateStatus(order._id, "Processing")
+                            }
+                            disabled={
+                              isUpdating || order.orderStatus === "Processing"
+                            }
+                          >
+                            <Clock className="w-3 h-3 mr-2" /> Processing
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleUpdateStatus(order._id, "Shipped")
+                            }
+                            disabled={
+                              isUpdating || order.orderStatus === "Shipped"
+                            }
+                          >
+                            <Truck className="w-3 h-3 mr-2" /> Shipped
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleUpdateStatus(order._id, "Delivered")
+                            }
+                            disabled={
+                              isUpdating || order.orderStatus === "Delivered"
+                            }
+                          >
+                            <CheckCircle className="w-3 h-3 mr-2" /> Delivered
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleUpdateStatus(order._id, "Cancelled")
+                            }
+                            disabled={
+                              isUpdating || order.orderStatus === "Cancelled"
+                            }
+                            className="text-red-600"
+                          >
+                            <XCircle className="w-3 h-3 mr-2" /> Cancelled
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
 
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Customer:</span>
-                        <span className="font-medium">{order.customer}</span>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={
+                          order.buyerId?.profile ||
+                          "https://ui-avatars.com/api/?name=User"
+                        }
+                        alt={order.buyerId?.fullName}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                      <div>
+                        <p className="font-medium">{order.buyerId?.fullName}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {order.buyerId?.email}
+                        </p>
                       </div>
+                    </div>
+
+                    <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Total:</span>
                         <span className="font-bold">
-                          ${order.total.toFixed(2)}
+                          Rs {order.totalPrice?.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Items:</span>
-                        <span>{order.items}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Tracking:</span>
-                        <span className="font-mono text-xs">
-                          {order.deliveryNumber}
-                        </span>
+                        <span>{order.items?.length || 0}</span>
                       </div>
                     </div>
 
                     <div className="flex gap-2 flex-wrap">
-                      {getPaymentBadge(order.paymentStatus)}
+                      {getPaymentBadge(order.isPaid)}
                       {getStatusBadge(order.orderStatus)}
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
+
+            {filteredOrders.length === 0 && (
+              <div className="text-center py-10">
+                <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">No orders found</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

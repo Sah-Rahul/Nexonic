@@ -48,6 +48,25 @@ const UserProfile = () => {
     { label: "Rewards", value: "2,450" },
   ];
 
+  const getOrderStatusBadge = (status: string) => {
+    const statusStyles: Record<string, string> = {
+      Processing: "bg-yellow-100 text-yellow-700",
+      Shipped: "bg-blue-100 text-blue-700",
+      Delivered: "bg-green-100 text-green-700",
+      Cancelled: "bg-red-100 text-red-700",
+    };
+
+    return (
+      <span
+        className={`px-3 py-1 rounded-full text-sm font-medium ${
+          statusStyles[status] || "bg-gray-100 text-gray-700"
+        }`}
+      >
+        {status}
+      </span>
+    );
+  };
+
   return (
     <Layout>
       <div className="space-y-6 p-6 bg-white min-h-screen">
@@ -236,9 +255,12 @@ const UserProfile = () => {
                               {order._id}
                             </span>
                           </p>
-                          <p className="text-sm text-muted-foreground">
-                            Status: {order.orderStatus}
-                          </p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-sm text-muted-foreground">
+                              Status:
+                            </span>
+                            {getOrderStatusBadge(order.orderStatus)}
+                          </div>
                           <p className="text-sm text-muted-foreground">
                             Paid At:{" "}
                             {new Date(order.paidAt).toLocaleDateString()}
@@ -250,7 +272,6 @@ const UserProfile = () => {
                         </p>
                       </div>
 
-                      {/* Items */}
                       <div className="space-y-2">
                         {order.items.map((item: any) => (
                           <div
