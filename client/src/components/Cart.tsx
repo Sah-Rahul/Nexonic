@@ -12,6 +12,7 @@ import type { RootState } from "@/redux/store";
 import { useTheme } from "@/context/ThemeContext";
 import EmptyCart from "./EmptyCart";
 import { loadStripe } from "@stripe/stripe-js";
+import { Link } from "react-router-dom";
 
 const Cart: React.FC = () => {
   const [showCouponInput, setShowCouponInput] = useState(false);
@@ -101,7 +102,9 @@ const Cart: React.FC = () => {
                         className="w-16 h-16 object-cover rounded-md"
                       />
                       <div>
-                        <span className="text-sm  ">{item.title}</span>
+                        <Link to={`/products-details/${item._id}`}>
+                        <span className="text-sm hover:text-blue-600 ">{item.title}</span>
+                        </Link>
                       </div>
                     </td>
                     <td className="p-4">Rs{item.price.toFixed(2)}</td>
