@@ -50,3 +50,9 @@ export const getProductByCategory = async (slug: string) => {
   );
   return data;
 };
+
+export const getRelatedProductApi = async (id: string) => {
+  const { data } = await axiosInstance.get(`/api/v1/product/related-product/${id}`);
+  return data;
+};
+

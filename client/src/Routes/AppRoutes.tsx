@@ -45,6 +45,7 @@ import PaymentSuccess from "@/components/PaymentSuccess";
 import PaymentCancel from "@/components/PaymentCancel";
 import MyOrder from "@/components/MyOrder";
 import CheckOutPage from "@/components/CheckOutPage";
+import RelatedProducts from "@/components/RelatedProducts";
 
 const AppRoutes = () => {
   return (
@@ -119,16 +120,20 @@ const AppRoutes = () => {
         <Route path="/gadgets" element={<Gadgets />} />
         <Route path="/home-smart" element={<SmartHome />} />
         <Route path="/products-details/:id" element={<ProductDetails />} />
-        <Route path="/admin-products-details/:id" element={<AdminProductDetails />} />
+        <Route
+          path="/related-product-details/:id"
+          element={<RelatedProducts />}
+        />
+        <Route
+          path="/admin-products-details/:id"
+          element={<AdminProductDetails />}
+        />
         <Route path="/category/:category" element={<GetCategoryByProducts />} />
         <Route path="/*" element={<NotFound />} />
         <Route path="/success" element={<PaymentSuccess />} />
         <Route path="/cancel" element={<PaymentCancel />} />
-        <Route path="/my-orders" element={<MyOrder />} /> 
-        <Route path="/check-out-page" element={<CheckOutPage />} /> 
-
-
-
+        <Route path="/my-orders" element={<MyOrder />} />
+        <Route path="/check-out-page" element={<CheckOutPage />} />
 
         {/* ADMIN PROTECTED ROUTES */}
         <Route

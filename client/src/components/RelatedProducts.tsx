@@ -1,6 +1,6 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import type { Product } from "@/redux/slices/productSlice";
-import { getProductsApi, getRelatedProductApi } from "@/api/productApi";
+import { getProductsApi } from "@/api/productApi";
 import { useQuery } from "@tanstack/react-query";
 import NavBar from "@/components/NavBar";
 import { useTheme } from "@/context/ThemeContext";
@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/redux/store";
 import Loading from "@/components/Loading";
 
-const ProductDetails = () => {
+const RelatedProducts = () => {
   const { id } = useParams<{ id: string }>();
   const { themeColor } = useTheme();
   const dispatch = useDispatch();
@@ -27,11 +27,6 @@ const ProductDetails = () => {
   const { data: getProducts = [] } = useQuery<Product[], Error>({
     queryKey: ["products"],
     queryFn: getProductsApi,
-  });
-
-  const { data: getRelatedProduct } = useQuery({
-    queryKey: ["products", id],
-    queryFn: ({ queryKey }) => getRelatedProductApi(queryKey[1] as string),
   });
 
   useEffect(() => {
@@ -60,22 +55,6 @@ const ProductDetails = () => {
 
   const handleDecrease = (productId: string) => {
     dispatch(decreaseQuantity(productId));
-  };
-
-  const renderStars = (rating: number) => {
-    return (
-      <div className="flex ">
-        {Array.from({ length: 5 }, (_, i) => (
-          <span
-            key={i}
-            style={{ color: i < Math.round(rating) ? themeColor : "#ccc" }}
-            className="text-lg"
-          >
-            {i < Math.round(rating) ? "★" : "☆"}
-          </span>
-        ))}
-      </div>
-    );
   };
 
   return (
@@ -177,41 +156,9 @@ const ProductDetails = () => {
         </div>
       </main>
 
-      <div className="md:h-[45vw] px-11 bg-[#ffffff]">
-        <h1 className="font-bold text-3xl">Related products</h1>
-
-        <div className="md:flex items-center justify-between">
-          {getRelatedProduct?.data?.relatedProducts?.map((item: any) => (
-            <Link key={item._id} to={`/related-product-details/${item._id}`}>
-              <div className="mt-5 md:h-[38vw] md:w-[22vw] bg-white">
-                <img
-                  src={item.productImage}
-                  alt={item.title}
-                  className="h-[60%] w-full object-cover"
-                />
-
-                <div className="flex flex-col p-3">
-                  <div style={{ color: themeColor }} className="pt-2">
-                    {renderStars(item.Rating)}
-                  </div>
-
-                  <label className="text-xl font-bold text-gray-400">
-                    {item.title.slice(0, 52)}
-                  </label>
-
-                  <small className="pt-4 font-semibold text-xl">
-                    ${item.price}
-                  </small>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
       <Footer />
     </>
   );
 };
 
-export default ProductDetails;
+export default RelatedProducts;
