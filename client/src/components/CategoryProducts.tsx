@@ -9,11 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { getProductsApi } from "@/api/productApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSlice";
 import toast from "react-hot-toast";
 import type { Product } from "@/redux/slices/productSlice";
 import { addToWishlist } from "@/redux/slices/Wishlist";
+import type { RootState } from "@/redux/store";
 
 interface Props {
   category: string;
@@ -23,6 +24,7 @@ const CategoryProducts = ({ category }: Props) => {
   const { themeColor } = useTheme();
   const dispatch = useDispatch();
   const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     AOS.init({ duration: 1000, easing: "ease-in-out", once: true });
@@ -73,11 +75,19 @@ const CategoryProducts = ({ category }: Props) => {
   };
 
   const handleAddToCart = (product: Product) => {
+    if (!user) {
+      toast.error("Please login first");
+      return;
+    }
     dispatch(addToCart(product));
     toast.success("Product added to cart");
   };
 
   const handleAddToWishList = (product: Product) => {
+    if (!user) {
+      toast.error("Please login first");
+      return;
+    }
     dispatch(addToWishlist(product));
     toast.success("Product added in wishlist");
   };
