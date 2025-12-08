@@ -49,7 +49,7 @@ const CATEGORIES = [
   "REFRIGERATOR",
   "SMART HOME",
   "BEST DEALS",
-  "NEW ARRIVALS"
+  "NEW ARRIVALS",
 ];
 
 const Products = () => {
@@ -70,7 +70,6 @@ const Products = () => {
     queryKey: ["products"],
     queryFn: getProductsApi,
   });
-
   const createMutation = useMutation({
     mutationFn: createProductApi,
     onSuccess: () => {
@@ -118,7 +117,7 @@ const Products = () => {
 
   const handleAddProduct = (newProduct: any) => {
     const fd = new FormData();
-
+    console.log(newProduct);
     Object.entries(newProduct).forEach(([key, value]) => {
       if (key === "KeyFeatures" && Array.isArray(value)) {
         value.forEach((feat) => fd.append("KeyFeatures[]", feat));
@@ -134,8 +133,6 @@ const Products = () => {
         fd.append(key, String(value));
       }
     });
-
-    console.log("FormData entries:", [...fd.entries()]);
 
     createMutation.mutate(fd);
   };
@@ -171,7 +168,7 @@ const Products = () => {
     currentPage * itemsPerPage
   );
 
-    Math.ceil(filteredProducts.length / itemsPerPage);
+  Math.ceil(filteredProducts.length / itemsPerPage);
 
   return (
     <div className="space-y-6">

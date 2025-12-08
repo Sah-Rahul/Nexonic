@@ -14,7 +14,7 @@ export const createProductApi = async (product: FormData) => {
 };
 
 export const getProductsApi = async () => {
-  const { data } = await axiosInstance.get("/api/v1/product/");
+  const { data } = await axiosInstance.get("/api/v1/product");
   return data.data;
 };
 
@@ -39,8 +39,8 @@ export const deleteProductApi = async (id: string) => {
 };
 
 export const getProductById = async (id: string) => {
-  const { data } = await axiosInstance.get(`/api/v1/product/:/${id}`);
-  return data;
+  const { data } = await axiosInstance.get(`/api/v1/product/${id}`);
+  return data.data;
 };
 
 export const getProductByCategory = async (slug: string) => {
@@ -48,11 +48,12 @@ export const getProductByCategory = async (slug: string) => {
   const { data } = await axiosInstance.get(
     `/api/v1/product/category/${encodedSlug}`
   );
-  return data;
+  return data.data;
 };
 
 export const getRelatedProductApi = async (id: string) => {
-  const { data } = await axiosInstance.get(`/api/v1/product/related-product/${id}`);
-  return data;
+  const { data } = await axiosInstance.get(
+    `/api/v1/product/related-product/${id}`
+  );
+  return data.data;
 };
-
