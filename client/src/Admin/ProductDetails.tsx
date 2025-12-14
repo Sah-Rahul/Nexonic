@@ -34,6 +34,7 @@ const ProductDetails = () => {
     queryFn: ({ queryKey }) => getRelatedProductApi(queryKey[1] as string),
   });
 
+
   useEffect(() => {
     window.scroll(0, 0);
   }, []);
