@@ -61,7 +61,7 @@ const TodaysDeal = () => {
                   className="px-4 sm:px-6 overflow-hidden relative md:h-[45vw] md:w-[90vw] sm:h-[40vw] sm:w-[42vw] lg:h-[30vw] lg:w-[22vw] group"
                 >
                   <div className="flex flex-col items-center">
-                    <Link to={`/todaydealsdetails/${item.id}`}>
+                    <Link to={`/products-details/${item.id}`}>
                       <img
                         src={item.img}
                         alt={item.name}

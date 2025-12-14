@@ -25,7 +25,6 @@ const NavBar: React.FC = () => {
     { label: "Home Appliances", link: "/appliancess_home" },
     { label: "Audio & video", link: "/video_and_audio" },
     { label: "Refrigerator", link: "/refrigerator" },
-    { label: "New arrivals", link: "/new-arrivals" },
     { label: "Todays deal", link: "/todays-deal" },
     { label: "Gift cards", link: "/gift-cards" },
   ];

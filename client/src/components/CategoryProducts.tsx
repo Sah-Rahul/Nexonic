@@ -129,8 +129,8 @@ const CategoryProducts = ({ category }: Props) => {
                     <label className="font-semibold">
                       Rs {item.totalPrice}
                     </label>
-                    <del className="text-gray-600">Rs {item.price}</del>
-                    <label className="text-red-600">
+                    <del className="text-gray-600 ">Rs {item.price}</del>
+                    <label className="text-red-600 text-sm">
                       ({item.discount}% OFF)
                     </label>
                   </div>

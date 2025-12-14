@@ -63,7 +63,7 @@ const Category = () => {
       id: 8,
       img: "/images/Speaker.jpg",
       title: "SMART HOME",
-      link: "/home_smart",
+      link: "/home-smart",
     },
   ];
 
