@@ -266,11 +266,16 @@ const Products = () => {
                             ? moment(product.createdAt).format("DD MMM YYYY")
                             : "N/A"}
                         </TableCell>
-                        <TableCell>₹{product.price}</TableCell>
+                        <TableCell>Rs {product.price.toString()}</TableCell>
                         <TableCell>{product.discount}%</TableCell>
                         <TableCell className="font-semibold">
-                          Rs{product.totalPrice || product.price}
+                          Rs{" "}
+                          {(
+                            product.price -
+                            (product.price * product.discount) / 100
+                          ).toFixed(2)}
                         </TableCell>
+
                         <TableCell>
                           <div className="flex items-center gap-0.5">
                             {Array.from({ length: 5 }, (_, i) => {
