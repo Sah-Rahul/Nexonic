@@ -81,14 +81,18 @@ const Category = () => {
       <h2 style={{ color: themeColor }} className="font-bold text-2xl mb-5">
         Shop by Category
       </h2>
-      <div className="h-full border-gray-200 border flex items-center flex-wrap justify-between bg-white p-5">
+      <div className="h-full border-gray-200 border flex items-center flex-wrap justify-center gap-6 bg-white p-5">
         {categories.map((item) => (
           <Link
             key={item.id}
             to={item.link}
-            className="flex flex-col items-center text-center w-64 mb-6"
+            className="flex flex-col items-center text-center w-64 mb-6 transition-transform duration-300 hover:scale-105"
           >
-            <img src={item.img} alt={item.title} className="mx-auto" />
+            <img
+              src={item.img}
+              alt={item.title}
+              className="w-56 h-56 object-cover rounded-lg mb-3"
+            />
             <span className="text-sm font-bold">{item.title}</span>
             <span className="text-gray-400 font-semibold">
               {item.dataLength} products
