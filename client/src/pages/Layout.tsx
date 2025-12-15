@@ -15,6 +15,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
   const [showCustomize, setShowCustomize] = useState<boolean>(false);
   const { themeColor } = useTheme();
+  const [rating, setRating] = useState<number>(0);
+  const [price, setPrice] = useState<number>(5000);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -59,6 +61,73 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </li>
               ))}
             </ul>
+
+            <div className="space-y-7 mt-5">
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-3">
+                  Price Range
+                </h3>
+                <input
+                  type="range"
+                  min={1000}
+                  max={100000}
+                  step={1000}
+                  value={price}
+                  onChange={(e) => setPrice(+e.target.value)}
+                  className="w-36 cursor-pointer"
+                  style={{ accentColor: themeColor }}
+                />
+                <div className="text-sm text-gray-600 mt-2">
+                  Rs1,000 – Rs{price.toLocaleString()}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <h3 className="font-semibold text-gray-800 mb-3">
+                Customer Rating
+              </h3>
+
+              {[
+                { stars: "★★★★★", value: 5 },
+                { stars: "★★★★☆", value: 4 },
+                { stars: "★★★☆☆", value: 3 },
+                { stars: "★★☆☆☆", value: 2 },
+              ].map((item) => (
+                <div
+                  key={item.value}
+                  onClick={() => setRating(item.value)}
+                  className="flex items-center cursor-pointer px-2 py-1 rounded transition"
+                  style={{
+                    background:
+                      rating === item.value ? `${themeColor}20` : "transparent",
+                  }}
+                >
+                  <span
+                    className="text-lg tracking-wide"
+                    style={{
+                      color: rating === item.value ? themeColor : themeColor,
+                    }}
+                  >
+                    {item.stars}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5">
+              <button
+                onClick={() => {
+                  setPrice(50000);
+                  setRating(0);
+                }}
+                className="w-46 cursor-pointer py-2 text-sm font-semibold rounded-md border hover:bg-gray-50 transition"
+                style={{ color: themeColor, borderColor: themeColor }}
+              >
+                {" "}
+                Clear All Filters{" "}
+              </button>
+            </div>
           </div>
         </aside>
 
