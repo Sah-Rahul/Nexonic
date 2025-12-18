@@ -34,6 +34,7 @@ const ProductDetails = () => {
     queryFn: ({ queryKey }) => getRelatedProductApi(queryKey[1] as string),
   });
 
+  console.log('=====================>', getRelatedProduct)
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -182,7 +183,7 @@ const ProductDetails = () => {
         <h1 className="font-bold text-3xl">Related products</h1>
 
         <div className="md:flex items-center justify-between">
-          {getRelatedProduct?.data?.relatedProducts?.map((item: any) => (
+          {getRelatedProduct?.relatedProducts?.map((item: any) => (
             <Link key={item._id} to={`/related-product-details/${item._id}`}>
               <div className="mt-5 md:h-[38vw] md:w-[22vw] bg-white">
                 <img

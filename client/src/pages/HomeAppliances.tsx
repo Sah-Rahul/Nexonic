@@ -21,6 +21,8 @@ const HomeAppliances = () => {
   const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState("Default sorting");
+  const [priceRange, setPriceRange] = useState(100000);
+  const [selectedRating, setSelectedRating] = useState(0);
 
   const {
     data: products = [],
@@ -31,12 +33,8 @@ const HomeAppliances = () => {
     queryFn: getProductsApi,
   });
 
-  const filteredProducts = products.filter(
-    (p) => p.category?.toUpperCase() === "HOME APPLIANCES"
-  );
-
   const sortOptions = [
-    { value: "", label: "Default sorting" },
+    { value: "default", label: "Default sorting" },
     { value: "popularity", label: "Sort by popularity" },
     { value: "latest", label: "Sort by latest" },
     { value: "price-high", label: "Price: High to Low" },
@@ -56,6 +54,30 @@ const HomeAppliances = () => {
         Error loading products: {error.message}
       </div>
     );
+
+  let filteredProducts = products.filter(
+    (p) => p.category?.toUpperCase() === "HOME APPLIANCES"
+  );
+
+  filteredProducts = filteredProducts.filter((p) => p.price <= priceRange);
+
+  if (selectedRating > 0) {
+    filteredProducts = filteredProducts.filter(
+      (p) => Math.round(p.Rating) >= selectedRating
+    );
+  }
+
+  let sortedProducts = [...filteredProducts];
+
+  if (selectedSort === "Sort by latest") {
+    sortedProducts.sort((a, b) => b._id.localeCompare(a._id));
+  } else if (selectedSort === "Sort by popularity") {
+    sortedProducts.sort((a, b) => b.Rating - a.Rating);
+  } else if (selectedSort === "Price: High to Low") {
+    sortedProducts.sort((a, b) => b.price - a.price);
+  } else if (selectedSort === "Price: Low to High") {
+    sortedProducts.sort((a, b) => a.price - b.price);
+  }
 
   const renderStars = (rating: number) => {
     return (
@@ -84,7 +106,12 @@ const HomeAppliances = () => {
   };
 
   return (
-    <Layout>
+    <Layout
+      onPriceChange={setPriceRange}
+      onRatingChange={setSelectedRating}
+      currentPrice={priceRange}
+      currentRating={selectedRating}
+    >
       <div className="min-h-screen mt-3 sm:mt-5 w-full px-3 sm:px-4 lg:px-6 xl:px-8">
         <h1 className="text-xl sm:text-2xl lg:text-3xl mb-3 sm:mb-5 font-bold text-black">
           {formatBreadcrumb(location.pathname)}
@@ -96,80 +123,86 @@ const HomeAppliances = () => {
           comfortable all year round with our trusted cooling solutions.
         </p>
 
-        <div className="mb-4 sm:mb-6 h-auto sm:h-14 px-2 sm:px-4 w-full flex flex-col sm:flex-row items-start sm:items-center justify-between text-black gap-3 sm:gap-0">
-          <span className="text-xs sm:text-sm md:text-base">
-            Showing all {filteredProducts.length} results
+        <div className="mb-4 sm:mb-6 px-2 sm:px-4 flex items-center justify-between">
+          <span className="text-xs sm:text-sm md:text-base text-gray-600 font-semibold">
+            Showing {sortedProducts.length}
+            results
           </span>
 
-          <div className="relative w-full sm:w-auto">
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white border-2 border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 group w-full sm:min-w-[200px] md:min-w-60"
-            >
-              <SlidersHorizontal className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
-              <span
-                style={{ color: themeColor }}
-                className="text-xs sm:text-sm flex-1 text-left"
+          <div>
+            <h3 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">
+              Sort By
+            </h3>
+            <div className="relative w-full">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white border-2 border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 group w-full"
               >
-                {selectedSort}
-              </span>
-              <ChevronDown
-                className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-500 transition-transform duration-300 ${
-                  isDropdownOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {isDropdownOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-10"
-                  onClick={() => setIsDropdownOpen(false)}
+                <SlidersHorizontal className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
+                <span
+                  style={{ color: themeColor }}
+                  className="text-xs sm:text-sm flex-1 text-left"
+                >
+                  {selectedSort}
+                </span>
+                <ChevronDown
+                  className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-500 transition-transform duration-300 ${
+                    isDropdownOpen ? "rotate-180" : ""
+                  }`}
                 />
-                <div className="absolute right-0 mt-2 w-full sm:w-64 bg-white rounded-xl shadow-2xl border-2 border-gray-100 overflow-hidden z-20 animate-dropdown">
-                  <div className="py-2">
-                    {sortOptions.map((option, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => handleSortSelect(option)}
-                        className={`w-full cursor-pointer px-3 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm transition-all duration-200 flex items-center justify-between group ${
-                          selectedSort === option.label
-                            ? "font-semibold"
-                            : "hover:bg-gray-50"
-                        }`}
-                        style={{
-                          backgroundColor:
+              </button>
+
+              {isDropdownOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setIsDropdownOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-full bg-white rounded-xl shadow-2xl border-2 border-gray-100 overflow-hidden z-20 animate-dropdown">
+                    <div className="py-2">
+                      {sortOptions.map((option, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleSortSelect(option)}
+                          className={`w-full cursor-pointer px-3 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm transition-all duration-200 flex items-center justify-between group ${
                             selectedSort === option.label
-                              ? `${themeColor}15`
-                              : undefined,
-                        }}
-                      >
-                        <span
-                          className={
-                            selectedSort === option.label
-                              ? "text-gray-900"
-                              : "text-gray-600"
-                          }
+                              ? "font-semibold"
+                              : "hover:bg-gray-50"
+                          }`}
+                          style={{
+                            backgroundColor:
+                              selectedSort === option.label
+                                ? `${themeColor}15`
+                                : undefined,
+                          }}
                         >
-                          {option.label}
-                        </span>
-                        {selectedSort === option.label && (
                           <span
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: themeColor }}
-                          />
-                        )}
-                      </button>
-                    ))}
+                            className={
+                              selectedSort === option.label
+                                ? "text-gray-900"
+                                : "text-gray-600"
+                            }
+                          >
+                            {option.label}
+                          </span>
+                          {selectedSort === option.label && (
+                            <span
+                              className="w-2 h-2 rounded-full"
+                              style={{ backgroundColor: themeColor }}
+                            />
+                          )}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
-          {filteredProducts.map((item, idx) => (
+          {sortedProducts.map((item, idx) => (
             <div key={item._id} className="relative group mb-4 sm:mb-6">
               {idx === 0 && (
                 <Badge.Ribbon
@@ -234,21 +267,6 @@ const HomeAppliances = () => {
           ))}
         </div>
       </div>
-
-      <style>{`
-        @keyframes dropdown {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-dropdown { animation: dropdown 0.2s ease-out; }
-        
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      `}</style>
     </Layout>
   );
 };

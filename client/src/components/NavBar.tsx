@@ -144,7 +144,7 @@ const NavBar: React.FC = () => {
               onClick={() => setShowCart(true)}
               className="transition-transform duration-200 hover:scale-110"
             >
-              <ShoppingBasket className="text-white" size={30} />
+              <ShoppingBasket className="text-white cursor-pointer" size={30} />
             </button>
             <div className="h-6 w-6 rounded-full flex items-center justify-center bg-white absolute -top-4 right-0 transition-transform duration-200 hover:scale-110">
               <span style={{ color: themeColor }} className="font-semibold">

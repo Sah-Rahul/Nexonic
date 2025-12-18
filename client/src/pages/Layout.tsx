@@ -9,15 +9,23 @@ import { Link } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;
+  onPriceChange?: (price: number) => void;
+  onRatingChange?: (rating: number) => void;
+  currentPrice?: number;
+  currentRating?: number;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  onPriceChange,
+  onRatingChange,
+  currentPrice = 100000,
+  currentRating = 0,
+}) => {
   const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
   const [showCustomize, setShowCustomize] = useState<boolean>(false);
   const [showMobileFilters, setShowMobileFilters] = useState<boolean>(false);
   const { themeColor } = useTheme();
-  const [rating, setRating] = useState<number>(0);
-  const [price, setPrice] = useState<number>(5000);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -67,13 +75,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             min={1000}
             max={100000}
             step={1000}
-            value={price}
-            onChange={(e) => setPrice(+e.target.value)}
+            value={currentPrice}
+            onChange={(e) => onPriceChange && onPriceChange(+e.target.value)}
             className="w-full cursor-pointer"
             style={{ accentColor: themeColor }}
           />
           <div className="text-xs sm:text-sm text-gray-600 mt-2">
-            Rs1,000 – Rs{price.toLocaleString()}
+            Rs1,000 – Rs{currentPrice.toLocaleString()}
           </div>
         </div>
       </div>
@@ -91,17 +99,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         ].map((item) => (
           <div
             key={item.value}
-            onClick={() => setRating(item.value)}
+            onClick={() => onRatingChange && onRatingChange(item.value)}
             className="flex items-center cursor-pointer px-2 py-1 rounded transition"
             style={{
               background:
-                rating === item.value ? `${themeColor}20` : "transparent",
+                currentRating === item.value
+                  ? `${themeColor}20`
+                  : "transparent",
             }}
           >
             <span
               className="text-base sm:text-lg tracking-wide"
               style={{
-                color: rating === item.value ? themeColor : themeColor,
+                color: themeColor,
+                fontWeight: currentRating === item.value ? 600 : 400,
               }}
             >
               {item.stars}
@@ -113,11 +124,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className="mt-5">
         <button
           onClick={() => {
-            setPrice(50000);
-            setRating(0);
+            onPriceChange && onPriceChange(100000);
+            onRatingChange && onRatingChange(0);
             setShowMobileFilters(false);
           }}
-          className="w-full py-2 text-xs sm:text-sm font-semibold rounded-md border hover:bg-gray-50 transition"
+          className="w-full cursor-pointer py-2 text-xs sm:text-sm font-semibold rounded-md border hover:bg-gray-50 transition"
           style={{ color: themeColor, borderColor: themeColor }}
         >
           Clear All Filters
