@@ -70,7 +70,7 @@ const NavBar: React.FC = () => {
           />
         </Link>
 
-        <div className="relative items-center gap-4 font-semibold w-full max-w-lg hidden md:flex">
+        <div className="relative items-center gap-4 font-semibold hidden md:flex w-[275px]">
           <input
             type="text"
             placeholder="Search product..."
@@ -81,12 +81,15 @@ const NavBar: React.FC = () => {
           <Search
             style={{ color: themeColor }}
             className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-            size={24}
+            size={22}
           />
         </div>
 
         <div className="md:hidden cursor-pointer flex items-center">
-          <button className="cursor-pointer" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button
+            className="cursor-pointer"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
             {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>

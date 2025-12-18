@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { addToWishlist } from "@/redux/slices/Wishlist";
 import { useDispatch } from "react-redux";
 import type { Product } from "@/redux/slices/productSlice";
+import Loading from "@/components/Loading";
 
 const SmartHome = () => {
   const { themeColor } = useTheme();
@@ -37,7 +38,6 @@ const SmartHome = () => {
   const sortOptions = [
     { value: "", label: "Default sorting" },
     { value: "popularity", label: "Sort by popularity" },
-    { value: "rating", label: "Sort by average rating" },
     { value: "latest", label: "Sort by latest" },
     { value: "price-high", label: "Price: High to Low" },
     { value: "price-low", label: "Price: Low to High" },
@@ -48,7 +48,7 @@ const SmartHome = () => {
     setIsDropdownOpen(false);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
   if (error) return <div>Error loading products: {error.message}</div>;
 
   const renderStars = (rating: number) => {

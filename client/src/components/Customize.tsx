@@ -27,7 +27,7 @@ const Customize: React.FC<CustomizeProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     setSelectedColor(themeColor);
   }, [themeColor]);
-  
+
   return (
     <>
       <div
@@ -49,7 +49,8 @@ const Customize: React.FC<CustomizeProps> = ({ isOpen, onClose }) => {
           <h2 className="text-2xl font-semibold">Customize</h2>
           <button
             onClick={onClose}
-            className="text-3xl cursor-pointer hover:text-red-500 transition-all"
+            style={{ backgroundColor: themeColor }}
+            className="text-3xl cursor-pointer transition-all hover:opacity-80"
           >
             <RxCross2 />
           </button>

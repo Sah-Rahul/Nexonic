@@ -13,8 +13,7 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { addToWishlist } from "@/redux/slices/Wishlist";
 import type { Product } from "@/redux/slices/productSlice";
-
-
+import Loading from "@/components/Loading";
 
 const HomeAppliances = () => {
   const { themeColor } = useTheme();
@@ -32,7 +31,6 @@ const HomeAppliances = () => {
     queryFn: getProductsApi,
   });
 
-  console.log(products);
   const filteredProducts = products.filter(
     (p) => p.category?.toUpperCase() === "HOME APPLIANCES"
   );
@@ -40,7 +38,6 @@ const HomeAppliances = () => {
   const sortOptions = [
     { value: "", label: "Default sorting" },
     { value: "popularity", label: "Sort by popularity" },
-    { value: "rating", label: "Sort by average rating" },
     { value: "latest", label: "Sort by latest" },
     { value: "price-high", label: "Price: High to Low" },
     { value: "price-low", label: "Price: Low to High" },
@@ -51,17 +48,23 @@ const HomeAppliances = () => {
     setIsDropdownOpen(false);
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading products: {error.message}</div>;
+  if (isLoading) return <Loading />;
+
+  if (error)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Error loading products: {error.message}
+      </div>
+    );
 
   const renderStars = (rating: number) => {
     return (
-      <div className="flex ">
+      <div className="flex">
         {Array.from({ length: 5 }, (_, i) => (
           <span
             key={i}
             style={{ color: i < Math.round(rating) ? themeColor : "#ccc" }}
-            className="text-lg"
+            className="text-base sm:text-lg"
           >
             {i < Math.round(rating) ? "★" : "☆"}
           </span>
@@ -82,36 +85,36 @@ const HomeAppliances = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen mt-5 w-[94%] p-4">
-        <h1 className="text-2xl mb-5 font-bold text-black">
+      <div className="min-h-screen mt-3 sm:mt-5 w-full px-3 sm:px-4 lg:px-6 xl:px-8">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl mb-3 sm:mb-5 font-bold text-black">
           {formatBreadcrumb(location.pathname)}
         </h1>
 
-        <p className="mb-5 text-black">
+        <p className="mb-4 sm:mb-5 text-sm sm:text-base text-black leading-relaxed">
           Beat the heat with our high-performance air conditioners. Whether it's
           split ACs, window units, or energy-saving inverters, stay cool and
           comfortable all year round with our trusted cooling solutions.
         </p>
 
-        <div className="mb-4 h-14 px-4 w-full flex items-center justify-between text-black">
-          <span className="text-sm md:text-base">
+        <div className="mb-4 sm:mb-6 h-auto sm:h-14 px-2 sm:px-4 w-full flex flex-col sm:flex-row items-start sm:items-center justify-between text-black gap-3 sm:gap-0">
+          <span className="text-xs sm:text-sm md:text-base">
             Showing all {filteredProducts.length} results
           </span>
 
-          <div className="relative">
+          <div className="relative w-full sm:w-auto">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 group min-w-[200px]"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white border-2 border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 group w-full sm:min-w-[200px] md:min-w-60"
             >
-              <SlidersHorizontal className="w-4 h-4 text-gray-500" />
+              <SlidersHorizontal className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
               <span
                 style={{ color: themeColor }}
-                className="text-sm flex-1 text-left"
+                className="text-xs sm:text-sm flex-1 text-left"
               >
                 {selectedSort}
               </span>
               <ChevronDown
-                className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
+                className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-500 transition-transform duration-300 ${
                   isDropdownOpen ? "rotate-180" : ""
                 }`}
               />
@@ -123,13 +126,13 @@ const HomeAppliances = () => {
                   className="fixed inset-0 z-10"
                   onClick={() => setIsDropdownOpen(false)}
                 />
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border-2 border-gray-100 overflow-hidden z-20 animate-dropdown">
+                <div className="absolute right-0 mt-2 w-full sm:w-64 bg-white rounded-xl shadow-2xl border-2 border-gray-100 overflow-hidden z-20 animate-dropdown">
                   <div className="py-2">
                     {sortOptions.map((option, idx) => (
                       <button
                         key={idx}
                         onClick={() => handleSortSelect(option)}
-                        className={`w-full cursor-pointer px-4 py-3 text-left text-sm transition-all duration-200 flex items-center justify-between group ${
+                        className={`w-full cursor-pointer px-3 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm transition-all duration-200 flex items-center justify-between group ${
                           selectedSort === option.label
                             ? "font-semibold"
                             : "hover:bg-gray-50"
@@ -165,48 +168,46 @@ const HomeAppliances = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-5 flex-wrap">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
           {filteredProducts.map((item, idx) => (
-            <div key={item._id} className="relative md:w-[22vw] group mb-6">
+            <div key={item._id} className="relative group mb-4 sm:mb-6">
               {idx === 0 && (
                 <Badge.Ribbon
                   text="Sale"
                   color={themeColor}
-                  className="absolute top-0 right-5"
+                  className="absolute top-0 right-2 sm:right-5 z-10"
                 />
               )}
 
-              <div className="flex flex-col items-center">
-                <Link to={`/products-details/${item._id}`}>
+              <div className="flex flex-col items-center bg-white rounded-lg hover:shadow-xl transition-shadow duration-300 p-3 sm:p-4">
+                <Link to={`/products-details/${item._id}`} className="w-full">
                   <img
                     src={item.productImage}
                     alt={item.title}
-                    className="transition-all duration-300 ease-in-out"
+                    className="w-full h-48 sm:h-56 md:h-64 object-contain transition-transform duration-300 group-hover:scale-105"
                   />
                 </Link>
 
-                <Link to={`/products-details/${item._id}`}>
-                  <div className="px-6 flex flex-col">
-                    <span className="pt-2 md:text-xl text-xl  ">
-                      {item.title.slice(0, 60)}
+                <Link to={`/products-details/${item._id}`} className="w-full">
+                  <div className="px-2 sm:px-4 flex flex-col w-full">
+                    <span className="pt-2 text-sm sm:text-base md:text-lg line-clamp-2">
+                      {item.title}
                     </span>
 
-                    <span
-                      style={{ color: themeColor }}
-                      className="pt-2 text-xl"
-                    >
-                      {renderStars(item.Rating)}
-                    </span>
-                    <div className="pt-5 flex gap-3">
-                      <label className="font-semibold">
+                    <div className="pt-2">{renderStars(item.Rating)}</div>
+
+                    <div className="pt-3 sm:pt-5 flex flex-wrap gap-2 items-center">
+                      <label className="font-semibold text-base sm:text-lg">
                         Rs
                         {(
                           item.price -
                           (item.price * item.discount) / 100
                         ).toFixed()}
                       </label>
-                      <del className="text-gray-600">Rs{item.price}</del>
-                      <label className="text-red-600">
+                      <del className="text-gray-600 text-xs sm:text-sm">
+                        Rs{item.price}
+                      </del>
+                      <label className="text-red-600 text-xs sm:text-sm">
                         ({item.discount}% OFF)
                       </label>
                     </div>
@@ -215,19 +216,19 @@ const HomeAppliances = () => {
               </div>
 
               <div
-              onClick={() => handleAddToCart(item)}
+                onClick={() => handleAddToCart(item)}
                 style={{ backgroundColor: themeColor }}
-                className="h-8 w-8 flex items-center justify-center font-bold rounded-full text-white text-xs absolute top-3 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
+                className="h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center font-bold rounded-full text-white text-xs absolute top-3 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out cursor-pointer z-20"
               >
-                <BsCart4 className="text-xl cursor-pointer" />
+                <BsCart4 className="text-base sm:text-xl" />
               </div>
 
               <div
-              onClick={() => handleAddToWishList(item)}
+                onClick={() => handleAddToWishList(item)}
                 style={{ backgroundColor: themeColor }}
-                className="h-8 w-8 flex items-center justify-center font-bold rounded-full text-white text-xs absolute top-14 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out"
+                className="h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center font-bold rounded-full text-white text-xs absolute top-14 sm:top-16 right-[-30px] opacity-0 group-hover:opacity-100 group-hover:right-3 transition-all duration-300 ease-in-out cursor-pointer z-20"
               >
-                <Heart className="w-4 h-4 cursor-pointer" />
+                <Heart className="w-3 h-3 sm:w-4 sm:h-4" />
               </div>
             </div>
           ))}
@@ -240,6 +241,13 @@ const HomeAppliances = () => {
           to { opacity: 1; transform: translateY(0); }
         }
         .animate-dropdown { animation: dropdown 0.2s ease-out; }
+        
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
       `}</style>
     </Layout>
   );
