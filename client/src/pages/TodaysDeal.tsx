@@ -134,6 +134,7 @@ const TodaysDeal = () => {
             <div className="md:px2 px-5 flex gap-4 flex-wrap justify-center">
               {comingsoondata.map((item) => (
                 <div
+                key={item.id}
                   data-aos="fade-up"
                   className=" sm:px-6 overflow-hidden relative md:h-[50vw] md:w-[90vw] sm:h-[40vw] sm:w-[42vw] lg:h-[30vw] lg:w-[22vw] group"
                 >
