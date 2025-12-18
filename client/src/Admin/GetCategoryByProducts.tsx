@@ -33,7 +33,7 @@ const GetCategoryByProducts: React.FC = () => {
     enabled: !!category,
   });
 
-  const products: Product[] = data?.data?.products || [];
+  const products: Product[] = data?.products || [];
 
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -48,9 +48,9 @@ const GetCategoryByProducts: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-xl mb-4">Invalid category</p>
-          <Link to="/admin/category">
-            <Button>Back to Categories</Button>
-          </Link>
+          <Button onClick={() => window.history.back}>
+            Back to Categories
+          </Button>
         </div>
       </div>
     );
