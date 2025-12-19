@@ -9,6 +9,7 @@ import {
   CreditCard,
   Shield,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const PaymentCancel = () => {
   const [showX, setShowX] = useState(false);
@@ -151,9 +152,6 @@ const PaymentCancel = () => {
                 </div>
                 <div className="text-left">
                   <p className="text-xs text-gray-500">Your cart is saved</p>
-                  <p className="font-semibold text-gray-800">
-                    5 items • Rs. 12,499
-                  </p>
                 </div>
               </div>
               <span className="text-xs bg-amber-100 text-amber-700 px-3 py-1 rounded-full font-medium">
@@ -167,10 +165,12 @@ const PaymentCancel = () => {
                 Try Again
               </button>
 
-              <button className="flex-1 bg-white border-2 border-red-200 text-red-700 py-4 px-6 rounded-2xl font-semibold hover:bg-red-50 hover:border-red-300 transform hover:scale-105 transition-all flex items-center justify-center gap-2">
-                <ArrowLeft className="w-5 h-5" />
-                Back to Cart
-              </button>
+              <Link to={"/cart"}>
+                <button className="flex-1 cursor-pointer bg-white border-2 border-red-200 text-red-700 py-4 px-6 rounded-2xl font-semibold hover:bg-red-50 hover:border-red-300 transform hover:scale-105 transition-all flex items-center justify-center gap-2">
+                  <ArrowLeft className="w-5 h-5" />
+                  Back to Cart
+                </button>
+              </Link>
             </div>
 
             <p className="mt-6 text-sm text-gray-500">

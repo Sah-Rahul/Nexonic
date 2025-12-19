@@ -25,7 +25,6 @@ const ALLOWED_CATEGORIES = [
   "PCS & LAPTOP",
   "REFRIGERATOR",
   "SMART HOME",
-  "NEW ARRIVALS",
 ] as const;
 
 type CategoryType = (typeof ALLOWED_CATEGORIES)[number];
@@ -76,12 +75,7 @@ const categoriesData: CategoryData[] = [
     name: "SMART HOME",
     icon: CgSmartHomeWashMachine,
     color: "bg-teal-500",
-  },
-  {
-    name: "NEW ARRIVALS",
-    icon: CgSmartHomeWashMachine,
-    color: "bg-indigo-500",
-  },
+  }
 ];
 
 const Category = () => {

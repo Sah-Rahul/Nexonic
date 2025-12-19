@@ -29,8 +29,7 @@ import {
   getProductsApi,
   deleteProductApi,
   updateProductApi,
-} from "@/api/productApi";
-import { Link } from "react-router-dom";
+} from "@/api/productApi"; 
 import { useDispatch } from "react-redux";
 import {
   removeProduct,
@@ -240,18 +239,16 @@ const Products = () => {
                     paginatedProducts.map((product: any) => (
                       <TableRow key={product._id}>
                         <TableCell>
-                          <Link to={`/admin/details/${product._id}`}>
-                            <div className="flex items-center gap-3">
-                              <img
-                                src={product.productImage}
-                                alt={product.title}
-                                className="h-10 w-10 object-cover rounded"
-                              />
-                              <span className="hover:text-blue-600 transition-colors">
-                                {product.title.slice(0, 20)}...
-                              </span>
-                            </div>
-                          </Link>
+                          <div className="flex items-center gap-3">
+                            <img
+                              src={product.productImage}
+                              alt={product.title}
+                              className="h-10 w-10 object-cover rounded"
+                            />
+                            <span className="hover:text-blue-600 transition-colors">
+                              {product.title.slice(0, 20)}...
+                            </span>
+                          </div>
                         </TableCell>
                         <TableCell>
                           {product.description.slice(0, 20)}...

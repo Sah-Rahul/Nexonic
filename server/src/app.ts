@@ -1,5 +1,6 @@
-import dotenv from "dotenv"
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
+
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -15,30 +16,38 @@ import statsRouter from "./routes/stats.routes";
 import salesRouter from "./routes/sales.routes";
 import paymentRouter from "./routes/payment.routes";
 
-
 const app: Application = express();
 
 connectDB();
 
-// Middleware
+/* 🔥 STRIPE WEBHOOK — RAW BODY (MUST BE FIRST) */
+app.use("/api/v1/payment/webhook", express.raw({ type: "application/json" }));
+
+/* NORMAL MIDDLEWARES */
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin:process.env.FRONTEND_URL,
-  credentials:true
-}));
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("API is running!");
 });
 
-app.use('/api/v1/auth', userRouter)
-app.use('/api/v1/product', productRouter)
-app.use('/api/v1/review', reviewRouter)
-app.use('/api/v1/order', orderRouter)
-app.use('/api/v1/stats', statsRouter)
+/* ROUTES */
+app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/product", productRouter);
+app.use("/api/v1/review", reviewRouter);
+app.use("/api/v1/order", orderRouter);
+app.use("/api/v1/stats", statsRouter);
 app.use("/api/v1/sales", salesRouter);
 app.use("/api/v1/payment", paymentRouter);
 
-app.use(errorMiddleware)
+/* ERROR */
+app.use(errorMiddleware);
+
 export default app;

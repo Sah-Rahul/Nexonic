@@ -169,7 +169,6 @@ const AddProductModal: React.FC<AddModalProps> = ({
                   "REFRIGERATOR",
                   "SMART HOME",
                   "BEST DEALS",
-                  "NEW ARRIVALS"
                 ].map((c) => (
                   <option key={c} value={c}>
                     {c}
