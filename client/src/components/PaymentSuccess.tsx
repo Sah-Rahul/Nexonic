@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Check,
   Package,
@@ -6,31 +7,92 @@ import {
   Sparkles,
   ShoppingBag,
   Truck,
+  Loader2,
 } from "lucide-react";
 
 const PaymentSuccess = () => {
+  const navigate = useNavigate();
   const [showCheck, setShowCheck] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [countdown, setCountdown] = useState(5);
+  const [loading, setLoading] = useState(true);
+  const [orderData, setOrderData] = useState(null);
+  const [error, setError] = useState("");
 
+  // ✅ Payment Verification - Runs once on mount
   useEffect(() => {
-    setTimeout(() => setShowCheck(true), 300);
-    setTimeout(() => setShowConfetti(true), 600);
-    setTimeout(() => setShowContent(true), 900);
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get("session_id");
 
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
+    const verifyPayment = async () => {
+      if (!sessionId) {
+        setError("No session ID found");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:3000/api/v1/payment/verify", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ sessionId }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          setOrderData(data.order);
+          setLoading(false);
+        } else {
+          setError(data.message || "Payment verification failed");
+          setLoading(false);
         }
-        return prev - 1;
-      });
-    }, 1000);
+      } catch (err) {
+        console.error("Error verifying payment:", err);
+        setError("Failed to verify payment");
+        setLoading(false);
+      }
+    };
 
-    return () => clearInterval(timer);
+    verifyPayment();
   }, []);
+
+  // ✅ Animations - Separate useEffect
+  useEffect(() => {
+    if (!loading && orderData) {
+      setTimeout(() => setShowCheck(true), 300);
+      setTimeout(() => setShowConfetti(true), 600);
+      setTimeout(() => setShowContent(true), 900);
+    }
+  }, [loading, orderData]);
+
+  // ✅ Countdown Timer - Separate useEffect
+  useEffect(() => {
+    if (!loading && orderData) {
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [loading, orderData]);
+
+  // ✅ Navigation - Separate useEffect, triggered by countdown
+  useEffect(() => {
+    if (countdown === 0 && orderData) {
+      navigate("/user/profile");
+    }
+  }, [countdown, orderData, navigate]);
 
   const confettiPieces = Array.from({ length: 50 }, (_, i) => ({
     id: i,
@@ -42,6 +104,40 @@ const PaymentSuccess = () => {
     ],
   }));
 
+  // Loading State
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-linear-to-br from-emerald-50 via-green-50 to-teal-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-16 h-16 text-emerald-600 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600 text-lg">Verifying your payment...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error State
+  if (error) {
+    return (
+      <div className="min-h-screen bg-linear-to-br from-red-50 via-orange-50 to-yellow-50 flex items-center justify-center p-4">
+        <div className="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-8 text-center">
+          <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span className="text-4xl">❌</span>
+          </div>
+          <h1 className="text-3xl font-bold text-red-600 mb-4">Payment Error</h1>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button
+            onClick={() => navigate("/")}
+            className="bg-red-600 text-white py-3 px-8 rounded-xl font-semibold hover:bg-red-700 transition-all"
+          >
+            Return to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Success State
   return (
     <div className="min-h-screen bg-linear-to-br from-emerald-50 via-green-50 to-teal-50 flex items-center justify-center p-4 overflow-hidden relative">
       {showConfetti &&
@@ -120,9 +216,9 @@ const PaymentSuccess = () => {
               <div className="bg-linear-to-br from-emerald-50 to-green-100 rounded-2xl p-4 transform hover:scale-105 transition-transform">
                 <Package className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
                 <p className="text-xs text-gray-500">Order ID</p>
-                <p className="font-bold text-gray-800 text-sm">
-                  #ORD-2024-7842
-                </p>
+                {/* <p className="font-bold text-gray-800 text-sm">
+                  #{orderData?._id?.slice(-8).toUpperCase() || "XXXXXXXX"}
+                </p> */}
               </div>
 
               <div className="bg-linear-to-br from-teal-50 to-cyan-100 rounded-2xl p-4 transform hover:scale-105 transition-transform">
@@ -158,13 +254,19 @@ const PaymentSuccess = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <button className="flex-1 bg-linear-to-r from-emerald-600 to-green-600 text-white py-4 px-6 rounded-2xl font-semibold hover:shadow-xl transform hover:scale-105 transition-all flex items-center justify-center gap-2 group">
+              <button
+                onClick={() => navigate("/user/profile")}
+                className="flex-1 bg-linear-to-r from-emerald-600 to-green-600 text-white py-4 px-6 rounded-2xl font-semibold hover:shadow-xl transform hover:scale-105 transition-all flex items-center justify-center gap-2 group"
+              >
                 <Package className="w-5 h-5" />
                 View My Orders
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <button className="flex-1 bg-white border-2 border-emerald-200 text-emerald-700 py-4 px-6 rounded-2xl font-semibold hover:bg-emerald-50 hover:border-emerald-300 transform hover:scale-105 transition-all flex items-center justify-center gap-2">
+              <button
+                onClick={() => navigate("/")}
+                className="flex-1 bg-white border-2 border-emerald-200 text-emerald-700 py-4 px-6 rounded-2xl font-semibold hover:bg-emerald-50 hover:border-emerald-300 transform hover:scale-105 transition-all flex items-center justify-center gap-2"
+              >
                 <ShoppingBag className="w-5 h-5" />
                 Continue Shopping
               </button>

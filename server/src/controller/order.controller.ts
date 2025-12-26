@@ -1,77 +1,54 @@
 import asyncHandler from "../utils/AsyncHandler";
 import { Request, Response } from "express";
-import { OrderZodSchema, OrderType } from "../zodSchema/OrderZodSchema";
 import { ApiError } from "../utils/ApiError";
 import Order from "../models/order.model";
 import { ApiResponse } from "../utils/ApiResponse";
-import mongoose from "mongoose";
 import { AuthRequest } from "../types/Auth.interface";
+import mongoose from "mongoose";
 
-export const placeOrder = asyncHandler(async (req: Request, res: Response) => {
-  const parsed = OrderZodSchema.safeParse(req.body);
+export const fetchMyOrders = async (req: AuthRequest, res: Response) => {
+  const orders = await Order.find({ buyerId: req.user!.id })
+    .populate("items.productId", "title price productImage")
+    .sort({ createdAt: -1 });
 
-  if (!parsed.success) {
-    const formattedErrors = parsed.error.issues.map(
-      (issue) => `${issue.path.join(".")}: ${issue.message}`
-    );
-    throw new ApiError(400, "Invalid input", formattedErrors);
-  }
+  res.status(200).json(orders);
+};
 
-  const orderData: OrderType = parsed.data;
+export const fetchAllOrders = async (req: AuthRequest, res: Response) => {
+  const orders = await Order.find()
+    .populate("buyerId", "name email")
+    .sort({ createdAt: -1 });
 
-  const order = await Order.create(orderData);
-
-  res
-    .status(201)
-    .json(new ApiResponse(201, order, "Order placed successfully"));
-});
+  res.status(200).json(orders);
+};
 
 export const fetchSingleOrder = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req: AuthRequest, res: Response) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new ApiError(400, "Invalid order ID");
+      throw new ApiError(400, "Invalid order id");
     }
 
     const order = await Order.findById(id)
-      .populate("buyerId")
-      .populate("items.productId");
+      .populate("buyerId", "fullName email")
+      .populate("items.productId", "title price productImage");
 
     if (!order) {
       throw new ApiError(404, "Order not found");
     }
 
+ 
+    if (
+      req.user?.role !== "admin" &&
+      order.buyerId.toString() !== req.user?.id
+    ) {
+      throw new ApiError(403, "Access denied");
+    }
+
     return res
       .status(200)
       .json(new ApiResponse(200, order, "Order fetched successfully"));
-  }
-);
-
-export const fetchMyOrders = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
-    const userId = req.user?.id;
-
-    const orders = await Order.find({ buyerId: userId })
-      .populate("items.productId", "title productImage price")
-      .sort({ createdAt: -1 });
-
-    return res
-      .status(200)
-      .json(new ApiResponse(200, orders, "My orders fetched successfully"));
-  }
-);
-
-export const fetchAllOrders = asyncHandler(
-  async (req: Request, res: Response) => {
-    const orders = await Order.find()
-      .populate("buyerId")
-      .populate("items.productId")
-      .sort({ createdAt: -1 });
-
-    return res
-      .status(200)
-      .json(new ApiResponse(200, orders, "All orders fetched successfully"));
   }
 );
 

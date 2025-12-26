@@ -20,10 +20,10 @@ const app: Application = express();
 
 connectDB();
 
-/* 🔥 STRIPE WEBHOOK — RAW BODY (MUST BE FIRST) */
+ 
 app.use("/api/v1/payment/webhook", express.raw({ type: "application/json" }));
 
-/* NORMAL MIDDLEWARES */
+ 
 app.use(express.json());
 app.use(cookieParser());
 
@@ -38,7 +38,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("API is running!");
 });
 
-/* ROUTES */
+// ROUTES  
 app.use("/api/v1/auth", userRouter);
 app.use("/api/v1/product", productRouter);
 app.use("/api/v1/review", reviewRouter);

@@ -61,6 +61,7 @@ const Cart: React.FC = () => {
         }/api/v1/payment/create-checkout-session`,
         {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ cartItems: products }),
         }
@@ -103,7 +104,9 @@ const Cart: React.FC = () => {
                       />
                       <div>
                         <Link to={`/products-details/${item._id}`}>
-                        <span className="text-sm hover:text-blue-600 ">{item.title}</span>
+                          <span className="text-sm hover:text-blue-600 ">
+                            {item.title}
+                          </span>
                         </Link>
                       </div>
                     </td>

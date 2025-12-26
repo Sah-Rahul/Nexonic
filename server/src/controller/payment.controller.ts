@@ -1,45 +1,61 @@
-import dotenv from "dotenv"
-dotenv.config()
-import { Request, Response } from "express";
 import Stripe from "stripe";
+import { Request, Response } from "express";
+import { AuthRequest } from "../types/Auth.interface";
 import Order from "../models/order.model";
-import { ApiError } from "../utils/ApiError";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
- 
-export const createCheckoutSession = async (req, res) => {
+export const createCheckoutSession = async (
+  req: AuthRequest,
+  res: Response
+) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
     const { cartItems } = req.body;
 
-    const lineItems = cartItems.map((item) => ({
+    if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
+      return res.status(400).json({ message: "Cart is empty or invalid" });
+    }
+
+    // log for debugging
+    console.log("Cart Items:====================>", cartItems);
+    console.log("User ID:=======================>", req.user.id);
+
+    const lineItems = cartItems.map((item: any) => ({
       price_data: {
-        currency: "NPR",
+        currency: "npr",
         product_data: {
           name: item.title,
-          images: [item.productImage],
+          images: item.productImage ? [item.productImage] : [],
         },
-        unit_amount: Math.round(item.totalPrice * 100),
+        unit_amount: Math.round((item.price || 0) * 100), 
       },
-      quantity: item.quantity,
+      quantity: item.quantity || 1,
     }));
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
       line_items: lineItems,
-      success_url: `http://localhost:5173/user/profile`,
-      cancel_url: "http://localhost:5173/cancel",
+      success_url: `${process.env.FRONTEND_URL}/success`,
+      cancel_url: `${process.env.FRONTEND_URL}/cancel`,
+      metadata: {
+        userId: req.user.id,
+        itemsCount: cartItems.length.toString(),
+      },
     });
 
-    res.json({ success: true, url: session.url });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Payment failed", error });
+    return res.status(200).json({ url: session.url });
+  } catch (error: any) {
+    console.error("Stripe checkout error:", error);
+    return res
+      .status(500)
+      .json({ message: "Stripe checkout failed", error: error.message });
   }
 };
-
-
 
 export const stripeWebhook = async (req: Request, res: Response) => {
   const sig = req.headers["stripe-signature"] as string;
@@ -53,24 +69,21 @@ export const stripeWebhook = async (req: Request, res: Response) => {
       process.env.STRIPE_WEBHOOK_SECRET as string
     );
   } catch (err: any) {
-    new ApiError(404,err.message)
-    console.log("Webhook Error:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
- 
   if (event.type === "checkout.session.completed") {
     const session: any = event.data.object;
 
-    const orderData = {
-      user: session.metadata.userId,
+    await Order.create({
+      buyerId: session.metadata.userId,
       items: JSON.parse(session.metadata.items),
       totalAmount: session.amount_total / 100,
       paymentId: session.payment_intent,
-      status: "Paid",
-    };
-
-    await Order.create(orderData);
+      isPaid: true,
+      paidAt: new Date(),
+      orderStatus: "Processing",
+    });
   }
 
   res.json({ received: true });
